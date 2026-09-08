@@ -4,14 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-const LOGO_SRC = "/simplifyne-logo-white.webp";
+const LOGO_SRC = "/images/simplifyne-logo-white.webp";
 const LOGO_INTRINSIC_WIDTH = 148;
 const LOGO_INTRINSIC_HEIGHT = 28;
 
 /**
  * TODO: replace with provided logo — drop `simplifyne-logo-white.webp` into
- * /public. Until that asset exists the request 404s and we fall back to a
- * plain wordmark so the header never renders a broken image.
+ * /public/images. Until that asset exists the request 404s and we fall back to
+ * a plain wordmark so the header never renders a broken image.
+ *
+ * Once the file is in the repo, prefer a static import from src/assets: Next
+ * derives the intrinsic width and height from the file itself, content-hashes
+ * the URL, and turns a missing asset into a build error instead of a silent
+ * 404 — which also lets this component drop the fallback and stop being a
+ * client component.
  */
 export function Logo() {
   const [assetMissing, setAssetMissing] = useState(false);

@@ -29,6 +29,12 @@ Two notes on that file:
 
 ## Missing asset
 
-`public/simplifyne-logo-white.webp` is not in the repo yet. Until it is added,
-`src/components/Logo.tsx` falls back to a text wordmark (see the `TODO` there).
-Drop the file in and the fallback stops firing — no code change needed.
+`public/images/simplifyne-logo-white.webp` is not in the repo yet. Until it is
+added, `src/components/Logo.tsx` falls back to a text wordmark (see the `TODO`
+there). Drop the file in and the fallback stops firing — no code change needed.
+
+Static assets served by URL must live under `public/`; that is a Next.js
+requirement, not a choice. Subfolders inside it are free, so images go in
+`public/images/`. The alternative for a small number of build-time assets is a
+static import from `src/assets/`, which is the better fit for the logo once the
+file lands — see the note in `Logo.tsx`.
