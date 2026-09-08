@@ -16,7 +16,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Simplifyne — We build around your business growth.",
+  title: "Simplifyne, We build around your business growth.",
   description:
     "From websites and applications to AI-powered workflows and search growth, we build digital solutions around your business and its growth.",
 };

@@ -17,7 +17,7 @@ export interface ServiceMenuItem {
 
 export const serviceMenuIntro = {
   heading: "What we do",
-  body: "We build digital solutions around your business — from AI workflows to search growth.",
+  body: "We build digital solutions around your business, from AI workflows to search growth.",
 } as const;
 
 export const serviceMenuItems: readonly ServiceMenuItem[] = [
@@ -50,3 +50,12 @@ export const serviceMenuItems: readonly ServiceMenuItem[] = [
     href: "#",
   },
 ];
+
+export const featuredWork = {
+  label: "Featured work",
+  title: "PhysiTAI",
+  descriptor: "AI powered rehabilitation platform",
+  linkLabel: "View work",
+  /** TODO: point at the real case study once it exists. */
+  href: "#",
+} as const;
