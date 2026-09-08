@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import {
   featuredWork,
@@ -91,12 +91,26 @@ export function ServicesMegaMenu({
       >
         <div className="mega-regions mx-auto w-full max-w-site px-2 py-5 sm:px-3">
           <div>
-            <h2 className="text-menu-title font-semibold text-ink">
+            <h2 className="text-menu-heading font-semibold text-ink">
               {serviceMenuIntro.heading}
             </h2>
             <p className="mt-2 max-w-menu-intro text-card-body text-on-light-soft">
               {serviceMenuIntro.body}
             </p>
+
+            <a
+              role="menuitem"
+              href={serviceMenuIntro.ctaHref}
+              className="mega-cta mt-2.5 inline-flex items-center gap-1 rounded-menu-item text-card-body font-semibold text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            >
+              {serviceMenuIntro.ctaLabel}
+              <ArrowUpRight
+                size={ARROW_SIZE}
+                strokeWidth={ICON_STROKE}
+                aria-hidden="true"
+                className="mega-cta-arrow"
+              />
+            </a>
           </div>
 
           <div className="grid grid-cols-2 content-start gap-2">

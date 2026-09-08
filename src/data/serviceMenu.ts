@@ -1,5 +1,6 @@
 import {
   Code2,
+  Cpu,
   PenTool,
   Sparkles,
   TrendingUp,
@@ -18,6 +19,9 @@ export interface ServiceMenuItem {
 export const serviceMenuIntro = {
   heading: "What we do",
   body: "We build digital solutions around your business, from AI workflows to search growth.",
+  ctaLabel: "How we work",
+  /** TODO: point at the real page once it exists. */
+  ctaHref: "#",
 } as const;
 
 export const serviceMenuItems: readonly ServiceMenuItem[] = [
@@ -47,6 +51,13 @@ export const serviceMenuItems: readonly ServiceMenuItem[] = [
     icon: PenTool,
     title: "Design & UX",
     description: "Design people actually use",
+    href: "#",
+  },
+  {
+    id: "iot",
+    icon: Cpu,
+    title: "IoT Solutions",
+    description: "Connect devices to real business value",
     href: "#",
   },
 ];

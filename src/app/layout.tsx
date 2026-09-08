@@ -16,9 +16,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Simplifyne, We build around your business growth.",
+  title: "Simplifyne | AI & Tech Growth Partner",
   description:
-    "From websites and applications to AI-powered workflows and search growth, we build digital solutions around your business and its growth.",
+    "Simplifyne builds digital solutions around your business, from websites and apps to AI workflows, IoT, and search growth.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
