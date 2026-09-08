@@ -27,14 +27,12 @@ Two notes on that file:
 - The service-card resize and the staggered reveal cannot be expressed as
   utilities, so they live in one `@layer components` block in the same file.
 
-## Missing asset
+## Assets
 
-`public/images/simplifyne-logo-white.webp` is not in the repo yet. Until it is
-added, `src/components/Logo.tsx` falls back to a text wordmark (see the `TODO`
-there). Drop the file in and the fallback stops firing — no code change needed.
+The logo lives at `src/assets/simplifyne-logo-white.webp` and is pulled in with
+a static import, so Next derives its intrinsic dimensions from the file, gives
+it a content-hashed URL, and fails the build if it ever goes missing.
 
-Static assets served by URL must live under `public/`; that is a Next.js
-requirement, not a choice. Subfolders inside it are free, so images go in
-`public/images/`. The alternative for a small number of build-time assets is a
-static import from `src/assets/`, which is the better fit for the logo once the
-file lands — see the note in `Logo.tsx`.
+Build-time assets referenced from code belong in `src/assets/`. Only files that
+need a stable public URL of their own — `robots.txt`, an Open Graph image, a
+downloadable PDF — need `public/`, which is why this project does not have one.
