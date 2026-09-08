@@ -8,7 +8,6 @@
   /* Colour ---------------------------------------------------------------- */
   --color-brand: #2a5fd7;
   --color-brand-deep: #043ab4;
-  --color-brand-tint: #8fb0f5;
   --color-ink: #0a0a0a;
   --color-surface-gray: #e9e9ea;
   --color-surface-white: #ffffff;
@@ -65,7 +64,7 @@
   --spacing: 0.5rem;
 
   --container-site: 78.75rem; /* 1260px */
-  --container-hero-copy: 28.75rem; /* 460px */
+  --container-hero-copy: 36rem; /* 576px */
   --container-card-heading: 20ch;
   --container-card-copy: 30ch;
   --container-menu-stub: 16rem;

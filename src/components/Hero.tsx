@@ -1,4 +1,3 @@
-import { HeroUnderline } from "./HeroUnderline";
 import { ServiceCardRow } from "./ServiceCardRow";
 
 export function Hero() {
@@ -8,20 +7,16 @@ export function Hero() {
         <h1 className="font-display text-hero font-bold text-on-brand">
           We build around
           <br />
-          your business{" "}
-          <span className="relative inline-block">
-            growth.
-            <HeroUnderline />
-          </span>
+          your business growth.
         </h1>
 
-        <p className="mt-3 max-w-hero-copy text-body-sm text-on-brand-muted">
+        <p className="mt-4 max-w-hero-copy text-body-sm text-on-brand-muted">
           From websites and applications to AI-powered workflows and search
           growth, we build digital solutions around your business and its
           growth.
         </p>
 
-        <ServiceCardRow className="mt-6" />
+        <ServiceCardRow className="mt-8" />
       </div>
     </section>
   );
