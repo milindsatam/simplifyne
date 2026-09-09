@@ -106,9 +106,9 @@ function TeamCard({ member }: { member: TeamMember }) {
 
       <a
         href={member.linkedinHref}
-        className="mt-1.5 inline-flex items-center gap-1 text-menu-body font-semibold text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        className="mt-1.5 inline-flex items-center gap-1 text-[0.75rem] font-semibold text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
       >
-        <LinkedinIcon className="size-3.5" />
+        <LinkedinIcon className="size-3" />
         Follow on LinkedIn
       </a>
     </li>

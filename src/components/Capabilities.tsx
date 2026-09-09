@@ -27,31 +27,24 @@ export function Capabilities() {
     setOpenIndex((current) => (current + 1) % capabilities.length);
 
   return (
-    <section className="section-padding bg-surface-muted">
+    <section className="section-padding bg-surface-white">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <h2 className="font-display text-section-title font-bold text-ink">
           Capabilities
         </h2>
 
-        <div className="mt-6 flex flex-col gap-8 lg:mt-12 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
-          <ul className="flex flex-col gap-2">
+        <div className="mt-6 flex flex-col gap-6 lg:mt-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-8">
+          <ul className="flex flex-col gap-1.5">
             {capabilities.map((capability, index) => {
               const isOpen = index === openIndex;
 
               return (
-                <li
-                  key={capability.id}
-                  className={`rounded-panel transition-colors duration-standard ease-standard ${
-                    isOpen
-                      ? "bg-surface-white shadow-panel"
-                      : "bg-surface-muted"
-                  }`}
-                >
+                <li key={capability.id} className="rounded-panel bg-surface-muted">
                   <button
                     type="button"
                     onClick={() => setOpenIndex(index)}
                     aria-expanded={isOpen}
-                    className="flex w-full items-center justify-between gap-4 p-4 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink"
+                    className="flex w-full items-center justify-between gap-4 px-6 py-2.5 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink"
                   >
                     <span className="text-bento-heading-md font-semibold text-ink">
                       {capability.title}
@@ -72,7 +65,7 @@ export function Capabilities() {
                   </button>
 
                   <div data-open={isOpen} className="accordion-panel">
-                    <div className="px-4 pb-4">
+                    <div className="px-6 pb-5">
                       <p className="text-body-md text-ink-soft">
                         {capability.description}
                       </p>
@@ -136,11 +129,11 @@ export function Capabilities() {
               key={active.id}
               className="motion-safe:animate-[testimonial-fade_var(--duration-standard)_var(--ease-standard)]"
             >
-              <p className="mt-6 text-[1.375rem]/[1.3] font-medium text-ink">
+              <p className="mt-4 text-[1.375rem]/[1.3] font-medium text-ink">
                 {active.testimonial.quote}
               </p>
 
-              <div className="mt-6 flex items-center gap-3">
+              <div className="mt-4 flex items-center gap-3">
                 <div
                   aria-hidden="true"
                   className="flex size-10 shrink-0 items-center justify-center rounded-pill bg-surface-muted text-body-sm font-semibold text-ink/50"

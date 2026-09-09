@@ -6,7 +6,7 @@ export function AboutIntro() {
           About Simplifyne
         </h1>
 
-        <p className="mx-auto mt-4 max-w-[38.75rem] text-body-md text-ink-soft">
+        <p className="mx-auto mt-4 max-w-[48.75rem] text-body-md text-ink-soft">
           Simplifyne is a small, senior team that builds around how a
           business actually grows. We design, build, and market digital
           products for founders across six countries, blending strategy,

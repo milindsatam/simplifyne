@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { AboutClients } from "@/components/AboutClients";
+import { AboutClosing } from "@/components/AboutClosing";
 import { AboutIntro } from "@/components/AboutIntro";
 import { Capabilities } from "@/components/Capabilities";
-import { ClosingStatement } from "@/components/ClosingStatement";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TeamSection } from "@/components/TeamSection";
@@ -24,7 +24,7 @@ export default function AboutPage() {
         <Capabilities />
         <TeamSection />
         <AboutClients />
-        <ClosingStatement />
+        <AboutClosing />
       </main>
       <Footer />
     </>
