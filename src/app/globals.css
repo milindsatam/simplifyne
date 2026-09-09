@@ -35,6 +35,10 @@
   --color-bento-placeholder-on-light: rgba(10, 10, 10, 0.06);
   --color-bento-placeholder-on-dark: rgba(255, 255, 255, 0.08);
 
+  /* Product card descriptions sit over a photo (via the scrim below), so
+     they read closer to full white than body copy on a flat surface does. */
+  --color-product-copy: rgba(255, 255, 255, 0.85);
+
   /* Services mega-menu. The panel is a light surface even though the header
      sits on blue, so it uses ink colours rather than the on-brand whites. */
   --color-menu-item-hover: #f5f5f6;
@@ -50,6 +54,14 @@
 
   /* The "AI & Automation" card is a gradient, not a flat surface. */
   --gradient-ai: linear-gradient(180deg, #3b3b3b 0%, #000000 100%);
+
+  /* Keeps a product card's overlaid white text readable over whatever image
+     eventually fills the card, light placeholder tint included. */
+  --gradient-product-scrim: linear-gradient(
+    to bottom,
+    transparent 40%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
 
   /* Type ------------------------------------------------------------------ */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -122,6 +134,8 @@
   --container-section-title: 20ch;
   --container-client-intro: 27.5rem; /* 440px */
   --container-client-caption: 14rem; /* 224px, fits the longest caption in two lines */
+  --container-product-intro: 32.5rem; /* 520px */
+  --container-product-copy: 16.25rem; /* 260px */
 
   --radius-pill: 999px;
   --radius-panel: 0.75rem; /* 12px */
@@ -159,6 +173,11 @@
   /* Case study bento cards. */
   --bento-lift: 0.25rem; /* 4px, the hover rise */
   --shadow-bento-hover: 0 16px 40px rgba(0, 0, 0, 0.14);
+
+  /* Product cards. The card frame lifts on the same tokens as the bento
+     cards above; only the image zone's own scale is specific to this
+     section. */
+  --product-image-hover-scale: 1.04;
 }
 
 @utility duration-standard {
@@ -448,6 +467,60 @@
     .bento-card:hover .bento-arrow,
     .bento-card:focus-visible .bento-arrow {
       translate: var(--arrow-shift) 0;
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     Products grid. Three portrait image cards where the card frame lifts
+     (same tokens as the bento cards) but only the image zone inside it
+     scales, clipped by the frame's own overflow so it never spills past the
+     rounded corners.
+  ------------------------------------------------------------------------- */
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: calc(var(--spacing) * 2); /* 16px */
+  }
+
+  /* Tablet keeps the 3-across row: at this width a portrait card is still
+     comfortably wide, so there's no reason to give up the shape early. */
+  @media (width >= 40rem) {
+    .product-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .product-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: var(--radius-bento);
+    transition:
+      transform var(--duration-standard) var(--ease-standard),
+      box-shadow var(--duration-standard) var(--ease-standard);
+  }
+
+  .product-card:hover,
+  .product-card:focus-visible {
+    box-shadow: var(--shadow-bento-hover);
+  }
+
+  .product-card-image {
+    position: absolute;
+    inset: 0;
+    transition: transform var(--duration-standard) var(--ease-standard);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .product-card:hover,
+    .product-card:focus-visible {
+      transform: translateY(calc(var(--bento-lift) * -1));
+    }
+
+    .product-card:hover .product-card-image,
+    .product-card:focus-visible .product-card-image {
+      transform: scale(var(--product-image-hover-scale));
     }
   }
 
