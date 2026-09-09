@@ -165,8 +165,10 @@ export function Testimonials() {
                       </a>
                     </div>
 
-                    {/* TODO: replace with founder photo (jazz-gandhum.webp /
-                        roshan-thiran.webp / kevin-barboza.webp). */}
+                    {/* TODO: replace with founder photo once the file
+                        exists in /public (roshan-thiran-leaderonomics.webp /
+                        jazz-gandhum-ecareers.webp /
+                        kevin-barboza-bdlights.webp). */}
                     <div className="relative order-first flex min-h-[16rem] items-end overflow-hidden rounded-bento bg-testimonial-photo lg:order-none lg:min-h-[var(--testimonial-card-height)]">
                       <div
                         aria-hidden="true"
