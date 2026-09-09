@@ -5,7 +5,6 @@ export interface TeamMember {
   /** Path under /public. TODO: swap the fallback initials tile out once the
       real photo lands at this path. */
   readonly photo: string;
-  readonly linkedinHref: string;
 }
 
 export const teamMembers: readonly TeamMember[] = [
@@ -14,41 +13,35 @@ export const teamMembers: readonly TeamMember[] = [
     name: "Yogesh Randive",
     role: "Co-founder (Development & Technical)",
     photo: "/yogesh-randive.webp",
-    linkedinHref: "#",
   },
   {
     id: "milind-satam",
     name: "Milind Satam",
     role: "Co-founder (Design, SEO & Growth)",
     photo: "/milind-satam.webp",
-    linkedinHref: "#",
   },
   {
     id: "manjusha-pathade",
     name: "Manjusha Pathade",
     role: "Lead Strategist",
     photo: "/manjusha-pathade.webp",
-    linkedinHref: "#",
   },
   {
     id: "anjali-randive",
     name: "Anjali Randive",
     role: "Human Resources",
     photo: "/anjali-randive.webp",
-    linkedinHref: "#",
   },
   {
     id: "parinita-naik",
     name: "Parinita Naik",
     role: "Designer",
     photo: "/parinita-naik.webp",
-    linkedinHref: "#",
   },
   {
     id: "komal-gawade",
     name: "Komal Gawade",
     role: "Intern",
     photo: "/komal-gawade.webp",
-    linkedinHref: "#",
   },
 ] as const;
