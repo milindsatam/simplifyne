@@ -6,7 +6,7 @@ const ARROW_SIZE = 16;
 
 export function Products() {
   return (
-    <section className="bg-surface-white pt-[6.25rem] pb-15">
+    <section className="bg-surface-muted pt-[6.25rem] pb-15">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <div className="lg:flex lg:items-end lg:justify-between lg:gap-6">
           <div>

@@ -79,7 +79,7 @@ export function Testimonials() {
   }, [instant]);
 
   return (
-    <section className="bg-surface-muted py-15">
+    <section className="bg-surface-white py-15">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <div className="flex items-end justify-between gap-6">
           <h2 className="font-display text-section-title font-bold text-ink">
