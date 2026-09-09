@@ -4,7 +4,7 @@ import { ServicesMegaMenu } from "./ServicesMegaMenu";
 /** TODO: point at real routes once those pages exist (out of scope for now). */
 const NAV_LINKS = [
   { label: "Work", href: "#" },
-  { label: "Team", href: "/team" },
+  { label: "About", href: "/about" },
   { label: "Products", href: "#" },
   { label: "Blog", href: "#" },
 ] as const;
