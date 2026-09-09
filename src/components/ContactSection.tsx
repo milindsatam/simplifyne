@@ -102,6 +102,10 @@ export function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
 
   const isOther = service === "Other";
+  const trimmedName = name.trim();
+  const displayName = trimmedName
+    ? trimmedName[0].toUpperCase() + trimmedName.slice(1)
+    : "";
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -128,19 +132,23 @@ export function ContactSection() {
               aria-hidden="true"
               className="text-brand"
             />
-            <p className="mt-4 max-w-[40rem] font-display text-closing-statement font-semibold text-ink">
-              Thanks, {name.trim() || "there"}. Your message just landed with
-              us. If it&rsquo;s urgent, you can call us at{" "}
+            <p className="mt-4 max-w-[28.75rem] text-[1.125rem]/[1.6] font-normal text-ink">
+              {displayName ? `Thanks, ${displayName}. ` : "Thanks. "}Your
+              message just landed with us. We&rsquo;ll be in touch soon.
+              Expect a reply within one business day.
+            </p>
+            <p className="mt-2 max-w-[28.75rem] text-card-body text-ink/55">
+              In a hurry? Call us at{" "}
               <a
                 href="tel:+919000000000"
-                className="font-bold underline decoration-1 underline-offset-4 transition-colors duration-standard ease-standard hover:text-brand"
+                className="font-bold text-ink/55 underline decoration-1 underline-offset-4 transition-colors duration-standard ease-standard hover:text-brand"
               >
                 +91 90000 00000
               </a>{" "}
               or message us on{" "}
               <a
                 href="https://wa.me/"
-                className="font-bold underline decoration-1 underline-offset-4 transition-colors duration-standard ease-standard hover:text-brand"
+                className="font-bold text-ink/55 underline decoration-1 underline-offset-4 transition-colors duration-standard ease-standard hover:text-brand"
               >
                 WhatsApp
               </a>
