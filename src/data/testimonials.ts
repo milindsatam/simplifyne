@@ -8,20 +8,20 @@ export interface Testimonial {
 
 export const testimonials: readonly Testimonial[] = [
   {
-    id: "jazz-gandhum",
-    quote:
-      "The whole build felt smooth and hassle free, exactly what we needed to launch on time.",
-    sub: "They understood our course business and shipped a platform our learners actually enjoy using.",
-    name: "Jazz Gandhum",
-    role: "Founder, E-Careers",
-  },
-  {
     id: "roshan-thiran",
     quote:
       "They turned a complex idea into a subscription platform that simply works.",
     sub: "Our leadership programs now reach more people with far less friction on our side.",
     name: "Roshan Thiran",
     role: "Founder, Leaderonomics",
+  },
+  {
+    id: "jazz-gandhum",
+    quote:
+      "The whole build felt smooth and hassle free, exactly what we needed to launch on time.",
+    sub: "They understood our course business and shipped a platform our learners actually enjoy using.",
+    name: "Jazz Gandhum",
+    role: "Founder, E-Careers",
   },
   {
     id: "kevin-barboza",

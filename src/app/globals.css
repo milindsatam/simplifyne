@@ -101,10 +101,13 @@
   --text-hero--line-height: 1.05;
   --text-hero--letter-spacing: -0.02em;
 
-  /* Every section H2 (the hero's H1 is separate) shares this one size, fixed
-     rather than clamped, so a new section inherits it instead of picking its
-     own scale. */
-  --text-section-title: 2.25rem; /* 36px */
+  /* Every section H2 (the hero's H1 is separate) shares this one size, so a
+     new section inherits it instead of picking its own scale. The value
+     itself steps up at the same two breakpoints as everything else on the
+     page (see the plain, unlayered :root overrides right after this block):
+     28px mobile, 32px tablet, 36px desktop. Line-height stays fixed at 1.1
+     throughout, only the size steps. */
+  --text-section-title: 1.75rem; /* 28px, mobile default */
   --text-section-title--line-height: 1.1;
 
   --text-wordmark: 1.375rem;
@@ -241,6 +244,24 @@
      floor is set above that natural height instead, so it's the value
      actually doing the work, with comfortable padding to spare. */
   --testimonial-card-height: 30rem; /* 480px */
+}
+
+/* Steps --text-section-title up at the page's usual two breakpoints. Left
+   deliberately unlayered (not inside @layer components) and placed after
+   @theme, so it sits in the same cascade tier as @theme's own :root output
+   and simply wins at each width by ordinary source order, rather than
+   losing to it the way an @layer components rule would against anything
+   unlayered regardless of order. */
+@media (width >= 40rem) {
+  :root {
+    --text-section-title: 2rem; /* 32px, tablet */
+  }
+}
+
+@media (width >= 64rem) {
+  :root {
+    --text-section-title: 2.25rem; /* 36px, desktop, unchanged from before */
+  }
 }
 
 @utility duration-standard {
