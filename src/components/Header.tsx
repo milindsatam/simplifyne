@@ -50,7 +50,7 @@ export function Header() {
     // content instead of just sitting in the document flow.
     <header
       data-hidden={hidden}
-      className={`fixed inset-x-0 top-0 z-40 border-b py-3 motion-safe:transition-[translate,background-color,border-color] motion-safe:duration-standard motion-safe:ease-standard data-[hidden=true]:-translate-y-full ${
+      className={`fixed inset-x-0 top-0 z-40 border-b py-2 motion-safe:transition-[translate,background-color,border-color] motion-safe:duration-standard motion-safe:ease-standard data-[hidden=true]:-translate-y-full lg:py-3 ${
         glassy
           ? "border-header-glass-border bg-header-glass backdrop-blur-md"
           : "border-transparent bg-transparent"

@@ -48,7 +48,7 @@ const LINK_CLASS =
 
 export function Footer() {
   return (
-    <footer className="bg-surface-white pb-8">
+    <footer className="section-padding bg-surface-white">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         {/* Newsletter bar */}
         <div className="flex flex-col items-start gap-4 rounded-bento bg-surface-muted p-5 sm:flex-row sm:items-center sm:justify-between">

@@ -57,7 +57,7 @@ export function ClientLogos() {
   }, []);
 
   return (
-    <section className="bg-surface-muted pt-[6.25rem] pb-15">
+    <section className="section-padding bg-surface-muted">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         {/* Desktop splits the row in two; below that the paragraph stacks under
             the heading block. */}

@@ -10,7 +10,7 @@ const ARROW_SIZE = 18;
 
 export function ClosingStatement() {
   return (
-    <section className="bg-surface-white py-[7.5rem]">
+    <section className="section-padding bg-surface-white">
       <div className="mx-auto w-full max-w-site px-2 text-center sm:px-3">
         <p className="mx-auto max-w-closing-statement font-display text-closing-statement font-semibold text-ink">
           At Simplifyne, we genuinely enjoy working with founders.
