@@ -5,7 +5,6 @@ import Image from "next/image";
 import { teamMembers, type TeamMember } from "@/data/team";
 import { LinkedinIcon } from "./LinkedinIcon";
 
-const EYEBROW_TAGS = ["WHO", "WE", "ARE"] as const;
 const ARROW_SIZE = 16;
 
 /** A plain Server Component (no client JS needed here), so this can check
@@ -31,32 +30,9 @@ export function TeamSection() {
   return (
     <section className="section-padding bg-surface-white">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
-        <div className="lg:flex lg:items-start lg:justify-between lg:gap-6">
-          <div>
-            <div className="flex items-center gap-1.5">
-              {EYEBROW_TAGS.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center rounded-pill border border-ink/15 px-2.5 py-1 text-label font-semibold uppercase text-ink/55"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <h1 className="mt-4 font-display text-page-title font-bold text-ink">
-              A team that builds around you
-            </h1>
-          </div>
-
-          <p className="mt-4 max-w-[28.75rem] text-body-md text-ink-soft lg:mt-0">
-            Simplifyne is a small, senior team that likes doing the actual
-            work. We design, build, and grow digital products for founders
-            across six countries, and we care about how each one turns out.
-            No layers, no handoffs, just the people who do the work talking
-            directly to you.
-          </p>
-        </div>
+        <h2 className="font-display text-section-title font-bold text-ink">
+          The team
+        </h2>
 
         <ul className="mt-8 grid grid-cols-2 gap-2 lg:grid-cols-4">
           {founders.map((member) => (
@@ -130,10 +106,10 @@ function TeamCard({ member }: { member: TeamMember }) {
 
       <a
         href={member.linkedinHref}
-        aria-label={`${member.name} on LinkedIn`}
-        className="mt-1.5 inline-flex text-ink/55 transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        className="mt-1.5 inline-flex items-center gap-1 text-menu-body font-semibold text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
       >
-        <LinkedinIcon />
+        <LinkedinIcon className="size-3.5" />
+        Follow on LinkedIn
       </a>
     </li>
   );

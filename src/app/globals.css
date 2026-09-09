@@ -286,6 +286,20 @@
   transition-duration: var(--duration-standard);
 }
 
+/* About page capabilities: the testimonial swaps content instantly under
+   the hood (a plain state change), so this keyframe is what gives it a
+   fade rather than a jump cut. Applied via a `key`-remounted element so the
+   animation replays on every switch, guarded by motion-safe: in the
+   markup rather than baked in here. */
+@keyframes testimonial-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* One vertical rhythm for every major section, so top-to-bottom the page
    never reads tighter or looser at one seam than the next. The hero is the
    one exception (its own header-aware top padding lives in Hero.tsx). */
@@ -700,6 +714,32 @@
   }
 
   /* -------------------------------------------------------------------------
+     Generic accordion panel (About page capabilities, and anywhere else an
+     open/close needs a real height animation rather than a jump cut). Same
+     grid-row 0fr/1fr collapse as .contact-other-row above, kept as its own
+     class since this one has no per-field validation semantics tied to it.
+  ------------------------------------------------------------------------- */
+
+  .accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      grid-template-rows var(--duration-standard) var(--ease-standard),
+      opacity var(--duration-standard) var(--ease-standard);
+  }
+
+  .accordion-panel > * {
+    min-height: 0;
+  }
+
+  .accordion-panel[data-open="true"] {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  /* -------------------------------------------------------------------------
      Testimonial carousel. A filmstrip, not a cross-dissolve: every slide
      stays mounted side by side in the track, and only the track's own
      transform ever changes, so prev/next always reads as one frame moving
@@ -726,6 +766,10 @@
   @media (prefers-reduced-motion: reduce) {
     .contact-other-row,
     .contact-other-row > * {
+      transition: none;
+    }
+
+    .accordion-panel {
       transition: none;
     }
 

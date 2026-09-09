@@ -11,7 +11,7 @@ const TOP_ITEMS = [
   { id: "work", label: "Work", href: "#" },
   { id: "services", label: "Services", submenu: "services" as const },
   { id: "products", label: "Products", submenu: "products" as const },
-  { id: "team", label: "Team", href: "/team" },
+  { id: "about", label: "About", href: "/about" },
   { id: "blog", label: "Blog", href: "#" },
 ];
 
