@@ -13,7 +13,15 @@ import { StickyHeader } from "./StickyHeader";
     while the real header is already gone does, and the moment the real
     header scrolls back into view, this is gone again automatically since
     that's exactly what "at the top" means here. */
-export function SiteHeader() {
+export function SiteHeader({
+  variant = "brand",
+}: {
+  /** Passed straight through to `Header`: "brand" for the homepage's
+      transparent-over-hero start, "light" for a page with no blue hero.
+      `StickyHeader`'s scroll-up reveal is identical either way, since it's
+      always glassy regardless of how the page started. */
+  variant?: "brand" | "light";
+}) {
   const headerRef = useRef<HTMLElement>(null);
   const [headerGone, setHeaderGone] = useState(false);
   const [scrollingUp, setScrollingUp] = useState(false);
@@ -58,7 +66,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <Header ref={headerRef} inert={headerGone} />
+      <Header ref={headerRef} inert={headerGone} variant={variant} />
       <StickyHeader revealed={revealed} />
     </>
   );
