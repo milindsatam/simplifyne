@@ -4,6 +4,7 @@ export interface Testimonial {
   readonly sub: string;
   readonly name: string;
   readonly role: string;
+  readonly photo: string;
 }
 
 export const testimonials: readonly Testimonial[] = [
@@ -14,6 +15,7 @@ export const testimonials: readonly Testimonial[] = [
     sub: "Our leadership programs now reach more people with far less friction on our side.",
     name: "Roshan Thiran",
     role: "Founder, Leaderonomics",
+    photo: "/roshan-thiran-leaderonomics.webp",
   },
   {
     id: "jazz-gandhum",
@@ -22,6 +24,7 @@ export const testimonials: readonly Testimonial[] = [
     sub: "They understood our course business and shipped a platform our learners actually enjoy using.",
     name: "Jazz Gandhum",
     role: "Founder, E-Careers",
+    photo: "/jazz-gandhum-ecareers.webp",
   },
   {
     id: "kevin-barboza",
@@ -29,5 +32,6 @@ export const testimonials: readonly Testimonial[] = [
     sub: "The content and search work put us in front of homeowners who are ready to buy.",
     name: "Kevin Barboza",
     role: "Founder, BD Lights",
+    photo: "/kevin-barboza-bdlights.webp",
   },
 ];
