@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { testimonials } from "@/data/testimonials";
 
@@ -165,11 +166,19 @@ export function Testimonials() {
                       </a>
                     </div>
 
-                    {/* TODO: replace with founder photo once the file
-                        exists in /public (roshan-thiran-leaderonomics.webp /
-                        jazz-gandhum-ecareers.webp /
-                        kevin-barboza-bdlights.webp). */}
                     <div className="relative order-first flex min-h-[16rem] items-end overflow-hidden rounded-bento bg-testimonial-photo lg:order-none lg:min-h-[var(--testimonial-card-height)]">
+                      {/* Name and role are already presented as visible text
+                          right below, so this is a captioned photo, not
+                          content of its own: empty alt keeps a screen reader
+                          from announcing the same thing twice. */}
+                      <Image
+                        src={testimonial.photo}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 34vw, 100vw"
+                        className="object-cover"
+                      />
+
                       <div
                         aria-hidden="true"
                         className="absolute inset-0 bg-[image:var(--gradient-product-scrim)]"
