@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
-import { SiteHeader } from "@/components/SiteHeader";
+import { Header } from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Contact | Simplifyne",
@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <SiteHeader />
+      {/* No blue hero on this page, so the header needs its light look from
+          the first frame rather than the homepage's transparent-over-blue
+          start (see Header.tsx's `variant` prop). */}
+      <Header variant="light" />
       <main>
         <ContactSection />
       </main>

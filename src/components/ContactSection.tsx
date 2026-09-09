@@ -119,7 +119,7 @@ export function ContactSection() {
   };
 
   return (
-    <section className="section-padding bg-surface-muted">
+    <section className="section-padding bg-surface-white">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         {submitted ? (
           <div>
@@ -144,40 +144,49 @@ export function ContactSection() {
             <form
               noValidate
               onSubmit={handleSubmit}
-              className="mt-10 flex max-w-[52rem] flex-col gap-8"
+              className="mt-10 flex flex-col gap-5"
             >
               <div>
                 <div className={SENTENCE_CLASS}>
-                  <span>Hey, my name is</span>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    placeholder="Type here"
-                    aria-label="Your name"
-                    className={`${FIELD_CLASS} w-full sm:w-40`}
-                  />
-                  <span>and I&rsquo;m looking for</span>
+                  {/* The core sentence stays nowrap from tablet up, so the
+                      dropdown never drops to its own line the way it would
+                      under a plain flex-wrap; the "Other" reveal sits
+                      outside this group so it alone can wrap below without
+                      disturbing it. */}
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-3 lg:flex-nowrap">
+                    <span>Hey, my name is</span>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(event) => setName(event.target.value)}
+                      placeholder="Type here"
+                      aria-label="Your name"
+                      className={`${FIELD_CLASS} w-full lg:w-40`}
+                    />
+                    <span className="whitespace-nowrap">
+                      and I&rsquo;m looking for
+                    </span>
 
-                  <span className="relative inline-flex">
-                    <select
-                      value={service}
-                      onChange={(event) =>
-                        setService(
-                          event.target.value as (typeof SERVICE_OPTIONS)[number],
-                        )
-                      }
-                      aria-label="What you're looking for"
-                      className={`${FIELD_CLASS} w-full cursor-pointer appearance-none pr-6 sm:w-auto`}
-                    >
-                      {SERVICE_OPTIONS.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDownIcon className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-ink/50" />
-                  </span>
+                    <span className="relative inline-flex">
+                      <select
+                        value={service}
+                        onChange={(event) =>
+                          setService(
+                            event.target.value as (typeof SERVICE_OPTIONS)[number],
+                          )
+                        }
+                        aria-label="What you're looking for"
+                        className={`${FIELD_CLASS} w-full cursor-pointer appearance-none pr-6 lg:w-auto`}
+                      >
+                        {SERVICE_OPTIONS.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDownIcon className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-ink/50" />
+                    </span>
+                  </div>
 
                   {/* Always mounted so the reveal can transition; inert keeps
                       it out of the tab order and validation while hidden,
@@ -193,7 +202,7 @@ export function ContactSection() {
                       onChange={(event) => setOtherReason(event.target.value)}
                       placeholder="Tell us what you need"
                       aria-label="Tell us what you need"
-                      className={`${FIELD_CLASS} w-56`}
+                      className={`${FIELD_CLASS} w-56 max-w-full`}
                     />
                   </span>
                 </div>
@@ -203,7 +212,7 @@ export function ContactSection() {
               </div>
 
               <div>
-                <div className={SENTENCE_CLASS}>
+                <div className={`${SENTENCE_CLASS} lg:flex-nowrap`}>
                   <span>Get in touch with me at</span>
                   <input
                     type="text"
@@ -211,7 +220,7 @@ export function ContactSection() {
                     onChange={(event) => setContact(event.target.value)}
                     placeholder="Your email or phone"
                     aria-label="Your email or phone number"
-                    className={`${FIELD_CLASS} w-full sm:w-64`}
+                    className={`${FIELD_CLASS} w-full lg:w-64`}
                   />
                   <span>!</span>
                 </div>
@@ -221,17 +230,24 @@ export function ContactSection() {
               </div>
 
               <div>
-                <label className="flex cursor-pointer items-start gap-2">
-                  <span className="relative mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-[0.25rem] border border-ink/30 bg-surface-white transition-colors duration-standard ease-standard has-[:checked]:border-brand has-[:checked]:bg-brand has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand">
+                <label className="flex cursor-pointer items-center gap-2">
+                  <span
+                    className={`flex size-5 shrink-0 items-center justify-center rounded-[0.25rem] border-[1.5px] transition-colors duration-standard ease-standard has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand ${
+                      accepted
+                        ? "border-brand bg-brand"
+                        : "border-ink bg-surface-white"
+                    }`}
+                  >
                     <input
                       type="checkbox"
                       checked={accepted}
                       onChange={(event) => setAccepted(event.target.checked)}
-                      className="absolute inset-0 size-full cursor-pointer opacity-0 outline-none"
+                      className="sr-only"
                     />
                     <Check
                       size={CHECK_ICON_SIZE}
                       aria-hidden="true"
+                      strokeWidth={3}
                       className={`text-on-dark ${accepted ? "opacity-100" : "opacity-0"}`}
                     />
                   </span>
