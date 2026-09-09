@@ -1,5 +1,4 @@
-"use client";
-
+import { MobileMenu } from "./MobileMenu";
 import { ServicesMegaMenu } from "./ServicesMegaMenu";
 
 /** TODO: point at real routes once those pages exist (out of scope for now). */
@@ -10,24 +9,29 @@ const NAV_LINKS = [
   { label: "Blog", href: "#" },
 ] as const;
 
-const navItemClass =
-  "text-nav font-medium text-on-brand-muted underline-offset-4 decoration-1 transition-colors duration-standard ease-standard hover:text-on-brand hover:underline focus-visible:text-on-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-brand";
+export function PrimaryNav({ glassy = false }: { glassy?: boolean }) {
+  const navItemClass = glassy
+    ? "text-nav font-medium text-ink-soft underline-offset-4 decoration-1 transition-colors duration-standard ease-standard hover:text-ink hover:underline focus-visible:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
+    : "text-nav font-medium text-on-brand-muted underline-offset-4 decoration-1 transition-colors duration-standard ease-standard hover:text-on-brand hover:underline focus-visible:text-on-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-brand";
 
-export function PrimaryNav() {
+  // Both states stay glass, never a solid fill; only the tint flips so the
+  // pill keeps working over the hero's blue and the glassy light surface.
+  const ctaClass = glassy
+    ? "inline-flex h-6 items-center rounded-pill border border-cta-glass-border-ink bg-transparent px-3 text-nav font-semibold text-ink transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
+    : "inline-flex h-6 items-center rounded-pill border border-cta-glass-border bg-cta-glass-bg px-3 text-nav font-semibold text-on-brand backdrop-blur-md transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-brand";
+
   return (
-    <div className="flex items-center gap-6">
-      {/* The compact nav for small screens is out of scope for this build. */}
-      <nav aria-label="Primary" className="hidden md:block">
+    <div className="flex items-center">
+      {/* The hamburger and mega-menu never show at the same width: the
+          desktop row (links plus mega-menu) only exists from 1024px up,
+          and the hamburger only below it. */}
+      <nav
+        aria-label="Primary"
+        className="hidden lg:flex lg:items-center lg:gap-6"
+      >
         <ul className="flex items-center gap-4">
-          {/* The mega-menu is a pointer pattern, so below 1024px Services is a
-              plain nav item until the mobile menu is built. */}
-          <li className="hidden lg:block">
+          <li>
             <ServicesMegaMenu triggerClassName={navItemClass} />
-          </li>
-          <li className="lg:hidden">
-            <a href="#" className={navItemClass}>
-              Services
-            </a>
           </li>
 
           {NAV_LINKS.map((link) => (
@@ -38,14 +42,15 @@ export function PrimaryNav() {
             </li>
           ))}
         </ul>
+
+        <a href="#" className={ctaClass}>
+          Let&rsquo;s Talk
+        </a>
       </nav>
 
-      <a
-        href="#"
-        className="inline-flex h-6 items-center rounded-pill bg-surface-white px-3 text-nav font-semibold text-ink transition-colors duration-standard ease-standard hover:bg-pill-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-brand"
-      >
-        Let&rsquo;s Talk
-      </a>
+      <div className="lg:hidden">
+        <MobileMenu glassy={glassy} />
+      </div>
     </div>
   );
 }
