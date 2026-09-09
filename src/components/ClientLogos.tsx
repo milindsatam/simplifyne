@@ -10,7 +10,7 @@ import { clients } from "@/data/clients";
 const REVEAL_THRESHOLD = 0.2;
 /* Matches --logo-stagger. Kept in JS (rather than a CSS transition-delay)
    because a per-cell delay on the reveal transition would also stall the
-   hover dim, which needs to react instantly regardless of index. */
+   hover tint, which needs to react instantly regardless of index. */
 const REVEAL_STAGGER_MS = 60;
 const ARROW_SIZE = 16;
 
@@ -57,7 +57,7 @@ export function ClientLogos() {
   }, []);
 
   return (
-    <section className="bg-surface-white py-15">
+    <section className="bg-surface-white pt-[6.25rem] pb-15">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         {/* Desktop splits the row in two; below that the paragraph stacks under
             the heading block. */}
@@ -91,31 +91,35 @@ export function ClientLogos() {
           <style>{`.client-cell { opacity: 1; transform: none; }`}</style>
         </noscript>
 
+        {/* One contained panel, not scattered marks: a hairline border and a
+            faint tint, with logos boxed into equal cells inside it. Dividers
+            only at the single-row desktop width; a wrapped row would make a
+            divider land in the wrong place, so it's dropped instead. */}
         <ul
           ref={gridRef}
-          className="client-grid mt-10 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3 lg:grid-cols-5"
+          className="mt-8 grid grid-cols-2 overflow-hidden rounded-bento border border-panel-border bg-panel-subtle sm:grid-cols-3 lg:grid-cols-5 lg:divide-x lg:divide-panel-border"
         >
           {clients.map((client, index) => (
             <li
               key={client.id}
               // Focusable so the caption is reachable by keyboard, the way it
-              // is by pointer. The caption itself is always in the document,
-              // so assistive tech reads it either way.
+              // is by pointer.
               tabIndex={0}
               data-revealed={revealed[index]}
-              className="client-cell flex items-center justify-center rounded-menu-item px-2 py-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              className="client-cell group flex flex-col items-center px-3 py-5 transition-colors duration-standard ease-standard hover:bg-panel-hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink focus-within:bg-panel-hover"
             >
               <Image
                 src={client.logo}
                 alt={client.name}
                 width={client.logoWidth}
                 height={client.logoHeight}
-                className="client-logo h-[var(--logo-height)] w-full object-contain"
+                className="h-[var(--logo-height)] w-[var(--logo-max-width)] object-contain"
               />
 
-              {/* Never rendered on mobile: no room beside a logo for it, and
-                  no hover to reveal it with. */}
-              <p className="client-caption hidden text-client-caption text-ink-soft sm:block">
+              {/* Space for the caption is reserved at rest (never display:
+                  none), so revealing it on hover never reflows the cell or
+                  shifts a neighbour. */}
+              <p className="mt-2 h-[2.25rem] max-w-full text-center text-menu-body text-ink/65 opacity-0 translate-y-[var(--logo-caption-shift)] motion-safe:transition motion-safe:duration-standard motion-safe:ease-standard group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0">
                 {client.work}
               </p>
             </li>

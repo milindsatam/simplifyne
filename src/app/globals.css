@@ -13,7 +13,12 @@
   --color-surface-white: #ffffff;
   --color-surface-muted: #f4f4f5; /* the light/dark rhythm's other "white" */
   --color-testimonial-photo: #d9dbde;
-  --color-rating: #f5b400;
+
+  /* Client logo panel. */
+  --color-panel-subtle: #fafafb;
+  --color-panel-border: #ececec;
+  --color-panel-hover: #f2f3f5;
+
   --color-on-brand: #ffffff;
   --color-on-brand-muted: rgba(255, 255, 255, 0.72);
   --color-on-dark: #ffffff;
@@ -120,9 +125,6 @@
   --text-featured-title: 1rem; /* 16px */
   --text-featured-title--line-height: 1.3;
 
-  --text-client-caption: 0.9375rem; /* 15px */
-  --text-client-caption--line-height: 1.5;
-
   --text-bento-heading-lg: 1.375rem; /* 22px, the tall Leaderonomics card */
   --text-bento-heading-lg--line-height: 1.25;
   --text-bento-heading-md: 1.25rem; /* 20px, the wide E-Careers card */
@@ -146,7 +148,6 @@
   --container-menu-intro: 13.75rem; /* 220px */
   --container-section-title: 20ch;
   --container-client-intro: 27.5rem; /* 440px */
-  --container-client-caption: 14rem; /* 224px, fits the longest caption in two lines */
   --container-product-intro: 32.5rem; /* 520px */
   --container-product-copy: 16.25rem; /* 260px */
 
@@ -175,13 +176,13 @@
   --arrow-shift: 4px;
   --cta-arrow-shift: 3px;
 
-  /* Client logo grid. */
-  --logo-height: 4rem; /* 64px */
+  /* Client logo panel. Every logo sits in the same bounding box regardless
+     of its own aspect ratio, so the row reads as one visual weight. */
+  --logo-height: 2rem; /* 32px */
+  --logo-max-width: 7.5rem; /* 120px */
   --logo-rise: 1.5rem; /* 24px, the scroll reveal's travel */
   --logo-stagger: 60ms;
-  --logo-dim-opacity: 0.08; /* siblings of the hovered logo fade to this */
-  --logo-caption-gap: 1rem; /* 16px, logo to caption */
-  --logo-caption-shift: 0.5rem; /* 8px, caption's slide-in travel */
+  --logo-caption-shift: 0.5rem; /* 8px, caption's rise on hover */
 
   /* Case study bento cards. */
   --bento-lift: 0.25rem; /* 4px, the hover rise */
@@ -333,15 +334,14 @@
   }
 
   /* -------------------------------------------------------------------------
-     Client logo grid. Logos stay full colour throughout; the only resting
-     property utilities can't express is the once-only scroll cascade (its
-     per-cell delay is driven from React, since a CSS transition-delay would
-     otherwise also stall the hover dim below) and the hover itself, which
-     dims every sibling and raises one caption beside its logo.
+     Client logo panel. Logos stay full colour throughout, and the hover
+     tint/caption reveal are plain hover:/group-hover: utilities in the
+     markup; the once-only scroll cascade is the one thing utilities can't
+     express (its per-cell delay is driven from React, not a CSS
+     transition-delay, so it never fights any other transition on the cell).
   ------------------------------------------------------------------------- */
 
   .client-cell {
-    position: relative;
     opacity: 0;
     transform: translateY(var(--logo-rise));
     transition:
@@ -352,57 +352,6 @@
   .client-cell[data-revealed="true"] {
     opacity: 1;
     transform: none;
-  }
-
-  /* Hovering or focusing one cell dims every other. :has() reaches up to the
-     grid to compare cells, so the fade needs no JS state at all. */
-  .client-grid:has(.client-cell:hover, .client-cell:focus-within)
-    .client-cell:not(:hover):not(:focus-within) {
-    opacity: var(--logo-dim-opacity);
-  }
-
-  .client-caption {
-    position: absolute;
-    top: 50%;
-    left: calc(100% + var(--logo-caption-gap));
-    /* An explicit width, not max-width: with only `left` set, an
-       absolutely positioned box otherwise shrink-fits against its
-       containing block (the cell), collapsing to a sliver instead of
-       running out over the dimmed neighbour it's meant to sit on. */
-    width: var(--container-client-caption);
-    opacity: 0;
-    /* Decorative and often overlapping the next cell, so it must never
-       intercept the pointer events meant for the logo underneath it. */
-    pointer-events: none;
-    transform: translateY(-50%) translateX(calc(var(--logo-caption-shift) * -1));
-    transition:
-      opacity var(--duration-standard) var(--ease-standard),
-      transform var(--duration-standard) var(--ease-standard);
-  }
-
-  /* The last cell has no sibling to its right to raise a caption over, so it
-     raises one over its left neighbour instead. */
-  .client-cell:last-child .client-caption {
-    left: auto;
-    right: calc(100% + var(--logo-caption-gap));
-    text-align: right;
-    transform: translateY(-50%) translateX(var(--logo-caption-shift));
-  }
-
-  .client-cell:hover .client-caption,
-  .client-cell:focus-within .client-caption {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
-  }
-
-  /* Mobile has no pointer to hover with and no room beside a logo for a
-     caption, so captions are never rendered there at all (see the `hidden
-     sm:block` on the element itself); this only guards the dim effect. */
-  @media (width < 40rem) {
-    .client-grid:has(.client-cell:hover, .client-cell:focus-within)
-      .client-cell:not(:hover):not(:focus-within) {
-      opacity: 1;
-    }
   }
 
   /* -------------------------------------------------------------------------
@@ -595,28 +544,12 @@
       transition: none;
     }
 
-    /* The logos arrive already in place; hover still dims siblings and shows
-       the caption, it just does so without the travel. */
-    .client-cell,
-    .client-caption {
-      transition: none;
-    }
-
+    /* The logos arrive already in place. The hover tint and caption use
+       Tailwind's motion-safe: variant directly in the markup instead of a
+       rule here, so they're already excluded under this same query. */
     .client-cell {
+      transition: none;
       opacity: 1;
-      transform: none;
-    }
-
-    .client-caption {
-      transform: none;
-    }
-
-    .client-cell:last-child .client-caption {
-      transform: none;
-    }
-
-    .client-cell:hover .client-caption,
-    .client-cell:focus-within .client-caption {
       transform: none;
     }
   }
