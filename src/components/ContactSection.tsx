@@ -21,6 +21,8 @@ const SERVICE_OPTIONS = [
   "Other",
 ] as const;
 
+type ServiceOption = (typeof SERVICE_OPTIONS)[number];
+
 const ARROW_SIZE = 18;
 const CHECK_ICON_SIZE = 12;
 const CONFIRM_ICON_SIZE = 40;
@@ -28,14 +30,21 @@ const METHOD_ICON_SIZE = 20;
 
 /* Shared underline treatment for every field: a box-shadow rather than a
    real border, so the focus state can thicken and recolour without shifting
-   any layout the way a growing border-width would. */
-const FIELD_CLASS =
-  "border-0 bg-transparent px-1 pb-1 text-inherit text-ink shadow-[inset_0_-1px_0_0_rgba(10,10,10,0.3)] outline-none transition-shadow duration-standard ease-standard placeholder:text-ink/35 focus:shadow-[inset_0_-2px_0_0_var(--color-brand)]";
+   any layout the way a growing border-width would. Colour and padding are
+   left out here since they differ (typed-text colour vs. the dropdown's
+   placeholder state; the desktop sentence's tight padding vs. mobile's
+   taller tap target), so each call site sets those itself rather than one
+   fighting the other for the same CSS property. */
+const FIELD_BASE =
+  "border-0 bg-transparent shadow-[inset_0_-1px_0_0_rgba(10,10,10,0.3)] outline-none transition-shadow duration-standard ease-standard placeholder:text-ink/35 focus:shadow-[inset_0_-2px_0_0_var(--color-brand)]";
 
 const SENTENCE_CLASS =
   "flex flex-wrap items-baseline gap-x-2 gap-y-3 font-sans text-form-sentence text-ink";
 
 const HINT_CLASS = "mt-1.5 text-body-sm text-brand";
+
+const MOBILE_LABEL_CLASS = "mb-1 block text-body-sm text-ink/70";
+const MOBILE_FIELD_CLASS = `${FIELD_BASE} block w-full px-1 py-2.5 text-body-md`;
 
 /* Demo placeholders only; wired to /contact stubs elsewhere on the site. */
 type ContactMethod = {
@@ -86,21 +95,21 @@ const CONTACT_METHODS: readonly ContactMethod[] = [
 
 type FieldErrors = {
   name: boolean;
+  service: boolean;
   contact: boolean;
   terms: boolean;
 };
 
 export function ContactSection() {
   const [name, setName] = useState("");
-  const [service, setService] = useState<(typeof SERVICE_OPTIONS)[number]>(
-    SERVICE_OPTIONS[0],
-  );
+  const [service, setService] = useState<ServiceOption | "">("");
   const [otherReason, setOtherReason] = useState("");
   const [contact, setContact] = useState("");
   const [accepted, setAccepted] = useState(false);
   const [errors, setErrors] = useState<FieldErrors | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
+  const isPlaceholder = service === "";
   const isOther = service === "Other";
   const trimmedName = name.trim();
   const displayName = trimmedName
@@ -112,12 +121,18 @@ export function ContactSection() {
 
     const nextErrors: FieldErrors = {
       name: name.trim().length === 0,
+      service: isPlaceholder,
       contact: contact.trim().length === 0,
       terms: !accepted,
     };
     setErrors(nextErrors);
 
-    if (!nextErrors.name && !nextErrors.contact && !nextErrors.terms) {
+    if (
+      !nextErrors.name &&
+      !nextErrors.service &&
+      !nextErrors.contact &&
+      !nextErrors.terms
+    ) {
       setSubmitted(true);
     }
   };
@@ -132,7 +147,7 @@ export function ContactSection() {
               aria-hidden="true"
               className="text-brand"
             />
-            <p className="mt-4 max-w-[28.75rem] text-[1.125rem]/[1.6] font-normal text-ink">
+            <p className="mt-4 max-w-[28.75rem] text-[1.375rem]/[1.35] font-bold text-ink">
               {displayName ? `Thanks, ${displayName}. ` : "Thanks. "}Your
               message just landed with us. We&rsquo;ll be in touch soon.
               Expect a reply within one business day.
@@ -162,37 +177,57 @@ export function ContactSection() {
               Schedule an appointment
             </h1>
 
-            <form
-              noValidate
-              onSubmit={handleSubmit}
-              className="mt-10 flex flex-col gap-5"
-            >
-              <div>
-                <div className={`${SENTENCE_CLASS} lg:flex-nowrap`}>
-                  <span>Hey, my name is</span>
+            <form noValidate onSubmit={handleSubmit} className="mt-10">
+              {/* Mobile: the inline sentence below doesn't translate to a
+                  narrow screen (fragments and the trailing "!" end up on
+                  their own lines), so under 640px this renders instead as
+                  stacked, labelled blocks. Both trees share the same state,
+                  so whichever one CSS shows always reflects the same
+                  values. */}
+              <div className="flex flex-col gap-3 sm:hidden">
+                <div>
+                  <label
+                    htmlFor="contact-name-mobile"
+                    className={MOBILE_LABEL_CLASS}
+                  >
+                    Hey, my name is
+                  </label>
                   <input
+                    id="contact-name-mobile"
                     type="text"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     placeholder="Type here"
-                    aria-label="Your name"
-                    className={`${FIELD_CLASS} w-full lg:w-40`}
+                    className={`${MOBILE_FIELD_CLASS} text-ink`}
                   />
-                  <span className="whitespace-nowrap">
-                    and I&rsquo;m looking for
-                  </span>
+                  {errors?.name && (
+                    <p className={HINT_CLASS}>
+                      We&rsquo;d love to know what to call you.
+                    </p>
+                  )}
+                </div>
 
-                  <span className="relative inline-flex">
+                <div>
+                  <label
+                    htmlFor="contact-service-mobile"
+                    className={MOBILE_LABEL_CLASS}
+                  >
+                    and I&rsquo;m looking for
+                  </label>
+                  <span className="relative block">
                     <select
+                      id="contact-service-mobile"
                       value={service}
                       onChange={(event) =>
-                        setService(
-                          event.target.value as (typeof SERVICE_OPTIONS)[number],
-                        )
+                        setService(event.target.value as ServiceOption | "")
                       }
-                      aria-label="What you're looking for"
-                      className={`${FIELD_CLASS} w-full cursor-pointer appearance-none pr-6 lg:w-auto`}
+                      className={`${MOBILE_FIELD_CLASS} cursor-pointer appearance-none pr-6 ${
+                        isPlaceholder ? "text-ink/35" : "text-ink"
+                      }`}
                     >
+                      <option value="" disabled>
+                        Select from dropdown
+                      </option>
                       {SERVICE_OPTIONS.map((option) => (
                         <option key={option} value={option}>
                           {option}
@@ -201,55 +236,153 @@ export function ContactSection() {
                     </select>
                     <ChevronDownIcon className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-ink/50" />
                   </span>
-                </div>
+                  {errors?.service && (
+                    <p className={HINT_CLASS}>
+                      Let us know what you&rsquo;re looking for.
+                    </p>
+                  )}
 
-                {/* Always mounted so the reveal can transition; inert keeps
-                    it out of the tab order and validation while hidden. A
-                    collapsing grid row (see .contact-other-row) reserves no
-                    space at all while closed, so line 2 below sits at
-                    normal spacing until this actually opens, at which point
-                    growing the row is what slides line 2 down. */}
-                <div
-                  data-open={isOther}
-                  inert={!isOther}
-                  className="contact-other-row"
-                >
-                  <div className="pt-3">
-                    <input
-                      type="text"
-                      value={otherReason}
-                      onChange={(event) => setOtherReason(event.target.value)}
-                      placeholder="Tell us what you need"
-                      aria-label="Tell us what you need"
-                      className={`${FIELD_CLASS} w-full sm:w-80`}
-                    />
+                  <div
+                    data-open={isOther}
+                    inert={!isOther}
+                    className="contact-other-row"
+                  >
+                    <div className="pt-3">
+                      <input
+                        type="text"
+                        value={otherReason}
+                        onChange={(event) =>
+                          setOtherReason(event.target.value)
+                        }
+                        placeholder="Tell us what you need"
+                        aria-label="Tell us what you need"
+                        className={`${MOBILE_FIELD_CLASS} text-ink`}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {errors?.name && (
-                  <p className={HINT_CLASS}>We&rsquo;d love to know what to call you.</p>
-                )}
-              </div>
-
-              <div>
-                <div className={`${SENTENCE_CLASS} lg:flex-nowrap`}>
-                  <span>Get in touch with me at</span>
+                <div>
+                  <label
+                    htmlFor="contact-reach-mobile"
+                    className={MOBILE_LABEL_CLASS}
+                  >
+                    Get in touch with me at
+                  </label>
                   <input
+                    id="contact-reach-mobile"
                     type="text"
                     value={contact}
                     onChange={(event) => setContact(event.target.value)}
                     placeholder="Your email or phone"
-                    aria-label="Your email or phone number"
-                    className={`${FIELD_CLASS} w-full lg:w-64`}
+                    className={`${MOBILE_FIELD_CLASS} text-ink`}
                   />
-                  <span>!</span>
+                  {errors?.contact && (
+                    <p className={HINT_CLASS}>How can we reach you?</p>
+                  )}
                 </div>
-                {errors?.contact && (
-                  <p className={HINT_CLASS}>How can we reach you?</p>
-                )}
               </div>
 
-              <div>
+              {/* Tablet and up: the conversational inline sentence,
+                  unchanged. */}
+              <div className="hidden sm:flex sm:flex-col sm:gap-5">
+                <div>
+                  <div className={`${SENTENCE_CLASS} lg:flex-nowrap`}>
+                    <span>Hey, my name is</span>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(event) => setName(event.target.value)}
+                      placeholder="Type here"
+                      aria-label="Your name"
+                      className={`${FIELD_BASE} w-full px-1 pb-1 text-ink lg:w-40`}
+                    />
+                    <span className="whitespace-nowrap">
+                      and I&rsquo;m looking for
+                    </span>
+
+                    <span className="relative inline-flex">
+                      <select
+                        value={service}
+                        onChange={(event) =>
+                          setService(event.target.value as ServiceOption | "")
+                        }
+                        aria-label="What you're looking for"
+                        className={`${FIELD_BASE} w-full cursor-pointer appearance-none px-1 pb-1 pr-6 lg:w-auto ${
+                          isPlaceholder ? "text-ink/35" : "text-ink"
+                        }`}
+                      >
+                        <option value="" disabled>
+                          Select from dropdown
+                        </option>
+                        {SERVICE_OPTIONS.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDownIcon className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-ink/50" />
+                    </span>
+                  </div>
+
+                  {/* Always mounted so the reveal can transition; inert
+                      keeps it out of the tab order and validation while
+                      hidden. A collapsing grid row (see .contact-other-row)
+                      reserves no space at all while closed, so line 2 below
+                      sits at normal spacing until this actually opens, at
+                      which point growing the row is what slides line 2
+                      down. */}
+                  <div
+                    data-open={isOther}
+                    inert={!isOther}
+                    className="contact-other-row"
+                  >
+                    <div className="pt-3">
+                      <input
+                        type="text"
+                        value={otherReason}
+                        onChange={(event) =>
+                          setOtherReason(event.target.value)
+                        }
+                        placeholder="Tell us what you need"
+                        aria-label="Tell us what you need"
+                        className={`${FIELD_BASE} w-full px-1 pb-1 text-ink sm:w-80`}
+                      />
+                    </div>
+                  </div>
+
+                  {errors?.name && (
+                    <p className={HINT_CLASS}>
+                      We&rsquo;d love to know what to call you.
+                    </p>
+                  )}
+                  {errors?.service && (
+                    <p className={HINT_CLASS}>
+                      Let us know what you&rsquo;re looking for.
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <div className={`${SENTENCE_CLASS} lg:flex-nowrap`}>
+                    <span>Get in touch with me at</span>
+                    <input
+                      type="text"
+                      value={contact}
+                      onChange={(event) => setContact(event.target.value)}
+                      placeholder="Your email or phone"
+                      aria-label="Your email or phone number"
+                      className={`${FIELD_BASE} w-full px-1 pb-1 text-ink lg:w-64`}
+                    />
+                    <span>!</span>
+                  </div>
+                  {errors?.contact && (
+                    <p className={HINT_CLASS}>How can we reach you?</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-6">
                 <label className="flex cursor-pointer items-center gap-2">
                   <span
                     className={`flex size-[1.125rem] shrink-0 items-center justify-center rounded-[0.25rem] border-[1.5px] transition-colors duration-standard ease-standard has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand ${
@@ -284,7 +417,7 @@ export function ContactSection() {
 
               <button
                 type="submit"
-                className="group inline-flex w-fit items-center gap-2 rounded-[0.5rem] bg-ink px-[1.75rem] py-[0.875rem] text-body-sm font-semibold text-on-dark transition-colors duration-standard ease-standard hover:bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
+                className="group mt-6 flex w-full items-center justify-center gap-2 rounded-[0.5rem] bg-ink px-[1.75rem] py-[0.875rem] text-body-sm font-semibold text-on-dark transition-colors duration-standard ease-standard hover:bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink sm:w-fit"
               >
                 Send enquiry
                 <ArrowRight

@@ -37,10 +37,10 @@ const SUBMENUS = {
 type SubmenuKey = keyof typeof SUBMENUS;
 
 const ICON_SIZE = 20;
-/** Smaller than a typical 24px icon so the mobile header reads light; the
-    button itself stays a full 44px hit area via its own padding, so the
-    tap target never shrinks along with it. */
-const HAMBURGER_SIZE = 18;
+/** Big enough to read as a confident, primary control, not an
+    afterthought; the button itself stays a full 44px hit area via its own
+    padding regardless of the glyph's own size. */
+const HAMBURGER_SIZE = 26;
 
 const CIRCLE_BUTTON_CLASS =
   "flex size-7 shrink-0 items-center justify-center rounded-pill transition-colors duration-standard ease-standard focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink";
