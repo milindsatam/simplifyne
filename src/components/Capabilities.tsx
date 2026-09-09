@@ -27,7 +27,12 @@ export function Capabilities() {
     setOpenIndex((current) => (current + 1) % capabilities.length);
 
   return (
-    <section className="section-padding bg-surface-white">
+    // AboutIntro above shares this same white background, and its own
+    // bottom padding already provides the seam's breathing room; keeping
+    // this section's full top padding on top of that would double it into
+    // a gap noticeably larger than every other (colour-changing) section
+    // boundary on the page, so only the top is pulled in here.
+    <section className="section-padding bg-surface-white pt-[1.5rem]">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <h2 className="font-display text-section-title font-bold text-ink">
           Capabilities
@@ -44,7 +49,7 @@ export function Capabilities() {
                     type="button"
                     onClick={() => setOpenIndex(index)}
                     aria-expanded={isOpen}
-                    className="flex w-full items-center justify-between gap-4 px-6 py-2.5 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink"
+                    className="flex w-full items-center justify-between gap-4 px-3 py-2 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink"
                   >
                     <span className="text-bento-heading-md font-semibold text-ink">
                       {capability.title}
@@ -65,7 +70,7 @@ export function Capabilities() {
                   </button>
 
                   <div data-open={isOpen} className="accordion-panel">
-                    <div className="px-6 pb-5">
+                    <div className="px-3 pb-5">
                       <p className="text-body-md text-ink-soft">
                         {capability.description}
                       </p>

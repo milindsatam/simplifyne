@@ -3,7 +3,6 @@ import path from "node:path";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { teamMembers, type TeamMember } from "@/data/team";
-import { LinkedinIcon } from "./LinkedinIcon";
 
 const ARROW_SIZE = 16;
 
@@ -28,7 +27,12 @@ export function TeamSection() {
   const rest = teamMembers.slice(3);
 
   return (
-    <section className="section-padding bg-surface-white">
+    // Capabilities above shares this same white background, and its own
+    // bottom padding already provides the seam's breathing room; keeping
+    // this section's full top padding on top of that would double it into
+    // a gap noticeably larger than every other (colour-changing) section
+    // boundary on the page, so only the top is pulled in here.
+    <section className="section-padding bg-surface-white pt-[1.5rem]">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <h2 className="font-display text-section-title font-bold text-ink">
           The team
@@ -103,14 +107,6 @@ function TeamCard({ member }: { member: TeamMember }) {
         {member.name}
       </p>
       <p className="mt-0.5 text-menu-body text-ink/60">{member.role}</p>
-
-      <a
-        href={member.linkedinHref}
-        className="mt-1.5 inline-flex items-center gap-1 text-[0.75rem] font-semibold text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-      >
-        <LinkedinIcon className="size-3" />
-        Follow on LinkedIn
-      </a>
     </li>
   );
 }
