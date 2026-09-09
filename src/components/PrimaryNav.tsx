@@ -20,6 +20,13 @@ export function PrimaryNav({ glassy = false }: { glassy?: boolean }) {
     ? "inline-flex h-6 items-center rounded-pill border border-cta-glass-border-ink bg-transparent px-3 text-nav font-semibold text-ink transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
     : "inline-flex h-6 items-center rounded-pill border border-cta-glass-border bg-cta-glass-bg px-3 text-nav font-semibold text-on-brand backdrop-blur-md transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-brand";
 
+  // Same treatment as the desktop pill, just tall enough on its own (44px)
+  // to be a comfortable tap target next to the hamburger, rather than
+  // inheriting the desktop pill's much shorter 24px.
+  const mobileCtaClass = glassy
+    ? "inline-flex h-[2.75rem] items-center rounded-pill border border-cta-glass-border-ink bg-transparent px-3 text-nav font-semibold text-ink transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
+    : "inline-flex h-[2.75rem] items-center rounded-pill border border-cta-glass-border bg-cta-glass-bg px-3 text-nav font-semibold text-on-brand backdrop-blur-md transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-brand";
+
   return (
     <div className="flex items-center">
       {/* The hamburger and mega-menu never show at the same width: the
@@ -48,7 +55,12 @@ export function PrimaryNav({ glassy = false }: { glassy?: boolean }) {
         </a>
       </nav>
 
-      <div className="lg:hidden">
+      {/* Logo, then this compact Let's Talk, then the hamburger: the same
+          priority order the desktop row keeps, just condensed. */}
+      <div className="flex items-center gap-2 lg:hidden">
+        <a href="/contact" className={mobileCtaClass}>
+          Let&rsquo;s Talk
+        </a>
         <MobileMenu glassy={glassy} />
       </div>
     </div>
