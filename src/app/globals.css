@@ -22,9 +22,18 @@
   --color-label-on-light: rgba(0, 0, 0, 0.62);
 
   --color-pill-hover: #f0f0f0;
+  --color-ink-hover: #1a1a1a; /* the "View all work" pill on hover */
 
   /* Body copy and captions on the white client section. */
   --color-ink-soft: rgba(10, 10, 10, 0.7);
+  --color-on-dark-soft: rgba(255, 255, 255, 0.7);
+
+  /* Case study bento cards. Eyebrows sit fainter than body copy on every
+     card, light or dark. */
+  --color-bento-label-on-light: rgba(10, 10, 10, 0.55);
+  --color-bento-label-on-dark: rgba(255, 255, 255, 0.55);
+  --color-bento-placeholder-on-light: rgba(10, 10, 10, 0.06);
+  --color-bento-placeholder-on-dark: rgba(255, 255, 255, 0.08);
 
   /* Services mega-menu. The panel is a light surface even though the header
      sits on blue, so it uses ink colours rather than the on-brand whites. */
@@ -92,6 +101,11 @@
   --text-client-caption: 0.9375rem; /* 15px */
   --text-client-caption--line-height: 1.5;
 
+  --text-bento-heading-lg: 1.375rem; /* 22px, the tall Leaderonomics card */
+  --text-bento-heading-lg--line-height: 1.25;
+  --text-bento-heading-md: 1.25rem; /* 20px, the wide E-Careers card */
+  --text-bento-heading-md--line-height: 1.3;
+
   --text-action: 0.875rem; /* 14px */
   --text-action--line-height: 1;
 
@@ -113,6 +127,9 @@
   --radius-panel: 0.75rem; /* 12px */
   --radius-menu-item: 0.5rem; /* 8px */
   --radius-thumb: 0.625rem; /* 10px */
+  --radius-bento: 1rem; /* 16px */
+
+  --bento-tall-height: 35rem; /* 560px, the left card's reference height */
 
   /* Cast downward only: the bar is full width, so its sides are off screen. */
   --shadow-panel: 0 12px 32px rgba(0, 0, 0, 0.1);
@@ -138,6 +155,10 @@
   --logo-dim-opacity: 0.08; /* siblings of the hovered logo fade to this */
   --logo-caption-gap: 1rem; /* 16px, logo to caption */
   --logo-caption-shift: 0.5rem; /* 8px, caption's slide-in travel */
+
+  /* Case study bento cards. */
+  --bento-lift: 0.25rem; /* 4px, the hover rise */
+  --shadow-bento-hover: 0 16px 40px rgba(0, 0, 0, 0.14);
 }
 
 @utility duration-standard {
@@ -342,6 +363,91 @@
     .client-grid:has(.client-cell:hover, .client-cell:focus-within)
       .client-cell:not(:hover):not(:focus-within) {
       opacity: 1;
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     Case studies bento grid. The shape itself (one tall card, a wide card,
+     two equal cards) is what utilities can't express, so it's built with
+     named grid areas rather than a generic column count; everything else on
+     the cards (colour, radius, padding) stays in the markup as utilities.
+  ------------------------------------------------------------------------- */
+
+  .bento-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: calc(var(--spacing) * 2); /* 16px */
+  }
+
+  /* Tablet: the bento shape doesn't survive a narrower row, so it steps down
+     to a plain 2x2 rather than forcing the tall card's proportions. */
+  @media (width >= 40rem) {
+    .bento-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Desktop: the actual bento. Two equal rows on the right naturally split
+     to roughly half the left card's height each, so the wide card and the
+     two lower cards need no height math of their own. */
+  @media (width >= 64rem) {
+    .bento-grid {
+      grid-template-columns: 4fr 3fr 3fr;
+      grid-template-rows: 1fr 1fr;
+      grid-template-areas:
+        "left top top"
+        "left bl br";
+    }
+
+    .bento-card--left {
+      grid-area: left;
+      min-height: var(--bento-tall-height);
+    }
+
+    .bento-card--top {
+      grid-area: top;
+    }
+
+    .bento-card--bl {
+      grid-area: bl;
+    }
+
+    .bento-card--br {
+      grid-area: br;
+    }
+  }
+
+  .bento-card {
+    position: relative;
+    display: flex;
+    height: 100%;
+    min-height: var(--card-min-height);
+    flex-direction: column;
+    text-align: left;
+    border-radius: var(--radius-bento);
+    transition:
+      transform var(--duration-standard) var(--ease-standard),
+      box-shadow var(--duration-standard) var(--ease-standard);
+  }
+
+  .bento-card:hover,
+  .bento-card:focus-visible {
+    box-shadow: var(--shadow-bento-hover);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bento-card:hover,
+    .bento-card:focus-visible {
+      transform: translateY(calc(var(--bento-lift) * -1));
+    }
+
+    .bento-arrow {
+      transition: translate var(--duration-standard) var(--ease-standard);
+    }
+
+    .bento-card:hover .bento-arrow,
+    .bento-card:focus-visible .bento-arrow {
+      translate: var(--arrow-shift) 0;
     }
   }
 
