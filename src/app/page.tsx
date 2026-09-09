@@ -1,6 +1,7 @@
 import { CaseStudies } from "@/components/CaseStudies";
 import { ClientLogos } from "@/components/ClientLogos";
 import { ClosingStatement } from "@/components/ClosingStatement";
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Products } from "@/components/Products";
@@ -18,6 +19,7 @@ export default function Home() {
         <Products />
         <ClosingStatement />
       </main>
+      <Footer />
     </>
   );
 }
