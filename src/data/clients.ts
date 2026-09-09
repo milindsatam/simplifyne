@@ -18,7 +18,7 @@ export const clients: readonly Client[] = [
     logo: "/leaderonomics-logo.webp",
     logoWidth: 350,
     logoHeight: 55,
-    work: "Course subscription platform and full website build",
+    work: "Course subscription platform and website",
   },
   {
     id: "ecareers",
