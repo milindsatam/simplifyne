@@ -11,6 +11,7 @@
   --color-ink: #0a0a0a;
   --color-surface-gray: #e9e9ea;
   --color-surface-white: #ffffff;
+  --color-surface-muted: #f4f4f5; /* the light/dark rhythm's other "white" */
   --color-on-brand: #ffffff;
   --color-on-brand-muted: rgba(255, 255, 255, 0.72);
   --color-on-dark: #ffffff;
@@ -71,7 +72,10 @@
   --text-hero--line-height: 1.05;
   --text-hero--letter-spacing: -0.02em;
 
-  --text-section-title: clamp(2rem, 3.5vw, 2.75rem);
+  /* Every section H2 (the hero's H1 is separate) shares this one size, fixed
+     rather than clamped, so a new section inherits it instead of picking its
+     own scale. */
+  --text-section-title: 2.25rem; /* 36px */
   --text-section-title--line-height: 1.1;
 
   --text-wordmark: 1.375rem;
