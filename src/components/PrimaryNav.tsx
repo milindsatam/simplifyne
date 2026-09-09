@@ -43,7 +43,7 @@ export function PrimaryNav({ glassy = false }: { glassy?: boolean }) {
           ))}
         </ul>
 
-        <a href="#" className={ctaClass}>
+        <a href="/contact" className={ctaClass}>
           Let&rsquo;s Talk
         </a>
       </nav>
