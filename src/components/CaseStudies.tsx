@@ -22,9 +22,7 @@ export function CaseStudies() {
         <div className="lg:flex lg:items-end lg:justify-between lg:gap-6">
           <div>
             <h2 className="font-display text-section-title font-bold text-ink">
-              The work behind
-              <br />
-              the growth
+              Some of our work
             </h2>
 
             <p className="mt-4 max-w-client-intro text-body-md text-ink-soft">

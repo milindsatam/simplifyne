@@ -153,9 +153,9 @@ export function MobileMenu({ glassy = false }: { glassy?: boolean }) {
             aria-modal="true"
             aria-label="Menu"
             data-open={open}
-            className="mobile-menu-backdrop fixed inset-0 z-50 flex items-center justify-center bg-mobile-menu-scrim p-6"
+            className="mobile-menu-backdrop fixed inset-0 z-50 flex items-center justify-center bg-mobile-menu-scrim p-4"
           >
-            <div className="mobile-menu-stage w-full max-w-[26rem]">
+            <div className="mobile-menu-stage w-full max-w-[28rem]">
               {/* Main card. Sits in normal flow, so it's what gives the
                   stage its height; the submenu card below overlays exactly
                   this same frame once it's active. */}

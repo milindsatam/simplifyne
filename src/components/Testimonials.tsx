@@ -79,7 +79,12 @@ export function Testimonials() {
   }, [instant]);
 
   return (
-    <section className="section-padding bg-surface-white">
+    // Case studies above shares this same white background, and its own
+    // bottom padding already provides the seam's breathing room; keeping
+    // this section's full top padding on top of that would double it into
+    // a gap noticeably larger than every other (colour-changing) section
+    // boundary on the page, so only the top is pulled in here.
+    <section className="section-padding bg-surface-white pt-[1.5rem]">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <div className="flex items-end justify-between gap-6">
           <h2 className="font-display text-section-title font-bold text-ink">
