@@ -2,7 +2,11 @@ import { ServiceCardRow } from "./ServiceCardRow";
 
 export function Hero() {
   return (
-    <section className="bg-brand pt-8 pb-8 lg:pt-12">
+    // The header is fixed and out of the document flow, so this top padding
+    // has to clear it on its own: header height (77px below 1024px, 97px
+    // from 1024px up) plus ~64px of genuine breathing room above the H1,
+    // rounded to a clean rem value at each of the header's own two heights.
+    <section className="bg-brand pt-[9rem] pb-8 lg:pt-[10rem]">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <h1 className="font-display text-hero font-bold text-on-brand">
           We build around

@@ -78,6 +78,10 @@
   --color-label-featured: rgba(17, 17, 17, 0.6);
   --color-menu-divider: #ececec;
 
+  /* Mobile menu backdrop. Dims the page behind the floating cards rather
+     than covering it outright, so it's visibly still there. */
+  --color-mobile-menu-scrim: rgba(10, 10, 10, 0.5);
+
   /* The "AI & Automation" card is a gradient, not a flat surface. */
   --gradient-ai: linear-gradient(180deg, #3b3b3b 0%, #000000 100%);
 
@@ -172,6 +176,12 @@
      (p-1 = 8px, p-2 = 16px, p-3 = 24px, p-6 = 48px, p-8 = 64px). */
   --spacing: 0.5rem;
 
+  /* Every major section (the hero excepted, which needs its own
+     header-aware top padding) shares this one vertical rhythm. */
+  --section-padding-mobile: 4.5rem; /* 72px */
+  --section-padding-tablet: 6rem; /* 96px */
+  --section-padding-desktop: 7.5rem; /* 120px */
+
   --container-site: 78.75rem; /* 1260px */
   --container-hero-copy: 36rem; /* 576px */
   --container-card-heading: 20ch;
@@ -189,6 +199,7 @@
   --radius-menu-item: 0.5rem; /* 8px */
   --radius-thumb: 0.625rem; /* 10px */
   --radius-bento: 1rem; /* 16px */
+  --radius-mobile-menu-card: 1.25rem; /* 20px */
 
   --bento-tall-height: 35rem; /* 560px, the left card's reference height */
 
@@ -209,10 +220,11 @@
   --arrow-shift: 4px;
   --cta-arrow-shift: 3px;
 
-  /* Mobile menu. How far the main card slides left so the incoming submenu
-     card's edge peeks over it, rather than fully hiding behind it. */
-  --mobile-menu-peek: -12%;
-  --shadow-mobile-menu-sub: -12px 0 24px rgba(10, 10, 10, 0.08);
+  /* Mobile menu. The gap kept between the two floating cards when a
+     submenu is open, so they slide apart rather than touching edge to
+     edge; it's what leaves a sliver of the off-to-the-side card peeking
+     past the stage instead of it vanishing outright. */
+  --mobile-menu-gap: 1.5rem; /* 24px */
 
   /* Client grid. */
   --grid-reveal-rise: 1.5rem; /* 24px, the scroll reveal's travel */
@@ -239,6 +251,30 @@
 
 @utility duration-standard {
   transition-duration: var(--duration-standard);
+}
+
+/* One vertical rhythm for every major section, so top-to-bottom the page
+   never reads tighter or looser at one seam than the next. The hero is the
+   one exception (its own header-aware top padding lives in Hero.tsx). */
+@layer components {
+  .section-padding {
+    padding-top: var(--section-padding-mobile);
+    padding-bottom: var(--section-padding-mobile);
+  }
+
+  @media (width >= 40rem) {
+    .section-padding {
+      padding-top: var(--section-padding-tablet);
+      padding-bottom: var(--section-padding-tablet);
+    }
+  }
+
+  @media (width >= 64rem) {
+    .section-padding {
+      padding-top: var(--section-padding-desktop);
+      padding-bottom: var(--section-padding-desktop);
+    }
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -530,57 +566,67 @@
   }
 
   /* -------------------------------------------------------------------------
-     Mobile menu. A Ramotion-style nested slide-over: the panel itself fades
-     and rises in on open (the same shape as the mega-panel above), and its
-     two cards, the main list and whichever submenu is active, slide past
-     each other horizontally rather than cross-fading, matching the desktop
-     site's own motion language.
+     Mobile menu. Two independent floating cards, not one full-bleed panel:
+     a dimmed backdrop centres a "stage" the size of one card, the main list
+     sits there in normal flow (so it gives the stage its height), and the
+     submenu card is absolutely overlaid on that same frame. Both cards
+     slide by exactly their own width plus the gap between them, so they
+     never overlap and a sliver of whichever one is off to the side stays
+     visible past the stage's own edge, peeking, rather than a continuous
+     panel dragging behind it.
   ------------------------------------------------------------------------- */
 
-  .mobile-menu-panel {
+  .mobile-menu-backdrop {
     visibility: hidden;
     opacity: 0;
-    transform: translateY(var(--reveal-offset-y));
     transition:
       opacity var(--duration-standard) var(--ease-standard),
-      transform var(--duration-standard) var(--ease-standard),
       visibility 0s linear var(--duration-standard);
   }
 
-  .mobile-menu-panel[data-open="true"] {
+  .mobile-menu-backdrop[data-open="true"] {
     visibility: visible;
     opacity: 1;
-    transform: none;
-    transition:
-      opacity var(--duration-standard) var(--ease-standard),
-      transform var(--duration-standard) var(--ease-standard),
-      visibility 0s;
+    transition: opacity var(--duration-standard) var(--ease-standard);
   }
 
-  /* The main card's own transform is the "previous card peeking behind
-     the submenu" effect, not just decoration, so reduced motion (below)
-     only drops its transition, never the transform itself. */
+  .mobile-menu-stage {
+    position: relative;
+    transform: scale(0.96);
+    opacity: 0;
+    transition:
+      transform var(--duration-standard) var(--ease-standard),
+      opacity var(--duration-standard) var(--ease-standard);
+  }
+
+  .mobile-menu-backdrop[data-open="true"] .mobile-menu-stage {
+    transform: none;
+    opacity: 1;
+  }
+
+  .mobile-menu-card {
+    border-radius: var(--radius-mobile-menu-card);
+    box-shadow: var(--shadow-panel);
+  }
+
   .mobile-menu-main {
-    position: absolute;
-    inset: 0;
+    transform: translateX(0);
     transition: transform var(--duration-standard) var(--ease-standard);
   }
 
   .mobile-menu-main[data-pushed="true"] {
-    transform: translateX(var(--mobile-menu-peek));
+    /* The stage is sized to exactly one card, so translateX's own
+       percentage (always relative to the element's own box) shifts this
+       by its full width regardless of how wide that ends up being at any
+       viewport; the added gap is what keeps it from touching the submenu
+       card now sitting where this one used to be. */
+    transform: translateX(calc(-100% - var(--mobile-menu-gap)));
   }
 
   .mobile-menu-sub {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    /* Narrower than the panel by exactly the amount the main card shifts
-       left, so the same sliver it moves out of is the sliver this card's
-       left edge leaves uncovered, letting it peek through underneath. */
-    width: calc(100% + var(--mobile-menu-peek));
-    box-shadow: var(--shadow-mobile-menu-sub);
-    transform: translateX(100%);
+    inset: 0;
+    transform: translateX(calc(100% + var(--mobile-menu-gap)));
     transition: transform var(--duration-standard) var(--ease-standard);
   }
 
@@ -648,14 +694,18 @@
       transform: none;
     }
 
-    .mobile-menu-panel,
-    .mobile-menu-panel[data-open="true"] {
+    .mobile-menu-backdrop,
+    .mobile-menu-backdrop[data-open="true"] {
+      transition: none;
+    }
+
+    .mobile-menu-stage {
       transform: none;
       transition: none;
     }
 
-    /* Their transform still positions the cards (off-screen vs. peeking),
-       so only the animated transition drops, per the panel rule above. */
+    /* Their transform still positions the cards (off to the side vs.
+       centred), so only the animated transition drops, per above. */
     .mobile-menu-main,
     .mobile-menu-sub {
       transition: none;

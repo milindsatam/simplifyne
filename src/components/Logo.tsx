@@ -14,12 +14,13 @@ export function Logo({ glassy = false }: { glassy?: boolean }) {
       {/* Only a white mark exists. brightness-0 multiplies every opaque
           pixel to black while leaving the transparent background alone, so
           the same file stands in for an ink mark once the header goes
-          glassy, no second asset needed. */}
+          glassy, no second asset needed. Smaller on mobile, where the whole
+          header is lighter, back to full size from lg up. */}
       <Image
         src={logo}
         alt="Simplifyne"
         priority
-        className={`h-3.5 w-auto motion-safe:transition-[filter] motion-safe:duration-standard motion-safe:ease-standard ${
+        className={`h-[1.375rem] w-auto motion-safe:transition-[filter] motion-safe:duration-standard motion-safe:ease-standard lg:h-3.5 ${
           glassy ? "brightness-0" : ""
         }`}
       />

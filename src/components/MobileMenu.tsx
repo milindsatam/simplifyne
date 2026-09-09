@@ -37,7 +37,13 @@ const SUBMENUS = {
 type SubmenuKey = keyof typeof SUBMENUS;
 
 const ICON_SIZE = 20;
-const HAMBURGER_SIZE = 22;
+/** Smaller than a typical 24px icon so the mobile header reads light; the
+    button itself stays a full 44px hit area via its own padding, so the
+    tap target never shrinks along with it. */
+const HAMBURGER_SIZE = 18;
+
+const CIRCLE_BUTTON_CLASS =
+  "flex size-7 shrink-0 items-center justify-center rounded-pill transition-colors duration-standard ease-standard focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink";
 
 /** The portal target only exists client-side. Never changes once true, so
     no subscription is needed beyond the initial client/server mismatch. */
@@ -55,7 +61,8 @@ export function MobileMenu({ glassy = false }: { glassy?: boolean }) {
   const [submenu, setSubmenu] = useState<SubmenuKey | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const mainCloseRef = useRef<HTMLButtonElement>(null);
+  const subBackRef = useRef<HTMLButtonElement>(null);
 
   const close = () => {
     setOpen(false);
@@ -64,14 +71,14 @@ export function MobileMenu({ glassy = false }: { glassy?: boolean }) {
   };
 
   // Body scroll lock, initial focus, Escape-to-close, and a focus trap, all
-  // scoped to the open panel. `inert` on the two cards already keeps
+  // scoped to the open backdrop. `inert` on the two cards already keeps
   // whichever one isn't active out of this trap's tab order, so the query
   // below only ever has to consider what's actually visible.
   useEffect(() => {
     if (!open) return;
 
     document.body.style.overflow = "hidden";
-    closeButtonRef.current?.focus();
+    mainCloseRef.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -111,6 +118,13 @@ export function MobileMenu({ glassy = false }: { glassy?: boolean }) {
     };
   }, [open]);
 
+  // Hands focus to the submenu card the moment it becomes the active one,
+  // mirroring how attention visually moves from one floating card to the
+  // next.
+  useEffect(() => {
+    if (submenu) subBackRef.current?.focus();
+  }, [submenu]);
+
   const hamburgerClass = glassy
     ? "flex size-[2.75rem] items-center justify-center rounded-pill text-ink transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
     : "flex size-[2.75rem] items-center justify-center rounded-pill text-on-brand transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-brand";
@@ -130,100 +144,122 @@ export function MobileMenu({ glassy = false }: { glassy?: boolean }) {
 
       {mounted &&
         createPortal(
+          // A dimmed backdrop, not a full-bleed panel: it centres a "stage"
+          // sized to one card, so the page stays faintly visible around the
+          // floating menu rather than being covered outright.
           <div
             ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
             data-open={open}
-            className="mobile-menu-panel fixed inset-0 z-50 overflow-hidden bg-surface-white"
+            className="mobile-menu-backdrop fixed inset-0 z-50 flex items-center justify-center bg-mobile-menu-scrim p-6"
           >
-            {/* Main list. Slides partly off to the left, still peeking at the
-                edge, whenever a submenu is active over it. */}
-            <div
-              data-pushed={submenu !== null}
-              aria-hidden={submenu !== null}
-              inert={submenu !== null}
-              className="mobile-menu-main flex flex-col px-2 pt-10 pb-9 sm:px-3"
-            >
-              <nav aria-label="Mobile" className="flex-1">
-                <ul className="flex flex-col gap-1">
-                  {TOP_ITEMS.map((item) =>
-                    item.submenu ? (
-                      <li key={item.id}>
-                        <button
-                          type="button"
-                          onClick={() => setSubmenu(item.submenu)}
-                          className="flex w-full items-center justify-between gap-2 rounded-menu-item py-2 text-left font-display text-mobile-menu-item font-bold text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-                        >
-                          {item.label}
-                          <ArrowRight size={ICON_SIZE} aria-hidden="true" />
-                        </button>
-                      </li>
-                    ) : (
-                      <li key={item.id}>
-                        <a
-                          href={item.href}
-                          className="block rounded-menu-item py-2 font-display text-mobile-menu-item font-bold text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-                        >
-                          {item.label}
-                        </a>
-                      </li>
-                    ),
-                  )}
-                </ul>
-              </nav>
-            </div>
-
-            {/* Submenu. Slides in from the right over the main card above. */}
-            <div
-              data-open={submenu !== null}
-              aria-hidden={submenu === null}
-              inert={submenu === null}
-              className="mobile-menu-sub flex flex-col bg-surface-white px-2 pt-10 pb-9 sm:px-3"
-            >
-              {submenu && (
-                <>
-                  <h2 className="text-menu-heading font-semibold text-ink">
-                    {SUBMENUS[submenu].label}
-                  </h2>
-                  <ul className="mt-4 flex-1 overflow-y-auto">
-                    {SUBMENUS[submenu].items.map((sub) => (
-                      <li
-                        key={sub.id}
-                        className="border-b border-menu-divider"
-                      >
-                        <a
-                          href={sub.href}
-                          className="block py-3 text-mobile-submenu-item text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-                        >
-                          {sub.label}
-                        </a>
-                      </li>
-                    ))}
+            <div className="mobile-menu-stage w-full max-w-[26rem]">
+              {/* Main card. Sits in normal flow, so it's what gives the
+                  stage its height; the submenu card below overlays exactly
+                  this same frame once it's active. */}
+              <div
+                data-pushed={submenu !== null}
+                aria-hidden={submenu !== null}
+                inert={submenu !== null}
+                className="mobile-menu-card mobile-menu-main bg-surface-white p-6"
+              >
+                <nav aria-label="Mobile">
+                  <ul className="flex flex-col gap-1">
+                    {TOP_ITEMS.map((item) =>
+                      item.submenu ? (
+                        <li key={item.id}>
+                          <button
+                            type="button"
+                            onClick={() => setSubmenu(item.submenu)}
+                            className="flex w-full items-center justify-between gap-2 rounded-menu-item py-2 text-left font-display text-mobile-menu-item font-bold text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                          >
+                            {item.label}
+                            <ArrowRight size={ICON_SIZE} aria-hidden="true" />
+                          </button>
+                        </li>
+                      ) : (
+                        <li key={item.id}>
+                          <a
+                            href={item.href}
+                            className="block rounded-menu-item py-2 font-display text-mobile-menu-item font-bold text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      ),
+                    )}
                   </ul>
+                </nav>
 
+                <div className="mt-6 flex justify-end">
                   <button
+                    ref={mainCloseRef}
                     type="button"
-                    aria-label="Back to main menu"
-                    onClick={() => setSubmenu(null)}
-                    className="absolute bottom-6 left-2 flex size-7 items-center justify-center rounded-pill bg-surface-muted text-ink transition-colors duration-standard ease-standard hover:bg-pill-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:left-3"
+                    aria-label="Close menu"
+                    onClick={close}
+                    className={`${CIRCLE_BUTTON_CLASS} bg-ink text-on-dark hover:bg-ink-hover`}
                   >
-                    <ArrowLeft size={ICON_SIZE} aria-hidden="true" />
+                    <X size={ICON_SIZE} aria-hidden="true" />
                   </button>
-                </>
-              )}
-            </div>
+                </div>
+              </div>
 
-            <button
-              ref={closeButtonRef}
-              type="button"
-              aria-label="Close menu"
-              onClick={close}
-              className="absolute bottom-6 right-2 flex size-7 items-center justify-center rounded-pill bg-ink text-on-dark transition-colors duration-standard ease-standard hover:bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:right-3"
-            >
-              <X size={ICON_SIZE} aria-hidden="true" />
-            </button>
+              {/* Submenu card. Overlays the main card's frame, sliding in
+                  from the right (and pushing that one to the left, with a
+                  gap) once a submenu is chosen. */}
+              <div
+                data-open={submenu !== null}
+                aria-hidden={submenu === null}
+                inert={submenu === null}
+                className="mobile-menu-card mobile-menu-sub bg-surface-white p-6"
+              >
+                {submenu && (
+                  <>
+                    <h2 className="text-menu-heading font-semibold text-ink">
+                      {SUBMENUS[submenu].label}
+                    </h2>
+                    <ul className="mt-4">
+                      {SUBMENUS[submenu].items.map((sub) => (
+                        <li
+                          key={sub.id}
+                          className="border-b border-menu-divider"
+                        >
+                          <a
+                            href={sub.href}
+                            className="block py-3 text-mobile-submenu-item text-ink transition-colors duration-standard ease-standard hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                          >
+                            {sub.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-6 flex items-center justify-between">
+                      <button
+                        ref={subBackRef}
+                        type="button"
+                        aria-label="Back to main menu"
+                        onClick={() => setSubmenu(null)}
+                        className={`${CIRCLE_BUTTON_CLASS} bg-surface-muted text-ink hover:bg-pill-hover`}
+                      >
+                        <ArrowLeft size={ICON_SIZE} aria-hidden="true" />
+                      </button>
+
+                      <button
+                        type="button"
+                        aria-label="Close menu"
+                        onClick={close}
+                        className={`${CIRCLE_BUTTON_CLASS} bg-ink text-on-dark hover:bg-ink-hover`}
+                      >
+                        <X size={ICON_SIZE} aria-hidden="true" />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>,
           document.body,
         )}
