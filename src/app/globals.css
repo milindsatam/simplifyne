@@ -174,6 +174,20 @@
   --text-mobile-submenu-item: 1.125rem; /* 18px */
   --text-mobile-submenu-item--line-height: 1.4;
 
+  /* Contact page. A page title reads larger than any section H2, so it gets
+     its own scale rather than borrowing --text-section-title; it steps up
+     at the same two breakpoints (see the unlayered overrides below). */
+  --text-page-title: 2rem; /* 32px, mobile default */
+  --text-page-title--line-height: 1.1;
+
+  /* The conversational form's sentence text. Large enough to read as the
+     page's main content, not a label; scales down once on mobile. */
+  --text-form-sentence: 1.125rem; /* 18px, mobile default */
+  --text-form-sentence--line-height: 1.5;
+
+  --text-eyebrow: 0.875rem; /* 14px */
+  --text-eyebrow--line-height: 1.4;
+
   /* Layout ---------------------------------------------------------------- */
   /* 8px base grid: every numeric spacing utility is a multiple of 8
      (p-1 = 8px, p-2 = 16px, p-3 = 24px, p-6 = 48px, p-8 = 64px). */
@@ -255,12 +269,15 @@
 @media (width >= 40rem) {
   :root {
     --text-section-title: 2rem; /* 32px, tablet */
+    --text-page-title: 2.25rem; /* 36px, tablet */
+    --text-form-sentence: 1.5rem; /* 24px, tablet and up */
   }
 }
 
 @media (width >= 64rem) {
   :root {
     --text-section-title: 2.25rem; /* 36px, desktop, unchanged from before */
+    --text-page-title: 2.75rem; /* 44px, desktop */
   }
 }
 
@@ -648,6 +665,33 @@
   }
 
   /* -------------------------------------------------------------------------
+     Contact page. The "Other" field is always mounted (see
+     ContactSection.tsx, which also toggles `inert`) so this can transition
+     it in on select; a grid column track rather than a width lets the
+     input's own intrinsic size decide the settled width instead of a
+     guessed max-width.
+  ------------------------------------------------------------------------- */
+
+  .contact-other-reveal {
+    display: grid;
+    grid-template-columns: 0fr;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      grid-template-columns var(--duration-standard) var(--ease-standard),
+      opacity var(--duration-standard) var(--ease-standard);
+  }
+
+  .contact-other-reveal > * {
+    min-width: 0;
+  }
+
+  .contact-other-reveal[data-open="true"] {
+    grid-template-columns: 1fr;
+    opacity: 1;
+  }
+
+  /* -------------------------------------------------------------------------
      Testimonial carousel. A filmstrip, not a cross-dissolve: every slide
      stays mounted side by side in the track, and only the track's own
      transform ever changes, so prev/next always reads as one frame moving
@@ -672,6 +716,10 @@
   /* Reduced motion: no resize, no slide, no rise. The reveal still happens,
      it just happens instantly. */
   @media (prefers-reduced-motion: reduce) {
+    .contact-other-reveal {
+      transition: none;
+    }
+
     .testimonial-track {
       transition: none;
     }

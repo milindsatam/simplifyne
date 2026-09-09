@@ -30,7 +30,7 @@ const FOOTER_COLUMNS = [
     links: [
       { label: "hello@simplifyne.com", href: "#" },
       { label: "+91 90000 00000", href: "#" },
-      { label: "Contact us", href: "#" },
+      { label: "Contact us", href: "/contact" },
     ],
   },
 ] as const;

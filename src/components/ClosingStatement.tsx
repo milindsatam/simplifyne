@@ -38,7 +38,7 @@ export function ClosingStatement() {
 
         <div className="mt-5 flex justify-center">
           <a
-            href="#"
+            href="/contact"
             className="group inline-flex items-center gap-2 rounded-pill bg-ink px-5 py-[1.25rem] text-cta-large font-semibold text-on-dark transition-colors duration-standard ease-standard hover:bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
           >
             Let&apos;s talk
