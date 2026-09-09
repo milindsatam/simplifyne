@@ -89,8 +89,8 @@
   --text-featured-title: 1rem; /* 16px */
   --text-featured-title--line-height: 1.3;
 
-  --text-caption: 0.8125rem; /* 13px */
-  --text-caption--line-height: 1.4;
+  --text-client-caption: 0.9375rem; /* 15px */
+  --text-client-caption--line-height: 1.5;
 
   --text-action: 0.875rem; /* 14px */
   --text-action--line-height: 1;
@@ -105,7 +105,9 @@
   --container-card-heading: 20ch;
   --container-card-copy: 30ch;
   --container-menu-intro: 13.75rem; /* 220px */
+  --container-section-title: 20ch;
   --container-client-intro: 27.5rem; /* 440px */
+  --container-client-caption: 14rem; /* 224px, fits the longest caption in two lines */
 
   --radius-pill: 999px;
   --radius-panel: 0.75rem; /* 12px */
@@ -129,12 +131,13 @@
   --arrow-shift: 4px;
   --cta-arrow-shift: 3px;
 
-  /* Client logo grid. The caption reuses --reveal-offset-y, so its 12px
-     rise stays in step with the service cards' Expand. */
-  --logo-height: 2.5rem; /* 40px */
-  --logo-rest-opacity: 0.4;
+  /* Client logo grid. */
+  --logo-height: 4rem; /* 64px */
   --logo-rise: 1.5rem; /* 24px, the scroll reveal's travel */
   --logo-stagger: 60ms;
+  --logo-dim-opacity: 0.08; /* siblings of the hovered logo fade to this */
+  --logo-caption-gap: 1rem; /* 16px, logo to caption */
+  --logo-caption-shift: 0.5rem; /* 8px, caption's slide-in travel */
 }
 
 @utility duration-standard {
@@ -270,69 +273,75 @@
   }
 
   /* -------------------------------------------------------------------------
-     Client logo grid. Three pieces of state the utilities cannot express: the
-     once-only scroll cascade, its per-cell delay, and the hover that colours
-     the logo while raising its caption.
+     Client logo grid. Logos stay full colour throughout; the only resting
+     property utilities can't express is the once-only scroll cascade (its
+     per-cell delay is driven from React, since a CSS transition-delay would
+     otherwise also stall the hover dim below) and the hover itself, which
+     dims every sibling and raises one caption beside its logo.
   ------------------------------------------------------------------------- */
 
-  /* The cell carries the scroll reveal. The logo's own resting opacity lives
-     on the image below, so the two never fight over the same property. */
   .client-cell {
+    position: relative;
     opacity: 0;
     transform: translateY(var(--logo-rise));
     transition:
       opacity var(--duration-standard) var(--ease-standard),
       transform var(--duration-standard) var(--ease-standard);
-    /* --logo-index is set per cell, so the row cascades left to right. */
-    transition-delay: calc(var(--logo-index) * var(--logo-stagger));
   }
 
-  [data-revealed="true"] .client-cell {
+  .client-cell[data-revealed="true"] {
     opacity: 1;
     transform: none;
   }
 
-  .client-logo {
-    filter: grayscale(1);
-    opacity: var(--logo-rest-opacity);
-    transition:
-      filter var(--duration-standard) var(--ease-standard),
-      opacity var(--duration-standard) var(--ease-standard);
+  /* Hovering or focusing one cell dims every other. :has() reaches up to the
+     grid to compare cells, so the fade needs no JS state at all. */
+  .client-grid:has(.client-cell:hover, .client-cell:focus-within)
+    .client-cell:not(:hover):not(:focus-within) {
+    opacity: var(--logo-dim-opacity);
   }
 
   .client-caption {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + var(--logo-caption-gap));
+    /* An explicit width, not max-width: with only `left` set, an
+       absolutely positioned box otherwise shrink-fits against its
+       containing block (the cell), collapsing to a sliver instead of
+       running out over the dimmed neighbour it's meant to sit on. */
+    width: var(--container-client-caption);
     opacity: 0;
-    transform: translateY(var(--reveal-offset-y));
+    /* Decorative and often overlapping the next cell, so it must never
+       intercept the pointer events meant for the logo underneath it. */
+    pointer-events: none;
+    transform: translateY(-50%) translateX(calc(var(--logo-caption-shift) * -1));
     transition:
       opacity var(--duration-standard) var(--ease-standard),
       transform var(--duration-standard) var(--ease-standard);
   }
 
-  /* :focus-within also matches the cell itself, which is what carries the
-     tabindex, so the pointer and keyboard paths share one rule. */
-  .client-cell:hover .client-logo,
-  .client-cell:focus-within .client-logo {
-    filter: grayscale(0);
-    opacity: 1;
+  /* The last cell has no sibling to its right to raise a caption over, so it
+     raises one over its left neighbour instead. */
+  .client-cell:last-child .client-caption {
+    left: auto;
+    right: calc(100% + var(--logo-caption-gap));
+    text-align: right;
+    transform: translateY(-50%) translateX(var(--logo-caption-shift));
   }
 
   .client-cell:hover .client-caption,
   .client-cell:focus-within .client-caption {
     opacity: 1;
-    transform: none;
+    transform: translateY(-50%) translateX(0);
   }
 
-  /* Mobile has no pointer to hover with, so the coloured logo and its caption
-     become the resting state rather than something out of reach. */
+  /* Mobile has no pointer to hover with and no room beside a logo for a
+     caption, so captions are never rendered there at all (see the `hidden
+     sm:block` on the element itself); this only guards the dim effect. */
   @media (width < 40rem) {
-    .client-logo {
-      filter: grayscale(0);
+    .client-grid:has(.client-cell:hover, .client-cell:focus-within)
+      .client-cell:not(:hover):not(:focus-within) {
       opacity: 1;
-    }
-
-    .client-caption {
-      opacity: 1;
-      transform: none;
     }
   }
 
@@ -361,13 +370,11 @@
       transition: none;
     }
 
-    /* The logos arrive already in place; hover still colours them and shows
+    /* The logos arrive already in place; hover still dims siblings and shows
        the caption, it just does so without the travel. */
     .client-cell,
-    .client-logo,
     .client-caption {
       transition: none;
-      transition-delay: 0ms;
     }
 
     .client-cell {
@@ -376,6 +383,15 @@
     }
 
     .client-caption {
+      transform: none;
+    }
+
+    .client-cell:last-child .client-caption {
+      transform: none;
+    }
+
+    .client-cell:hover .client-caption,
+    .client-cell:focus-within .client-caption {
       transform: none;
     }
   }

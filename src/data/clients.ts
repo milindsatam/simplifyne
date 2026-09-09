@@ -18,7 +18,7 @@ export const clients: readonly Client[] = [
     logo: "/leaderonomics-logo.webp",
     logoWidth: 350,
     logoHeight: 55,
-    work: "Course subscription platform and website",
+    work: "Course subscription platform and full website build",
   },
   {
     id: "ecareers",
@@ -26,7 +26,7 @@ export const clients: readonly Client[] = [
     logo: "/ecareers-logo.webp",
     logoWidth: 144,
     logoHeight: 60,
-    work: "eLearning course production",
+    work: "eLearning course production and delivery",
   },
   {
     id: "esteril",
@@ -34,7 +34,7 @@ export const clients: readonly Client[] = [
     logo: "/esteril-logo.webp",
     logoWidth: 233,
     logoHeight: 55,
-    work: "SEO and web development",
+    work: "SEO and web development retainer",
   },
   {
     id: "shaftcraft",
@@ -42,7 +42,7 @@ export const clients: readonly Client[] = [
     logo: "/shaftcraft-logo.webp",
     logoWidth: 65,
     logoHeight: 56,
-    work: "Website and digital services",
+    work: "Website and ongoing digital services",
   },
   {
     id: "aarogyam",
@@ -50,6 +50,6 @@ export const clients: readonly Client[] = [
     logo: "/aarogyam-logo.webp",
     logoWidth: 85,
     logoHeight: 55,
-    work: "SEO and long-form content",
+    work: "SEO and long-form healthcare content",
   },
 ];
