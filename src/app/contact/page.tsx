@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "Contact | Simplifyne",
@@ -14,8 +14,9 @@ export default function ContactPage() {
     <>
       {/* No blue hero on this page, so the header needs its light look from
           the first frame rather than the homepage's transparent-over-blue
-          start (see Header.tsx's `variant` prop). */}
-      <Header variant="light" />
+          start, but the same scroll-away/scroll-up-glassy behaviour still
+          applies (see SiteHeader.tsx and Header.tsx's `variant` prop). */}
+      <SiteHeader variant="light" />
       <main>
         <ContactSection />
       </main>

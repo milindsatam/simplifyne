@@ -668,28 +668,35 @@
   /* -------------------------------------------------------------------------
      Contact page. The "Other" field is always mounted (see
      ContactSection.tsx, which also toggles `inert`) so this can transition
-     it in on select; a grid column track rather than a width lets the
-     input's own intrinsic size decide the settled width instead of a
-     guessed max-width.
+     it in on select. A grid row track (0fr to 1fr) rather than a fixed
+     height collapses to a true zero height while hidden, so no gap is ever
+     reserved for it; growing the track is also what pushes line 2 smoothly
+     down, since it's just the next flex item in the form's own flow.
   ------------------------------------------------------------------------- */
 
-  .contact-other-reveal {
+  .contact-other-row {
     display: grid;
-    grid-template-columns: 0fr;
+    grid-template-rows: 0fr;
     overflow: hidden;
     opacity: 0;
     transition:
-      grid-template-columns var(--duration-standard) var(--ease-standard),
+      grid-template-rows var(--duration-standard) var(--ease-standard),
       opacity var(--duration-standard) var(--ease-standard);
   }
 
-  .contact-other-reveal > * {
-    min-width: 0;
+  .contact-other-row > * {
+    min-height: 0;
+    transform: translateY(-0.5rem);
+    transition: transform var(--duration-standard) var(--ease-standard);
   }
 
-  .contact-other-reveal[data-open="true"] {
-    grid-template-columns: 1fr;
+  .contact-other-row[data-open="true"] {
+    grid-template-rows: 1fr;
     opacity: 1;
+  }
+
+  .contact-other-row[data-open="true"] > * {
+    transform: none;
   }
 
   /* -------------------------------------------------------------------------
@@ -717,7 +724,8 @@
   /* Reduced motion: no resize, no slide, no rise. The reveal still happens,
      it just happens instantly. */
   @media (prefers-reduced-motion: reduce) {
-    .contact-other-reveal {
+    .contact-other-row,
+    .contact-other-row > * {
       transition: none;
     }
 
