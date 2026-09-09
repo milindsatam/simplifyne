@@ -14,10 +14,10 @@
   --color-surface-muted: #f4f4f5; /* the light/dark rhythm's other "white" */
   --color-testimonial-photo: #d9dbde;
 
-  /* Client logo panel. */
-  --color-panel-subtle: #fafafb;
-  --color-panel-border: #ececec;
-  --color-panel-hover: #f2f3f5;
+  /* Client grid. Every box shares its edges with its neighbours, so this is
+     the one hairline colour for the whole grid rather than a per-cell
+     border and an outer one that would double up where they meet. */
+  --color-grid-border: #e6e6e8;
 
   --color-on-brand: #ffffff;
   --color-on-brand-muted: rgba(255, 255, 255, 0.72);
@@ -176,13 +176,11 @@
   --arrow-shift: 4px;
   --cta-arrow-shift: 3px;
 
-  /* Client logo panel. Every logo sits in the same bounding box regardless
-     of its own aspect ratio, so the row reads as one visual weight. */
-  --logo-height: 2rem; /* 32px */
-  --logo-max-width: 7.5rem; /* 120px */
-  --logo-rise: 1.5rem; /* 24px, the scroll reveal's travel */
-  --logo-stagger: 60ms;
-  --logo-caption-shift: 0.5rem; /* 8px, caption's rise on hover */
+  /* Client grid. */
+  --grid-reveal-rise: 1.5rem; /* 24px, the scroll reveal's travel */
+  --grid-reveal-stagger: 50ms;
+  --grid-caption-shift: 0.5rem; /* 8px, caption's rise on hover */
+  --grid-caption-height: 2.25rem; /* fits the longest caption in two lines */
 
   /* Case study bento cards. */
   --bento-lift: 0.25rem; /* 4px, the hover rise */
@@ -334,16 +332,16 @@
   }
 
   /* -------------------------------------------------------------------------
-     Client logo panel. Logos stay full colour throughout, and the hover
-     tint/caption reveal are plain hover:/group-hover: utilities in the
-     markup; the once-only scroll cascade is the one thing utilities can't
-     express (its per-cell delay is driven from React, not a CSS
-     transition-delay, so it never fights any other transition on the cell).
+     Client grid. The hover colour, text colour, and caption reveal are all
+     plain hover:/group-hover: utilities in the markup; the once-only scroll
+     cascade is the one thing utilities can't express (its per-cell delay is
+     driven from React, not a CSS transition-delay, so it never fights the
+     hover transition on the same cell).
   ------------------------------------------------------------------------- */
 
   .client-cell {
     opacity: 0;
-    transform: translateY(var(--logo-rise));
+    transform: translateY(var(--grid-reveal-rise));
     transition:
       opacity var(--duration-standard) var(--ease-standard),
       transform var(--duration-standard) var(--ease-standard);
