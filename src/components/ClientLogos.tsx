@@ -2,36 +2,58 @@
 
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import { clients } from "@/data/clients";
 
 /* A fifth of the grid is enough to read as "arrived" without waiting for the
    whole row to clear the fold. */
 const REVEAL_THRESHOLD = 0.2;
+/* Matches --logo-stagger. Kept in JS (rather than a CSS transition-delay)
+   because a per-cell delay on the reveal transition would also stall the
+   hover dim, which needs to react instantly regardless of index. */
+const REVEAL_STAGGER_MS = 60;
 const ARROW_SIZE = 16;
 
 export function ClientLogos() {
   const gridRef = useRef<HTMLUListElement>(null);
-  const [revealed, setRevealed] = useState(false);
+  const [revealed, setRevealed] = useState<boolean[]>(() =>
+    clients.map(() => false),
+  );
 
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
 
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
-        setRevealed(true);
-        // The cascade is a greeting, not a loop: once it has played, scrolling
-        // back past the section should not replay it.
+
+        clients.forEach((_, index) => {
+          timeouts.push(
+            setTimeout(() => {
+              setRevealed((prev) => {
+                const next = [...prev];
+                next[index] = true;
+                return next;
+              });
+            }, index * REVEAL_STAGGER_MS),
+          );
+        });
+
+        // The cascade is a greeting, not a loop: once it has played,
+        // scrolling back past the section should not replay it.
         observer.disconnect();
       },
       { threshold: REVEAL_THRESHOLD },
     );
 
     observer.observe(grid);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      timeouts.forEach(clearTimeout);
+    };
   }, []);
 
   return (
@@ -41,7 +63,7 @@ export function ClientLogos() {
             the heading block. */}
         <div className="lg:flex lg:items-start lg:justify-between lg:gap-6">
           <div>
-            <h2 className="font-display text-section-title font-bold text-ink">
+            <h2 className="max-w-section-title font-display text-section-title font-bold text-ink">
               For companies with tech leverage
             </h2>
 
@@ -71,8 +93,7 @@ export function ClientLogos() {
 
         <ul
           ref={gridRef}
-          data-revealed={revealed}
-          className="mt-10 grid grid-cols-2 gap-x-3 sm:grid-cols-3 lg:grid-cols-5"
+          className="client-grid mt-10 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3 lg:grid-cols-5"
         >
           {clients.map((client, index) => (
             <li
@@ -81,18 +102,20 @@ export function ClientLogos() {
               // is by pointer. The caption itself is always in the document,
               // so assistive tech reads it either way.
               tabIndex={0}
-              style={{ "--logo-index": index } as CSSProperties}
-              className="client-cell flex flex-col items-center gap-1.5 rounded-menu-item px-1 py-4 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              data-revealed={revealed[index]}
+              className="client-cell flex items-center justify-center rounded-menu-item px-2 py-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
             >
               <Image
                 src={client.logo}
                 alt={client.name}
                 width={client.logoWidth}
                 height={client.logoHeight}
-                className="client-logo max-h-[var(--logo-height)] w-auto object-contain"
+                className="client-logo h-[var(--logo-height)] w-full object-contain"
               />
 
-              <p className="client-caption text-caption text-ink-soft">
+              {/* Never rendered on mobile: no room beside a logo for it, and
+                  no hover to reveal it with. */}
+              <p className="client-caption hidden text-client-caption text-ink-soft sm:block">
                 {client.work}
               </p>
             </li>
