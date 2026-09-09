@@ -34,8 +34,10 @@ export function ServiceCard({ service }: { service: Service }) {
         {service.description}
       </p>
 
-      {/* Not a nested <button>: the whole card is the control, this is its affordance. */}
-      <span className="service-reveal service-reveal--rise mt-auto inline-flex items-center gap-1 text-action font-semibold">
+      {/* Not a nested <button>: the whole card is the control, this is its
+          affordance. Follows the description directly rather than pinning
+          to the card's bottom, so it's never missed on a tall card. */}
+      <span className="service-reveal service-reveal--rise mt-[1.25rem] inline-flex items-center gap-1 text-action font-semibold">
         Expand
         <span aria-hidden="true">&rarr;</span>
       </span>

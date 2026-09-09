@@ -220,12 +220,6 @@
   --arrow-shift: 4px;
   --cta-arrow-shift: 3px;
 
-  /* Mobile menu. The gap kept between the two floating cards when a
-     submenu is open, so they slide apart rather than touching edge to
-     edge; it's what leaves a sliver of the off-to-the-side card peeking
-     past the stage instead of it vanishing outright. */
-  --mobile-menu-gap: 1.5rem; /* 24px */
-
   /* Client grid. */
   --grid-reveal-rise: 1.5rem; /* 24px, the scroll reveal's travel */
   --grid-reveal-stagger: 50ms;
@@ -569,11 +563,11 @@
      Mobile menu. Two independent floating cards, not one full-bleed panel:
      a dimmed backdrop centres a "stage" the size of one card, the main list
      sits there in normal flow (so it gives the stage its height), and the
-     submenu card is absolutely overlaid on that same frame. Both cards
-     slide by exactly their own width plus the gap between them, so they
-     never overlap and a sliver of whichever one is off to the side stays
-     visible past the stage's own edge, peeking, rather than a continuous
-     panel dragging behind it.
+     submenu card is absolutely overlaid on that same frame. Exactly one
+     card is ever visible: the inactive one slides a full viewport width
+     away (not just its own width), so it's genuinely off-screen rather
+     than left peeking at the stage's edge regardless of how much margin
+     surrounds the stage at any given viewport size.
   ------------------------------------------------------------------------- */
 
   .mobile-menu-backdrop {
@@ -615,18 +609,16 @@
   }
 
   .mobile-menu-main[data-pushed="true"] {
-    /* The stage is sized to exactly one card, so translateX's own
-       percentage (always relative to the element's own box) shifts this
-       by its full width regardless of how wide that ends up being at any
-       viewport; the added gap is what keeps it from touching the submenu
-       card now sitting where this one used to be. */
-    transform: translateX(calc(-100% - var(--mobile-menu-gap)));
+    /* A full viewport width clears the stage regardless of how much margin
+       surrounds it at any given viewport size, unlike a shift relative to
+       the card's own (much narrower) width would. */
+    transform: translateX(-100vw);
   }
 
   .mobile-menu-sub {
     position: absolute;
     inset: 0;
-    transform: translateX(calc(100% + var(--mobile-menu-gap)));
+    transform: translateX(100vw);
     transition: transform var(--duration-standard) var(--ease-standard);
   }
 

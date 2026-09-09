@@ -5,13 +5,19 @@ import { Logo } from "./Logo";
 import { PrimaryNav } from "./PrimaryNav";
 
 /** Below this, "at the top" always wins over scroll direction, so the header
-    never flickers between hidden and glassy while the hero is still mostly
-    in view. */
-const TOP_THRESHOLD = 8;
+    never flickers between hidden and glassy on the small scroll wobbles that
+    happen right at the top of the page. */
+const TOP_THRESHOLD = 80;
 
 export function Header() {
   const [atTop, setAtTop] = useState(true);
   const [hidden, setHidden] = useState(false);
+  // False until the first real scroll event. The header's transition
+  // classes only turn on once this flips, so whatever state that first
+  // event lands on (top, glassy, hidden, any combination) is applied
+  // instantly, with nothing to animate from, rather than mount-time state
+  // catching a transition it was never meant to run.
+  const [hasScrolled, setHasScrolled] = useState(false);
   const lastY = useRef(0);
   const frame = useRef<number | null>(null);
 
@@ -24,6 +30,7 @@ export function Header() {
       const isAtTop = y <= TOP_THRESHOLD;
       setAtTop(isAtTop);
       setHidden(!isAtTop && y > lastY.current);
+      setHasScrolled(true);
       lastY.current = y;
     };
 
@@ -48,11 +55,21 @@ export function Header() {
     // so it anchors to the header rather than to the 1260px lane inside it.
     // `fixed` is also what lets the header hide/reveal over scrolled
     // content instead of just sitting in the document flow.
+    //
+    // backdrop-blur-md stays on unconditionally, even in the transparent
+    // state (where a fully transparent background gives it nothing to
+    // visibly blur): toggling the filter itself on and off is what causes
+    // browsers to repaint with a visible pop, so only the colour underneath
+    // it ever changes.
     <header
       data-hidden={hidden}
-      className={`fixed inset-x-0 top-0 z-40 border-b py-2 motion-safe:transition-[translate,background-color,border-color] motion-safe:duration-standard motion-safe:ease-standard data-[hidden=true]:-translate-y-full lg:py-3 ${
+      className={`fixed inset-x-0 top-0 z-40 border-b py-2 backdrop-blur-md data-[hidden=true]:-translate-y-full ${
+        hasScrolled
+          ? "motion-safe:transition-[translate,background-color,border-color] motion-safe:duration-standard motion-safe:ease-standard"
+          : ""
+      } ${
         glassy
-          ? "border-header-glass-border bg-header-glass backdrop-blur-md"
+          ? "border-header-glass-border bg-header-glass"
           : "border-transparent bg-transparent"
       }`}
     >
