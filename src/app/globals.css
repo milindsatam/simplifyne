@@ -224,6 +224,7 @@
   --shadow-panel: 0 12px 32px rgba(0, 0, 0, 0.1);
 
   --card-min-height: 22.5rem; /* 360px */
+  --card-min-height-mobile: 30rem; /* 480px, tall portrait feel in the peek-scroll */
 
   /* Motion ---------------------------------------------------------------- */
   --duration-standard: 300ms;
@@ -236,6 +237,19 @@
   --lift-thumb: 2px;
   --arrow-shift: 4px;
   --cta-arrow-shift: 3px;
+
+  /* Hero service cards' image exit. A touch slower than the standard
+     duration so a bigger element (a whole image, not just text) still
+     reads as graceful rather than rushed; the easing family stays the
+     same as the text reveal it's coordinated with, except for the
+     shrink-to-corner variant's own overshoot below. */
+  --duration-image-exit: 380ms;
+  --image-exit-offset-x: 3rem; /* slide-left variant's travel */
+  --image-shrink-scale: 0.55; /* shrink-to-corner variant's settled size */
+  /* A "back" ease-out: overshoots past 1 before settling, which is what
+     reads as "grows slightly, then tucks away smaller" from a single
+     transition rather than a multi-step keyframe animation. */
+  --ease-shrink: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Client grid. */
   --grid-reveal-rise: 1.5rem; /* 24px, the scroll reveal's travel */
@@ -332,39 +346,60 @@
 @layer components {
   .service-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: 84%;
     gap: calc(var(--spacing) * 2); /* 16px */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .service-row::-webkit-scrollbar {
+    display: none;
   }
 
   .service-item {
     min-width: 0;
+    scroll-snap-align: start;
   }
 
   .service-card {
+    position: relative;
     display: flex;
     height: 100%;
-    min-height: var(--card-min-height);
+    min-height: var(--card-min-height-mobile);
     flex-direction: column;
     text-align: left;
+    overflow: hidden;
   }
 
-  /* Tablet: 2x2, no hover interaction — description and Expand stay visible. */
-  @media (width >= 40rem) {
-    .service-row {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  /* Shared box for the resting image and the hover-in description, so text
+     replacing image reads as one swap in one place, not two layers. */
+  .service-content {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
-  /* Desktop: one row of four. The hovered/focused card takes a larger share of
-     the free space; the other three shrink proportionally, so the row's total
-     width never changes and nothing below it moves. */
+  /* Desktop: one row of four, no more horizontal scroll. The hovered/focused
+     card takes a larger share of the free space; the other three shrink
+     proportionally, so the row's total width never changes and nothing below
+     it moves. */
   @media (width >= 64rem) {
     .service-row {
       display: flex;
+      overflow-x: visible;
+      scroll-snap-type: none;
+    }
+
+    .service-card {
+      min-height: var(--card-min-height);
     }
 
     .service-item {
       flex: 1 1 0%;
+      scroll-snap-align: none;
       transition: flex-grow var(--duration-standard) var(--ease-standard);
     }
 
@@ -381,6 +416,8 @@
     }
 
     .service-reveal--slide {
+      position: relative;
+      z-index: 1;
       transform: translateX(var(--reveal-offset-x));
     }
 
@@ -394,6 +431,35 @@
     .service-item:focus-within .service-reveal {
       opacity: 1;
       transform: none;
+    }
+
+    /* The image sits behind the description in the same box, so its exit and
+       the text's entrance read as one swap rather than two animations. */
+    .service-image {
+      transition:
+        transform var(--duration-image-exit) var(--ease-standard),
+        opacity var(--duration-image-exit) var(--ease-standard);
+    }
+
+    /* Anchored at the corner it tucks into, so a plain scale reads as the
+       image sliding into that corner without a separate translate. */
+    .service-image--shrink {
+      transform-origin: 100% 100%;
+      transition:
+        transform var(--duration-image-exit) var(--ease-shrink),
+        opacity var(--duration-image-exit) var(--ease-standard);
+    }
+
+    .service-item:hover .service-image--slide,
+    .service-item:focus-within .service-image--slide {
+      transform: translateX(calc(var(--image-exit-offset-x) * -1));
+      opacity: 0;
+    }
+
+    .service-item:hover .service-image--shrink,
+    .service-item:focus-within .service-image--shrink {
+      transform: scale(var(--image-shrink-scale));
+      opacity: 0;
     }
   }
 
@@ -816,6 +882,20 @@
     .service-reveal--rise {
       transform: none;
       transition-delay: 0ms;
+    }
+
+    /* Image exit becomes a plain crossfade, no slide or scale. */
+    .service-image,
+    .service-image--shrink {
+      transition: opacity var(--duration-standard) var(--ease-standard);
+    }
+
+    .service-item:hover .service-image--slide,
+    .service-item:focus-within .service-image--slide,
+    .service-item:hover .service-image--shrink,
+    .service-item:focus-within .service-image--shrink {
+      transform: none;
+      opacity: 0;
     }
 
     .mega-panel,
