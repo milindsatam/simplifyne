@@ -93,6 +93,24 @@
     rgba(0, 0, 0, 0.55) 100%
   );
 
+  /* Hero service cards' full-bleed image sits behind a label and heading
+     anchored top-left, so unlike the product scrim above this one tints
+     from the top down. Two variants so the tint still reads as each card's
+     own colour treatment: dark text gets a light wash, light text a dark
+     one. */
+  --gradient-scrim-on-dark: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.2) 45%,
+    transparent 72%
+  );
+  --gradient-scrim-on-light: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(255, 255, 255, 0.4) 45%,
+    transparent 72%
+  );
+
   /* Type ------------------------------------------------------------------ */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, sans-serif;
@@ -224,7 +242,6 @@
   --shadow-panel: 0 12px 32px rgba(0, 0, 0, 0.1);
 
   --card-min-height: 22.5rem; /* 360px */
-  --card-min-height-mobile: 30rem; /* 480px, tall portrait feel in the peek-scroll */
 
   /* Motion ---------------------------------------------------------------- */
   --duration-standard: 300ms;
@@ -368,18 +385,17 @@
     position: relative;
     display: flex;
     height: 100%;
-    min-height: var(--card-min-height-mobile);
+    min-height: var(--card-min-height);
     flex-direction: column;
     text-align: left;
     overflow: hidden;
   }
 
-  /* Shared box for the resting image and the hover-in description, so text
-     replacing image reads as one swap in one place, not two layers. */
-  .service-content {
-    position: relative;
-    flex: 1 1 auto;
-    min-height: 0;
+  /* Full-bleed image + scrim, layered as one group so it exits as a unit on
+     hover and reveals the card's own surface colour underneath. */
+  .service-media {
+    position: absolute;
+    inset: 0;
   }
 
   /* Desktop: one row of four, no more horizontal scroll. The hovered/focused
@@ -391,10 +407,6 @@
       display: flex;
       overflow-x: visible;
       scroll-snap-type: none;
-    }
-
-    .service-card {
-      min-height: var(--card-min-height);
     }
 
     .service-item {
@@ -416,8 +428,6 @@
     }
 
     .service-reveal--slide {
-      position: relative;
-      z-index: 1;
       transform: translateX(var(--reveal-offset-x));
     }
 
@@ -433,31 +443,31 @@
       transform: none;
     }
 
-    /* The image sits behind the description in the same box, so its exit and
-       the text's entrance read as one swap rather than two animations. */
-    .service-image {
+    /* Image + scrim exit together, so the swap reads as text replacing
+       image rather than two animations firing side by side. */
+    .service-media {
       transition:
         transform var(--duration-image-exit) var(--ease-standard),
         opacity var(--duration-image-exit) var(--ease-standard);
     }
 
-    /* Anchored at the corner it tucks into, so a plain scale reads as the
-       image sliding into that corner without a separate translate. */
-    .service-image--shrink {
+    /* Anchored at the corner it tucks into, so a plain scale reads as it
+       sliding into that corner without a separate translate. */
+    .service-media--shrink {
       transform-origin: 100% 100%;
       transition:
         transform var(--duration-image-exit) var(--ease-shrink),
         opacity var(--duration-image-exit) var(--ease-standard);
     }
 
-    .service-item:hover .service-image--slide,
-    .service-item:focus-within .service-image--slide {
+    .service-item:hover .service-media--slide,
+    .service-item:focus-within .service-media--slide {
       transform: translateX(calc(var(--image-exit-offset-x) * -1));
       opacity: 0;
     }
 
-    .service-item:hover .service-image--shrink,
-    .service-item:focus-within .service-image--shrink {
+    .service-item:hover .service-media--shrink,
+    .service-item:focus-within .service-media--shrink {
       transform: scale(var(--image-shrink-scale));
       opacity: 0;
     }
@@ -885,15 +895,15 @@
     }
 
     /* Image exit becomes a plain crossfade, no slide or scale. */
-    .service-image,
-    .service-image--shrink {
+    .service-media,
+    .service-media--shrink {
       transition: opacity var(--duration-standard) var(--ease-standard);
     }
 
-    .service-item:hover .service-image--slide,
-    .service-item:focus-within .service-image--slide,
-    .service-item:hover .service-image--shrink,
-    .service-item:focus-within .service-image--shrink {
+    .service-item:hover .service-media--slide,
+    .service-item:focus-within .service-media--slide,
+    .service-item:hover .service-media--shrink,
+    .service-item:focus-within .service-media--shrink {
       transform: none;
       opacity: 0;
     }
