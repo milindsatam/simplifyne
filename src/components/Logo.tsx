@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logoColor from "@/assets/simplifyne-logo-color.svg";
-import logoWhite from "@/assets/simplifyne-logo-white.webp";
+import logoWhite from "@/assets/simplifyne-logo-white.svg";
 
 export function Logo({ glassy = false }: { glassy?: boolean }) {
   return (
