@@ -230,6 +230,15 @@
   --section-padding-tablet: 6rem; /* 96px */
   --section-padding-desktop: 7.5rem; /* 120px */
 
+  /* Every page's first section shares this top clearance below the
+     floating mobile/tablet header island: island height plus its top
+     offset plus a deliberately airy gap, so no first heading ever sits
+     tight against it. Desktop's header is real and in-flow instead, so it
+     needs no clearance value here; each page keeps whatever top padding it
+     already used there. */
+  --content-clearance-mobile: 8.5rem; /* 136px */
+  --content-clearance-tablet: 9rem; /* 144px */
+
   --container-site: 78.75rem; /* 1260px */
   --container-hero-copy: 36rem; /* 576px */
   --container-card-heading: 20ch;

@@ -138,7 +138,11 @@ export function ContactSection() {
   };
 
   return (
-    <section className="section-padding bg-surface-white">
+    // The page's first section: below lg the header floats over it, so its
+    // top padding overrides section-padding's with the shared clearance
+    // tokens instead. From lg up it reverts to section-padding's own
+    // desktop value, above the real, in-flow header, unchanged from before.
+    <section className="section-padding bg-surface-white pt-[var(--content-clearance-mobile)] sm:pt-[var(--content-clearance-tablet)] lg:pt-[var(--section-padding-desktop)]">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         {submitted ? (
           <div>
