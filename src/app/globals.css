@@ -103,7 +103,7 @@
   --gradient-product-scrim: linear-gradient(
     to bottom,
     transparent 40%,
-    rgba(0, 0, 0, 0.55) 100%
+    rgba(0, 0, 0, 0.6) 100%
   );
 
   /* Hero service cards' full-bleed image sits behind a label and heading
@@ -303,7 +303,7 @@
   /* Product cards. The card frame lifts on the same tokens as the bento
      cards above; only the image zone's own scale is specific to this
      section. */
-  --product-image-hover-scale: 1.04;
+  --product-image-hover-scale: 1.05;
 
   /* Testimonial carousel. The track's own flex stretch already equalises
      the three slides to whichever is tallest, but that "tallest" is

@@ -1,27 +1,30 @@
+import Image from "next/image";
 import type { Product } from "@/data/products";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
     <a
       href={product.href}
+      target="_blank"
+      rel="noopener noreferrer"
       className="product-card block aspect-[3/4] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-dark"
     >
-      {/* The tint stands in for the product's image, so it's what scales on
-          hover, not the card frame itself. */}
-      <div
-        aria-hidden="true"
-        style={{ backgroundColor: product.bg }}
-        className="product-card-image flex items-center justify-center"
-      >
-        <span className="text-center text-card-body text-on-dark-soft">
-          TODO: replace with product image
-        </span>
-      </div>
+      <Image
+        src={product.image}
+        alt=""
+        fill
+        sizes="(min-width: 1024px) 33vw, 84vw"
+        className="product-card-image object-cover"
+      />
 
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-[image:var(--gradient-product-scrim)]"
       />
+
+      <p className="absolute inset-x-0 top-0 p-4 text-label font-semibold text-white/80 uppercase [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">
+        {product.category}
+      </p>
 
       <div className="absolute inset-0 flex flex-col justify-end p-4">
         <h3 className="text-bento-heading-lg font-semibold text-on-dark">
