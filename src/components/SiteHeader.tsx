@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Header } from "./Header";
+import { MobileHeaderIsland } from "./MobileHeaderIsland";
 import { StickyHeader } from "./StickyHeader";
 
 /** Orchestrates the two headers described in Header.tsx and
@@ -68,6 +69,7 @@ export function SiteHeader({
     <>
       <Header ref={headerRef} inert={headerGone} variant={variant} />
       <StickyHeader revealed={revealed} />
+      <MobileHeaderIsland variant={variant} />
     </>
   );
 }

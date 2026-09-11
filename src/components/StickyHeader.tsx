@@ -13,7 +13,7 @@ export function StickyHeader({ revealed }: { revealed: boolean }) {
       data-revealed={revealed}
       inert={!revealed}
       aria-hidden={!revealed}
-      className="fixed inset-x-0 top-0 z-50 border-b border-header-glass-border bg-header-glass py-2 backdrop-blur-md motion-safe:transition-[translate] motion-safe:duration-standard motion-safe:ease-standard data-[revealed=false]:-translate-y-full"
+      className="fixed inset-x-0 top-0 z-50 hidden border-b border-header-glass-border bg-header-glass py-2 backdrop-blur-md motion-safe:transition-[translate] motion-safe:duration-standard motion-safe:ease-standard data-[revealed=false]:-translate-y-full lg:block"
     >
       <div className="mx-auto flex w-full max-w-site items-center justify-between gap-3 px-2 sm:px-3">
         <Logo glassy />

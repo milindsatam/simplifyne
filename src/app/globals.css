@@ -57,6 +57,14 @@
   --color-header-glass: rgba(255, 255, 255, 0.72);
   --color-header-glass-border: rgba(0, 0, 0, 0.06);
 
+  /* Mobile header island. Needs its own pair, distinct from the desktop
+     glass above: a dark tint while floating over the hero's blue so it
+     never washes out to flat white, and a light tint everywhere else. */
+  --color-mobile-island-dark: rgba(12, 17, 28, 0.34);
+  --color-mobile-island-dark-border: rgba(255, 255, 255, 0.14);
+  --color-mobile-island-light: rgba(255, 255, 255, 0.62);
+  --color-mobile-island-light-border: rgba(0, 0, 0, 0.06);
+
   /* The header's "Let's Talk" pill stays glass in both colour states, just
      with its tint flipped to match. */
   --color-cta-glass-bg: rgba(255, 255, 255, 0.12);

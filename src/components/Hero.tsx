@@ -6,7 +6,7 @@ export function Hero() {
     // pure breathing room between it and the H1, not a fixed-header
     // clearance calc. Desktop now matches tablet's value (both 8rem), so
     // there's no separate lg: step above sm: any more.
-    <section className="bg-brand pt-[5rem] pb-8 sm:pt-[8rem]">
+    <section data-hero className="bg-brand pt-[5rem] pb-8 sm:pt-[8rem]">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <h1 className="font-display text-hero font-bold text-on-brand">
           We build around

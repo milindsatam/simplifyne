@@ -35,7 +35,7 @@ export function Header({
       ref={ref}
       inert={inert}
       aria-hidden={inert}
-      className={`relative z-40 py-2 ${
+      className={`relative z-40 hidden py-2 lg:block ${
         light ? "border-b border-header-glass-border bg-surface-white" : ""
       }`}
     >
