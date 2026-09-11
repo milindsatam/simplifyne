@@ -3,7 +3,8 @@
 import { MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import logoColor from "@/assets/simplifyne-logo-color.svg";
 import logoWhite from "@/assets/simplifyne-logo-white.svg";
 import { MobileMenu } from "./MobileMenu";
@@ -31,6 +32,21 @@ export function MobileHeaderIsland({
   const [animate, setAnimate] = useState(false);
   const lastY = useRef(0);
   const frame = useRef<number | null>(null);
+  const pathname = usePathname();
+
+  // Link already lands at the top of any other page. Already home, though,
+  // a link to the same URL is a no-op, so this steps in to scroll there
+  // instead of leaving the click feeling dead.
+  const handleLogoClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== "/") return;
+    event.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
+  };
 
   // Dark glass only while a blue hero is both present and still on screen;
   // an inner page, or the homepage once scrolled past it, is light. Starts
@@ -98,6 +114,7 @@ export function MobileHeaderIsland({
 
       <Link
         href="/"
+        onClick={handleLogoClick}
         aria-label="Simplifyne, home"
         className={`grid shrink-0 place-items-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-4 ${
           dark ? "focus-visible:outline-on-brand" : "focus-visible:outline-ink"
