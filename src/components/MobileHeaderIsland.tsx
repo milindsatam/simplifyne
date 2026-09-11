@@ -79,7 +79,7 @@ export function MobileHeaderIsland({
   // No transition classes at all until a real scroll happens, so the very
   // first paint can never itself be seen animating in.
   const barTransition = animate
-    ? "motion-safe:transition-[transform,background-color,border-color] motion-safe:duration-standard motion-safe:ease-standard"
+    ? "motion-safe:transition-[transform,background-color,border-color,box-shadow] motion-safe:duration-standard motion-safe:ease-standard"
     : "";
   const fadeTransition = animate
     ? "motion-safe:transition-opacity motion-safe:duration-standard motion-safe:ease-standard"
@@ -92,7 +92,7 @@ export function MobileHeaderIsland({
     <header
       data-visible={visible}
       data-dark={dark}
-      className={`fixed inset-x-2 top-1.5 z-50 flex items-center justify-between gap-2 rounded-bento border px-1 py-1 backdrop-blur-md backdrop-saturate-150 lg:hidden ${barTransition} data-[visible=false]:-translate-y-[6rem] data-[dark=true]:border-mobile-island-dark-border data-[dark=true]:bg-mobile-island-dark data-[dark=false]:border-mobile-island-light-border data-[dark=false]:bg-mobile-island-light`}
+      className={`fixed inset-x-2 top-1.5 z-50 flex items-center justify-between gap-2 rounded-bento border px-1 py-1 backdrop-blur-md backdrop-saturate-150 lg:hidden ${barTransition} data-[visible=false]:-translate-y-[6rem] data-[dark=true]:border-mobile-island-dark-border data-[dark=true]:bg-mobile-island-dark data-[dark=false]:border-mobile-island-light-border data-[dark=false]:bg-mobile-island-light data-[dark=false]:shadow-[var(--shadow-mobile-island-light)]`}
     >
       <MobileMenu glassy={!dark} />
 

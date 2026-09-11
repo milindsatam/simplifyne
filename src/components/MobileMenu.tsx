@@ -145,14 +145,16 @@ export function MobileMenu({ glassy = false }: { glassy?: boolean }) {
         createPortal(
           // A dimmed backdrop, not a full-bleed panel: it centres a "stage"
           // sized to one card, so the page stays faintly visible around the
-          // floating menu rather than being covered outright.
+          // floating menu rather than being covered outright. z-[60], above
+          // the mobile header island's z-50, so the open menu covers it
+          // rather than floating underneath it.
           <div
             ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
             data-open={open}
-            className="mobile-menu-backdrop fixed inset-0 z-50 flex items-center justify-center bg-mobile-menu-scrim p-4"
+            className="mobile-menu-backdrop fixed inset-0 z-[60] flex items-center justify-center bg-mobile-menu-scrim p-4"
           >
             <div className="mobile-menu-stage w-full max-w-[28rem]">
               {/* Main card. Sits in normal flow, so it's what gives the

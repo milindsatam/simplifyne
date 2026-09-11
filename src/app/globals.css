@@ -62,8 +62,13 @@
      never washes out to flat white, and a light tint everywhere else. */
   --color-mobile-island-dark: rgba(12, 17, 28, 0.34);
   --color-mobile-island-dark-border: rgba(255, 255, 255, 0.14);
-  --color-mobile-island-light: rgba(255, 255, 255, 0.62);
-  --color-mobile-island-light-border: rgba(0, 0, 0, 0.06);
+  /* Raised well above the dark variant's opacity: at the same low tint the
+     light glass all but disappeared against a white page, so this leans on
+     a stronger fill, a firmer hairline, and its own soft lift-off-white
+     shadow (added only in this state; the dark one reads fine without it). */
+  --color-mobile-island-light: rgba(255, 255, 255, 0.86);
+  --color-mobile-island-light-border: rgba(0, 0, 0, 0.09);
+  --shadow-mobile-island-light: 0 4px 16px rgba(0, 0, 0, 0.06);
 
   /* The header's "Let's Talk" pill stays glass in both colour states, just
      with its tint flipped to match. */
