@@ -37,10 +37,9 @@ const SUBMENUS = {
 type SubmenuKey = keyof typeof SUBMENUS;
 
 const ICON_SIZE = 20;
-/** Big enough to read as a confident, primary control, not an
-    afterthought; the button itself stays a full 44px hit area via its own
-    padding regardless of the glyph's own size. */
-const HAMBURGER_SIZE = 26;
+/** The button itself stays a full 44px hit area via its own padding
+    regardless of the glyph's own (deliberately compact) size. */
+const HAMBURGER_SIZE = 22;
 
 const CIRCLE_BUTTON_CLASS =
   "flex size-7 shrink-0 items-center justify-center rounded-pill transition-colors duration-standard ease-standard focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink";
