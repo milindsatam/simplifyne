@@ -634,6 +634,7 @@
     min-height: var(--card-min-height);
     flex-direction: column;
     text-align: left;
+    overflow: hidden;
     border-radius: var(--radius-bento);
     transition:
       transform var(--duration-standard) var(--ease-standard),
