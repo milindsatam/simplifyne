@@ -58,6 +58,7 @@ export const caseStudies: readonly CaseStudy[] = [
     heading: "Search that brings in the right jobs",
     body: "Content strategy, SEO, and paid ads that help a Toronto lighting company get found by homeowners ready to buy.",
     href: "#",
+    image: "/bdlights-seo-done-by-simplifyne.webp",
   },
   {
     id: "esteril",
@@ -68,5 +69,6 @@ export const caseStudies: readonly CaseStudy[] = [
     heading: "SEO and web for a pharma equipment maker",
     body: "An ongoing SEO and development retainer growing qualified search visibility in a specialised B2B niche.",
     href: "#",
+    image: "/esteril-seo-done-by-simplifyne.webp",
   },
 ];

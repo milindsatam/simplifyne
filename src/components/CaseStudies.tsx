@@ -45,15 +45,7 @@ export function CaseStudies() {
           {caseStudies.map((caseStudy) => (
             <li
               key={caseStudy.id}
-              className={`min-w-0 ${slotClass[caseStudy.slot]} ${
-                // The sibling top/bl/br cards are each floored at
-                // --card-min-height and stack two-high beside this one, so
-                // their combined height regularly exceeds what this card
-                // itself needs. Without self-start, the grid's default
-                // stretch would match it to that taller total instead of
-                // its own (compact) content height.
-                caseStudy.image ? "lg:self-start" : ""
-              }`}
+              className={`min-w-0 ${slotClass[caseStudy.slot]}`}
             >
               <CaseStudyCard caseStudy={caseStudy} />
             </li>

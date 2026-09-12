@@ -60,18 +60,18 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
   // The tall left card reads first and carries more weight, so it gets a
   // touch more breathing room than the other three.
   const padding = caseStudy.slot === "left" ? "p-5" : "p-4";
-  // The peek panel is absolutely positioned (see below) so it no longer
-  // stretches the card the way the flex-1 placeholder does; without an
-  // explicit floor the card would collapse to the text's own height and
-  // the panel would overlap it. At lg the sibling cards' own combined
-  // height (each floored at --card-min-height, stacked two-high beside
-  // this one) is taller than this card actually needs, so it's paired
-  // with self-start on the grid item (see CaseStudies.tsx) rather than
-  // stretching to match — --bento-tall-height is this card's own real
-  // target height, same token as before this floor existed.
-  const imageMinHeight = caseStudy.image
-    ? "min-h-[31.5rem] sm:min-h-[32.5rem] lg:min-h-[calc(var(--bento-tall-height)+1rem)]"
-    : "";
+  // Cancels that same padding on the bottom only, so the image (below) can
+  // bleed past the card's own bottom edge instead of leaving a gap of
+  // card colour there. Height stays flex-1: it fills whatever space the
+  // grid gives this card (see CaseStudies.tsx), so the card's own height
+  // is never dictated by the image, and never collapses to the text's.
+  const imageBleedMargin = caseStudy.slot === "left" ? "-mb-5" : "-mb-4";
+  // Below lg there's no grid row to stretch these cards open, so at the
+  // shared --card-min-height floor the image would be left a thin,
+  // illegible sliver. This floor is comfortably taller, and since the
+  // image is flex-1 it absorbs the difference on every image card alike
+  // rather than leaving a gap on the ones with shorter text.
+  const imageMinHeight = caseStudy.image ? "min-h-[29rem] sm:min-h-[30rem]" : "";
 
   return (
     <a
@@ -114,27 +114,29 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
       </span>
 
       {caseStudy.image ? (
-        // A floating panel, not part of the flow: absolutely positioned so
-        // it never grows the card, anchored to the bottom and inset a
-        // little from the left, wider than the card so it bleeds off the
-        // right, and nudged below the card's own bottom edge so it bleeds
-        // off there too. The card's own overflow-hidden crops both to a
-        // "peek" of the dashboard's top-left (header and first course
-        // row); the panel's own rounding and shadow read as a UI panel
-        // rather than a full-bleed photo. width/height (not fill) plus
-        // h-auto keeps the source's own ratio, so it never stretches.
+        // Fills whatever space is left in the card (flex-1), left-aligned
+        // to the text above via the card's own padding rather than a
+        // separate inset, and never wider than that padded width, so
+        // there's no bleed on either side. The negative bottom margin
+        // cancels that padding on the bottom only, letting the image run
+        // past the card's own edge there; the card's overflow-hidden crops
+        // it to a peek of the top of the screenshot, cropping off whatever
+        // doesn't fit rather than leaving a gap below the text.
         <div
           aria-hidden="true"
-          className="absolute -bottom-6 left-3 w-[calc(100%+4rem)] overflow-hidden rounded-[0.625rem] shadow-[0_8px_24px_rgba(0,0,0,0.1)]"
+          className={`relative mt-6 flex-1 ${imageBleedMargin} overflow-hidden rounded-t-[0.625rem]`}
         >
           <Image
             src={caseStudy.image}
             alt=""
-            width={1457}
-            height={914}
+            fill
             quality={90}
-            sizes="(min-width: 1024px) 34rem, 27rem"
-            className="h-auto w-full"
+            sizes={
+              caseStudy.slot === "left"
+                ? "(min-width: 1024px) 37vw, (min-width: 640px) 46vw, 92vw"
+                : "(min-width: 1024px) 28vw, (min-width: 640px) 46vw, 92vw"
+            }
+            className="object-cover object-top"
           />
         </div>
       ) : (
