@@ -75,12 +75,13 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
   // gap on the ones with shorter text. The left card's longer heading and
   // body wrap to an extra line at these widths, so it needs a taller floor
   // than the other two to leave its image the same comfortable amount of
-  // room.
+  // room. Mobile gets a bit more still, so a touch more of the dashboard
+  // clears the fold before it bleeds off the bottom.
   const imageMinHeight = !caseStudy.image
     ? ""
     : caseStudy.slot === "left"
-      ? "min-h-[28rem] sm:min-h-[29rem]"
-      : "min-h-[24rem] sm:min-h-[25rem]";
+      ? "min-h-[30rem] sm:min-h-[29rem]"
+      : "min-h-[26rem] sm:min-h-[25rem]";
 
   return (
     <a
@@ -130,7 +131,7 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
         // logo and nav, rather than a meaningless middle/right slice.
         <div
           aria-hidden="true"
-          className={`relative mt-2 flex-1 ${imageBleedMargin} overflow-hidden rounded-tl-[0.625rem]`}
+          className={`relative mt-4 flex-1 ${imageBleedMargin} overflow-hidden rounded-tl-[0.625rem]`}
         >
           <Image
             src={caseStudy.image}
