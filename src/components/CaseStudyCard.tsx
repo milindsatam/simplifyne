@@ -60,10 +60,12 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
   // The tall left card reads first and carries more weight, so it gets a
   // touch more breathing room than the other three.
   const padding = caseStudy.slot === "left" ? "p-5" : "p-4";
-  // Cancels that same padding on three sides so an image (below) bleeds to
-  // the card's own left, right, and bottom edges instead of sitting in a
-  // padded inset.
-  const bleedMargin = caseStudy.slot === "left" ? "-mx-5 -mb-5" : "-mx-4 -mb-4";
+  // Below lg, the peek panel is absolutely positioned (see below) so it no
+  // longer stretches the card the way the flex-1 placeholder does; without
+  // this the card would collapse to the text's own height and the panel
+  // would overlap it. lg:min-h-0 hands height back to the desktop grid
+  // area, which already sizes this card well past this floor.
+  const imageMinHeight = caseStudy.image ? "min-h-[27rem] lg:min-h-0" : "";
 
   return (
     <a
@@ -73,7 +75,7 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
           ? { backgroundColor: caseStudy.backgroundColor }
           : undefined
       }
-      className={`bento-card ${padding} ${surfaceClass[caseStudy.surface]} focus-visible:outline-2 focus-visible:outline-offset-2 ${ringClass[caseStudy.surface]}`}
+      className={`bento-card ${padding} ${imageMinHeight} ${surfaceClass[caseStudy.surface]} focus-visible:outline-2 focus-visible:outline-offset-2 ${ringClass[caseStudy.surface]}`}
     >
       <p
         className={`text-label font-semibold uppercase ${labelClass[caseStudy.surface]}`}
@@ -106,23 +108,27 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
       </span>
 
       {caseStudy.image ? (
-        // Bleeds to the card's own left, right, and bottom edges (the
-        // negative margin cancels the card's own padding) so it reads as
-        // part of the card rather than an inset photo. The card's own
-        // overflow-hidden and border-radius clip its bottom corners; the
-        // top stays a straight edge where it meets the text above.
-        // object-top crops off the bottom of the screenshot rather than
-        // the top, which is where the platform's own UI chrome reads.
+        // A floating panel, not part of the flow: absolutely positioned so
+        // it never grows the card, anchored to the bottom and inset a
+        // little from the left, wider than the card so it bleeds off the
+        // right, and nudged below the card's own bottom edge so it bleeds
+        // off there too. The card's own overflow-hidden crops both to a
+        // "peek" of the dashboard's top-left (header and first course
+        // row); the panel's own rounding and shadow read as a UI panel
+        // rather than a full-bleed photo. width/height (not fill) plus
+        // h-auto keeps the source's own ratio, so it never stretches.
         <div
           aria-hidden="true"
-          className={`relative mt-6 flex-1 ${bleedMargin}`}
+          className="absolute -bottom-6 left-3 w-[calc(100%+4rem)] overflow-hidden rounded-[0.625rem] shadow-[0_8px_24px_rgba(0,0,0,0.1)]"
         >
           <Image
             src={caseStudy.image}
             alt=""
-            fill
-            sizes="(min-width: 1024px) 33vw, 84vw"
-            className="object-cover object-top"
+            width={1457}
+            height={914}
+            quality={90}
+            sizes="(min-width: 1024px) 34rem, 27rem"
+            className="h-auto w-full"
           />
         </div>
       ) : (
