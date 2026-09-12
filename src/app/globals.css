@@ -14,6 +14,11 @@
   --color-surface-muted: #f4f4f5; /* the light/dark rhythm's other "white" */
   --color-testimonial-photo: #d9dbde;
 
+  /* The Leaderonomics case study card's own background, distinct from the
+     shared grey surface above: matched to its real screenshot's own tone
+     so the image blends into the card instead of sitting on a mismatch. */
+  --color-bento-leaderonomics: #e0e1e5;
+
   /* Client grid. Every box shares its edges with its neighbours, so this is
      the one hairline colour for the whole grid rather than a per-cell
      border and an outer one that would double up where they meet. */

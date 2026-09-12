@@ -19,6 +19,11 @@ export interface CaseStudy {
   readonly body: string;
   /** TODO: point at real case study routes once they exist (out of scope for now). */
   readonly href: string;
+  /** Overrides the surface's own background for this one card, so it can
+      match a real image's tone exactly instead of the shared surface. */
+  readonly backgroundColor?: string;
+  /** A real image shown instead of the placeholder block. */
+  readonly image?: string;
 }
 
 export const caseStudies: readonly CaseStudy[] = [
@@ -31,6 +36,8 @@ export const caseStudies: readonly CaseStudy[] = [
     heading: "A subscription platform for leadership learning",
     body: "We built the course subscription system and website that lets a Malaysian leadership brand sell, deliver, and manage its programs in one place.",
     href: "#",
+    backgroundColor: "var(--color-bento-leaderonomics)",
+    image: "/leaderonomics-lms-platform-built-simplifyne.webp",
   },
   {
     id: "ecareers",
