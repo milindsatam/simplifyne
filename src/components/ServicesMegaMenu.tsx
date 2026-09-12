@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import {
   featuredWork,
@@ -147,8 +148,16 @@ export function ServicesMegaMenu({
               {featuredWork.label}
             </p>
 
-            {/* TODO: replace with real case study image. */}
-            <div className="mega-lift mt-2 aspect-video rounded-thumb bg-icon-tile" />
+            <div className="mega-lift relative mt-2 aspect-video overflow-hidden rounded-thumb bg-icon-tile">
+              <Image
+                src="/physitai-simplifyne-product.webp"
+                alt=""
+                fill
+                quality={90}
+                sizes="22vw"
+                className="object-cover"
+              />
+            </div>
 
             <h3 className="mt-2 text-featured-title font-semibold text-ink">
               {featuredWork.title}

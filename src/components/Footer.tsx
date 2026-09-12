@@ -3,8 +3,11 @@ const FOOTER_COLUMNS = [
   {
     heading: "Social",
     links: [
-      { label: "LinkedIn", href: "#" },
-      { label: "Instagram", href: "#" },
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/company/simplifyne",
+      },
+      { label: "Instagram", href: "https://www.instagram.com/simplifyne.in/" },
     ],
   },
   {
@@ -28,19 +31,21 @@ const FOOTER_COLUMNS = [
   {
     heading: "Get in touch",
     links: [
-      { label: "hello@simplifyne.com", href: "#" },
-      { label: "+91 90000 00000", href: "#" },
+      { label: "contact@simplifyne.in", href: "mailto:contact@simplifyne.in" },
+      { label: "099300 38380", href: "tel:09930038380" },
       { label: "Contact us", href: "/contact" },
     ],
   },
 ] as const;
 
+const SOCIAL_HEADING = "Social";
+
 const LEGAL_ITEMS = [
-  "© 2026 Simplifyne. All rights reserved",
-  "hello@simplifyne.com",
-  "Sitemap",
-  "Privacy Policy",
-  "Terms of Use",
+  { text: "© 2026 Simplifyne. All rights reserved" },
+  { text: "contact@simplifyne.in", href: "mailto:contact@simplifyne.in" },
+  { text: "Sitemap" },
+  { text: "Privacy Policy" },
+  { text: "Terms of Use" },
 ] as const;
 
 const LINK_CLASS =
@@ -81,7 +86,13 @@ export function Footer() {
                 <ul className="mt-[1.25rem] flex flex-col gap-2">
                   {column.links.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} className={LINK_CLASS}>
+                      <a
+                        href={link.href}
+                        className={LINK_CLASS}
+                        {...(column.heading === SOCIAL_HEADING
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {})}
+                      >
                         {link.label}
                       </a>
                     </li>
@@ -100,11 +111,21 @@ export function Footer() {
             only ever appears where it's guaranteed to fit unwrapped. */}
         <div className="mt-10 border-t border-menu-divider pt-4">
           <div className="flex flex-col items-center gap-2 text-center text-card-body text-bento-label-on-light lg:flex-row lg:justify-center lg:gap-0 lg:divide-x lg:divide-menu-divider">
-            {LEGAL_ITEMS.map((item) => (
-              <span key={item} className="lg:px-3">
-                {item}
-              </span>
-            ))}
+            {LEGAL_ITEMS.map((item) =>
+              "href" in item ? (
+                <a
+                  key={item.text}
+                  href={item.href}
+                  className="transition-colors duration-standard ease-standard hover:text-ink lg:px-3"
+                >
+                  {item.text}
+                </a>
+              ) : (
+                <span key={item.text} className="lg:px-3">
+                  {item.text}
+                </span>
+              ),
+            )}
           </div>
         </div>
       </div>
