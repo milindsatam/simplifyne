@@ -439,7 +439,10 @@ export function ContactSection() {
         <div className="mt-8 border-t border-menu-divider pt-8">
           <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {CONTACT_METHODS.map((method) => (
-              <li key={method.id}>
+              <li
+                key={method.id}
+                className="flex flex-col items-center text-center sm:items-start sm:text-left"
+              >
                 <method.icon
                   size={METHOD_ICON_SIZE}
                   aria-hidden="true"
@@ -453,7 +456,7 @@ export function ContactSection() {
                 </p>
 
                 {method.locations ? (
-                  <div className="mt-2 flex flex-col gap-1">
+                  <div className="mt-2 flex flex-col items-center gap-1 sm:items-start">
                     {method.locations.map((location) => (
                       <a
                         key={location}
