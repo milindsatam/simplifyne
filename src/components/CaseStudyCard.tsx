@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import type {
   CaseStudy,
   CaseStudyHeadingSize,
@@ -63,6 +64,11 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
   return (
     <a
       href={caseStudy.href}
+      style={
+        caseStudy.backgroundColor
+          ? { backgroundColor: caseStudy.backgroundColor }
+          : undefined
+      }
       className={`bento-card ${padding} ${surfaceClass[caseStudy.surface]} focus-visible:outline-2 focus-visible:outline-offset-2 ${ringClass[caseStudy.surface]}`}
     >
       <p
@@ -95,19 +101,37 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
         />
       </span>
 
-      {/* Reserved for a case study image, added later. Marked aria-hidden:
-          the TODO is a note for whoever wires up the image next, not
-          content a screen reader should announce as part of the card. */}
-      <div
-        aria-hidden="true"
-        className={`mt-6 flex flex-1 items-center justify-center rounded-panel p-2 ${placeholderClass[caseStudy.surface]}`}
-      >
-        <span
-          className={`text-center text-card-body ${bodyClass[caseStudy.surface]}`}
+      {caseStudy.image ? (
+        // object-contain: the source is a full UI screenshot (a tilted
+        // browser mockup on its own light backdrop), so cropping it would
+        // cut the mockup off rather than just filling frame with photo.
+        <div
+          aria-hidden="true"
+          className="relative mt-6 flex-1 overflow-hidden rounded-panel p-2"
         >
-          TODO: replace with case study image
-        </span>
-      </div>
+          <Image
+            src={caseStudy.image}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 33vw, 84vw"
+            className="object-contain"
+          />
+        </div>
+      ) : (
+        // Reserved for a case study image, added later. Marked aria-hidden:
+        // the TODO is a note for whoever wires up the image next, not
+        // content a screen reader should announce as part of the card.
+        <div
+          aria-hidden="true"
+          className={`mt-6 flex flex-1 items-center justify-center rounded-panel p-2 ${placeholderClass[caseStudy.surface]}`}
+        >
+          <span
+            className={`text-center text-card-body ${bodyClass[caseStudy.surface]}`}
+          >
+            TODO: replace with case study image
+          </span>
+        </div>
+      )}
     </a>
   );
 }
