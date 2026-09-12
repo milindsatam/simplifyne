@@ -60,12 +60,18 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
   // The tall left card reads first and carries more weight, so it gets a
   // touch more breathing room than the other three.
   const padding = caseStudy.slot === "left" ? "p-5" : "p-4";
-  // Below lg, the peek panel is absolutely positioned (see below) so it no
-  // longer stretches the card the way the flex-1 placeholder does; without
-  // this the card would collapse to the text's own height and the panel
-  // would overlap it. lg:min-h-0 hands height back to the desktop grid
-  // area, which already sizes this card well past this floor.
-  const imageMinHeight = caseStudy.image ? "min-h-[27rem] lg:min-h-0" : "";
+  // The peek panel is absolutely positioned (see below) so it no longer
+  // stretches the card the way the flex-1 placeholder does; without an
+  // explicit floor the card would collapse to the text's own height and
+  // the panel would overlap it. At lg the sibling cards' own combined
+  // height (each floored at --card-min-height, stacked two-high beside
+  // this one) is taller than this card actually needs, so it's paired
+  // with self-start on the grid item (see CaseStudies.tsx) rather than
+  // stretching to match — --bento-tall-height is this card's own real
+  // target height, same token as before this floor existed.
+  const imageMinHeight = caseStudy.image
+    ? "min-h-[31.5rem] sm:min-h-[32.5rem] lg:min-h-[calc(var(--bento-tall-height)+1rem)]"
+    : "";
 
   return (
     <a
