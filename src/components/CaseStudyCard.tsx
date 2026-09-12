@@ -130,7 +130,7 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
         // logo and nav, rather than a meaningless middle/right slice.
         <div
           aria-hidden="true"
-          className={`relative mt-6 flex-1 ${imageBleedMargin} overflow-hidden rounded-tl-[0.625rem]`}
+          className={`relative mt-2 flex-1 ${imageBleedMargin} overflow-hidden rounded-tl-[0.625rem]`}
         >
           <Image
             src={caseStudy.image}
