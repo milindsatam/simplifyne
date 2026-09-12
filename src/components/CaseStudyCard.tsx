@@ -60,18 +60,27 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
   // The tall left card reads first and carries more weight, so it gets a
   // touch more breathing room than the other three.
   const padding = caseStudy.slot === "left" ? "p-5" : "p-4";
-  // Cancels that same padding on the bottom only, so the image (below) can
-  // bleed past the card's own bottom edge instead of leaving a gap of
-  // card colour there. Height stays flex-1: it fills whatever space the
-  // grid gives this card (see CaseStudies.tsx), so the card's own height
-  // is never dictated by the image, and never collapses to the text's.
-  const imageBleedMargin = caseStudy.slot === "left" ? "-mb-5" : "-mb-4";
+  // Cancels that same padding on the bottom and right, so the image (below)
+  // can bleed past the card's own bottom and right edges instead of leaving
+  // a gap of card colour there. Only the left stays inset, matching the
+  // text above. Height stays flex-1: it fills whatever space the grid gives
+  // this card (see CaseStudies.tsx), so the card's own height is never
+  // dictated by the image, and never collapses to the text's.
+  const imageBleedMargin = caseStudy.slot === "left" ? "-mb-5 -mr-5" : "-mb-4 -mr-4";
   // Below lg there's no grid row to stretch these cards open, so at the
   // shared --card-min-height floor the image would be left a thin,
-  // illegible sliver. This floor is comfortably taller, and since the
-  // image is flex-1 it absorbs the difference on every image card alike
-  // rather than leaving a gap on the ones with shorter text.
-  const imageMinHeight = caseStudy.image ? "min-h-[29rem] sm:min-h-[30rem]" : "";
+  // illegible sliver. This floor gives it just enough room to stay
+  // legible without ballooning the card, and since the image is flex-1 it
+  // absorbs the difference on every image card alike rather than leaving a
+  // gap on the ones with shorter text. The left card's longer heading and
+  // body wrap to an extra line at these widths, so it needs a taller floor
+  // than the other two to leave its image the same comfortable amount of
+  // room.
+  const imageMinHeight = !caseStudy.image
+    ? ""
+    : caseStudy.slot === "left"
+      ? "min-h-[28rem] sm:min-h-[29rem]"
+      : "min-h-[24rem] sm:min-h-[25rem]";
 
   return (
     <a
@@ -90,14 +99,12 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
       </p>
 
       <h3
-        className={`mt-2 max-w-card-heading font-semibold ${headingClass[caseStudy.headingSize]}`}
+        className={`mt-2 font-semibold ${headingClass[caseStudy.headingSize]}`}
       >
         {caseStudy.heading}
       </h3>
 
-      <p
-        className={`mt-2 max-w-card-copy text-card-body ${bodyClass[caseStudy.surface]}`}
-      >
+      <p className={`mt-2 text-card-body ${bodyClass[caseStudy.surface]}`}>
         {caseStudy.body}
       </p>
 
@@ -115,16 +122,15 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
 
       {caseStudy.image ? (
         // Fills whatever space is left in the card (flex-1), left-aligned
-        // to the text above via the card's own padding rather than a
-        // separate inset, and never wider than that padded width, so
-        // there's no bleed on either side. The negative bottom margin
-        // cancels that padding on the bottom only, letting the image run
-        // past the card's own edge there; the card's overflow-hidden crops
-        // it to a peek of the top of the screenshot, cropping off whatever
-        // doesn't fit rather than leaving a gap below the text.
+        // to the text above via the card's own left padding. The negative
+        // bottom and right margins cancel that same padding on those two
+        // sides, letting the image run past the card's own edges there;
+        // the card's overflow-hidden crops it to a peek of the dashboard's
+        // top-left corner, the same part of the screenshot that carries its
+        // logo and nav, rather than a meaningless middle/right slice.
         <div
           aria-hidden="true"
-          className={`relative mt-6 flex-1 ${imageBleedMargin} overflow-hidden rounded-t-[0.625rem]`}
+          className={`relative mt-6 flex-1 ${imageBleedMargin} overflow-hidden rounded-tl-[0.625rem]`}
         >
           <Image
             src={caseStudy.image}
@@ -133,10 +139,10 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
             quality={90}
             sizes={
               caseStudy.slot === "left"
-                ? "(min-width: 1024px) 37vw, (min-width: 640px) 46vw, 92vw"
-                : "(min-width: 1024px) 28vw, (min-width: 640px) 46vw, 92vw"
+                ? "(min-width: 1024px) 32vw, (min-width: 640px) 44vw, 88vw"
+                : "(min-width: 1024px) 24vw, (min-width: 640px) 44vw, 88vw"
             }
-            className="object-cover object-top"
+            className="object-cover object-left-top"
           />
         </div>
       ) : (

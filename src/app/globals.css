@@ -263,7 +263,7 @@
   --radius-bento: 1rem; /* 16px */
   --radius-mobile-menu-card: 1.25rem; /* 20px */
 
-  --bento-tall-height: 35rem; /* 560px, the left card's reference height */
+  --bento-tall-height: 28rem; /* 448px, the left card's reference height */
 
   /* Cast downward only: the bar is full width, so its sides are off screen. */
   --shadow-panel: 0 12px 32px rgba(0, 0, 0, 0.1);
