@@ -46,7 +46,7 @@ const HINT_CLASS = "mt-1.5 text-body-sm text-brand";
 const MOBILE_LABEL_CLASS = "mb-1 block text-body-sm text-ink/70";
 const MOBILE_FIELD_CLASS = `${FIELD_BASE} block w-full px-1 py-2.5 text-body-md`;
 
-/* Demo placeholders only; wired to /contact stubs elsewhere on the site. */
+/* Chat and the visit locations are still stubs; email and call are real. */
 type ContactMethod = {
   id: string;
   icon: LucideIcon;
@@ -71,16 +71,16 @@ const CONTACT_METHODS: readonly ContactMethod[] = [
     icon: Send,
     title: "Shoot us an email",
     description: "We reply within a day, usually sooner.",
-    linkLabel: "hello@simplifyne.com",
-    linkHref: "#",
+    linkLabel: "contact@simplifyne.in",
+    linkHref: "mailto:contact@simplifyne.in",
   },
   {
     id: "call",
     icon: Phone,
     title: "Call us",
     description: "Mon to Fri, 10am to 7pm IST.",
-    linkLabel: "+91 90000 00000",
-    linkHref: "#",
+    linkLabel: "099300 38380",
+    linkHref: "tel:09930038380",
   },
   {
     id: "visit",
@@ -159,14 +159,16 @@ export function ContactSection() {
             <p className="mt-2 max-w-[28.75rem] text-card-body text-ink/55">
               In a hurry? Call us at{" "}
               <a
-                href="tel:+919000000000"
+                href="tel:09930038380"
                 className="font-bold text-ink/55 underline decoration-1 underline-offset-4 transition-colors duration-standard ease-standard hover:text-brand"
               >
-                +91 90000 00000
+                099300 38380
               </a>{" "}
               or message us on{" "}
               <a
-                href="https://wa.me/"
+                href="https://wa.me/919930038380"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-bold text-ink/55 underline decoration-1 underline-offset-4 transition-colors duration-standard ease-standard hover:text-brand"
               >
                 WhatsApp
