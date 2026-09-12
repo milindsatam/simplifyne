@@ -60,6 +60,10 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
   // The tall left card reads first and carries more weight, so it gets a
   // touch more breathing room than the other three.
   const padding = caseStudy.slot === "left" ? "p-5" : "p-4";
+  // Cancels that same padding on three sides so an image (below) bleeds to
+  // the card's own left, right, and bottom edges instead of sitting in a
+  // padded inset.
+  const bleedMargin = caseStudy.slot === "left" ? "-mx-5 -mb-5" : "-mx-4 -mb-4";
 
   return (
     <a
@@ -102,19 +106,23 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
       </span>
 
       {caseStudy.image ? (
-        // object-contain: the source is a full UI screenshot (a tilted
-        // browser mockup on its own light backdrop), so cropping it would
-        // cut the mockup off rather than just filling frame with photo.
+        // Bleeds to the card's own left, right, and bottom edges (the
+        // negative margin cancels the card's own padding) so it reads as
+        // part of the card rather than an inset photo. The card's own
+        // overflow-hidden and border-radius clip its bottom corners; the
+        // top stays a straight edge where it meets the text above.
+        // object-top crops off the bottom of the screenshot rather than
+        // the top, which is where the platform's own UI chrome reads.
         <div
           aria-hidden="true"
-          className="relative mt-6 flex-1 overflow-hidden rounded-panel p-2"
+          className={`relative mt-6 flex-1 ${bleedMargin}`}
         >
           <Image
             src={caseStudy.image}
             alt=""
             fill
             sizes="(min-width: 1024px) 33vw, 84vw"
-            className="object-contain"
+            className="object-cover object-top"
           />
         </div>
       ) : (
