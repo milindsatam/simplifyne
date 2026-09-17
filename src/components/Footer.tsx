@@ -1,3 +1,5 @@
+import { FEATURES } from "@/config/features";
+
 /** TODO: point at real routes once those pages exist (stubs for now). */
 const FOOTER_COLUMNS = [
   {
@@ -6,37 +8,51 @@ const FOOTER_COLUMNS = [
       {
         label: "LinkedIn",
         href: "https://www.linkedin.com/company/simplifyne",
+        show: true,
       },
-      { label: "Instagram", href: "https://www.instagram.com/simplifyne.in/" },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/simplifyne.in/",
+        show: true,
+      },
     ],
   },
   {
     heading: "Company",
     links: [
-      { label: "About", href: "#" },
-      { label: "Case studies", href: "#" },
-      { label: "Services", href: "#" },
-      { label: "Products", href: "#" },
-      { label: "Team", href: "#" },
+      { label: "About", href: "/about", show: true },
+      { label: "Case studies", href: "#", show: FEATURES.footerFullLinks },
+      { label: "Services", href: "#", show: FEATURES.footerFullLinks },
+      { label: "Products", href: "#", show: FEATURES.footerFullLinks },
+      { label: "Team", href: "#", show: FEATURES.footerFullLinks },
     ],
   },
   {
     heading: "Learn",
     links: [
-      { label: "Blog", href: "#" },
-      { label: "FAQs", href: "#" },
-      { label: "Process", href: "#" },
+      { label: "Blog", href: "#", show: FEATURES.footerFullLinks },
+      { label: "FAQs", href: "#", show: FEATURES.footerFullLinks },
+      { label: "Process", href: "#", show: FEATURES.footerFullLinks },
     ],
   },
   {
     heading: "Get in touch",
     links: [
-      { label: "contact@simplifyne.in", href: "mailto:contact@simplifyne.in" },
-      { label: "099300 38380", href: "tel:09930038380" },
-      { label: "Contact us", href: "/contact" },
+      {
+        label: "contact@simplifyne.in",
+        href: "mailto:contact@simplifyne.in",
+        show: true,
+      },
+      { label: "099300 38380", href: "tel:09930038380", show: true },
+      { label: "Contact us", href: "/contact", show: true },
     ],
   },
 ] as const;
+
+const VISIBLE_FOOTER_COLUMNS = FOOTER_COLUMNS.map((column) => ({
+  heading: column.heading,
+  links: column.links.filter((link) => link.show),
+})).filter((column) => column.links.length > 0);
 
 const SOCIAL_HEADING = "Social";
 
@@ -75,11 +91,22 @@ export function Footer() {
           </a>
         </div>
 
-        {/* Link columns */}
+        {/* Link columns. Full launch has four columns spanning the row; the
+            reduced set (fewer, wider columns) is centered instead of
+            stretched, so the lighter footer still reads as deliberate. */}
         <nav aria-label="Footer" className="mt-10">
-          <div className="grid grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-4">
-            {FOOTER_COLUMNS.map((column) => (
-              <div key={column.heading}>
+          <div
+            className={
+              FEATURES.footerFullLinks
+                ? "grid grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-4"
+                : "flex flex-wrap justify-center gap-x-16 gap-y-8 text-center sm:text-left"
+            }
+          >
+            {VISIBLE_FOOTER_COLUMNS.map((column) => (
+              <div
+                key={column.heading}
+                className={FEATURES.footerFullLinks ? "" : "min-w-[9rem]"}
+              >
                 <h3 className="text-menu-body font-medium text-label-featured">
                   {column.heading}
                 </h3>

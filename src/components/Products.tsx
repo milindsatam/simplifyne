@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { FEATURES } from "@/config/features";
 import { products } from "@/data/products";
 import { ProductCard } from "./ProductCard";
 
@@ -21,13 +22,15 @@ export function Products() {
           </div>
 
           {/* TODO: point at the products index once that route exists. */}
-          <a
-            href="#"
-            className="mt-6 inline-flex w-fit items-center gap-1 rounded-pill bg-ink px-3 py-[0.875rem] text-body-sm font-semibold text-on-dark transition-colors duration-standard ease-standard hover:bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink lg:mt-0"
-          >
-            See all products
-            <ArrowRight size={ARROW_SIZE} aria-hidden="true" />
-          </a>
+          {FEATURES.showSeeAllProducts && (
+            <a
+              href="#"
+              className="mt-6 inline-flex w-fit items-center gap-1 rounded-pill bg-ink px-3 py-[0.875rem] text-body-sm font-semibold text-on-dark transition-colors duration-standard ease-standard hover:bg-ink-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink lg:mt-0"
+            >
+              See all products
+              <ArrowRight size={ARROW_SIZE} aria-hidden="true" />
+            </a>
+          )}
         </div>
 
         <ul className="product-grid mt-7">

@@ -3,6 +3,7 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
+import { FEATURES } from "@/config/features";
 import {
   featuredWork,
   serviceMenuIntro,
@@ -99,83 +100,128 @@ export function ServicesMegaMenu({
               {serviceMenuIntro.body}
             </p>
 
-            <a
-              role="menuitem"
-              href={serviceMenuIntro.ctaHref}
-              className="mega-cta mt-2.5 inline-flex items-center gap-1 rounded-menu-item text-card-body font-semibold text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            >
-              {serviceMenuIntro.ctaLabel}
-              <ArrowUpRight
-                size={ARROW_SIZE}
-                strokeWidth={ICON_STROKE}
-                aria-hidden="true"
-                className="mega-cta-arrow"
-              />
-            </a>
+            {FEATURES.megaMenuLinks && (
+              <a
+                role="menuitem"
+                href={serviceMenuIntro.ctaHref}
+                className="mega-cta mt-2.5 inline-flex items-center gap-1 rounded-menu-item text-card-body font-semibold text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                {serviceMenuIntro.ctaLabel}
+                <ArrowUpRight
+                  size={ARROW_SIZE}
+                  strokeWidth={ICON_STROKE}
+                  aria-hidden="true"
+                  className="mega-cta-arrow"
+                />
+              </a>
+            )}
           </div>
 
           <div className="grid grid-cols-2 content-start gap-2">
             {serviceMenuItems.map(
-              ({ id, icon: Icon, title, description, href }) => (
-                <a key={id} role="menuitem" href={href} className={itemClass}>
-                  <span className="flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-menu-item bg-icon-tile transition-colors duration-standard ease-standard group-hover:bg-icon-tile-hover">
-                    <Icon
-                      size={ICON_SIZE}
-                      strokeWidth={ICON_STROKE}
-                      aria-hidden="true"
-                      className="text-on-light"
-                    />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-menu-title font-semibold text-ink">
-                      {title}
+              ({ id, icon: Icon, title, description, href }) => {
+                const itemContent = (
+                  <>
+                    <span className="flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-menu-item bg-icon-tile transition-colors duration-standard ease-standard group-hover:bg-icon-tile-hover">
+                      <Icon
+                        size={ICON_SIZE}
+                        strokeWidth={ICON_STROKE}
+                        aria-hidden="true"
+                        className="text-on-light"
+                      />
                     </span>
-                    <span className="mt-0.5 block text-menu-body text-on-light-faint">
-                      {description}
+                    <span className="min-w-0">
+                      <span className="block text-menu-title font-semibold text-ink">
+                        {title}
+                      </span>
+                      <span className="mt-0.5 block text-menu-body text-on-light-faint">
+                        {description}
+                      </span>
                     </span>
-                  </span>
-                </a>
-              ),
+                  </>
+                );
+
+                return FEATURES.megaMenuLinks ? (
+                  <a
+                    key={id}
+                    role="menuitem"
+                    href={href}
+                    className={itemClass}
+                  >
+                    {itemContent}
+                  </a>
+                ) : (
+                  <div key={id} className={itemClass}>
+                    {itemContent}
+                  </div>
+                );
+              },
             )}
           </div>
 
-          <a
-            role="menuitem"
-            href={featuredWork.href}
-            className="mega-card block border-l border-menu-divider pl-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-          >
-            <p className="text-label font-semibold uppercase text-label-featured">
-              {featuredWork.label}
-            </p>
+          {FEATURES.megaMenuLinks ? (
+            <a
+              role="menuitem"
+              href={featuredWork.href}
+              className="mega-card block border-l border-menu-divider pl-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            >
+              <p className="text-label font-semibold uppercase text-label-featured">
+                {featuredWork.label}
+              </p>
 
-            <div className="mega-lift relative mt-2 aspect-video overflow-hidden rounded-thumb bg-icon-tile">
-              <Image
-                src="/physitai-simplifyne-product.webp"
-                alt=""
-                fill
-                quality={90}
-                sizes="22vw"
-                className="object-cover"
-              />
+              <div className="mega-lift relative mt-2 aspect-video overflow-hidden rounded-thumb bg-icon-tile">
+                <Image
+                  src="/physitai-simplifyne-product.webp"
+                  alt=""
+                  fill
+                  quality={90}
+                  sizes="22vw"
+                  className="object-cover"
+                />
+              </div>
+
+              <h3 className="mt-2 text-featured-title font-semibold text-ink">
+                {featuredWork.title}
+              </h3>
+              <p className="mt-0.5 text-menu-body text-on-light-faint">
+                {featuredWork.descriptor}
+              </p>
+
+              <span className="mt-2 inline-flex items-center gap-1 text-menu-body font-semibold text-ink">
+                {featuredWork.linkLabel}
+                <ArrowRight
+                  size={ARROW_SIZE}
+                  strokeWidth={ICON_STROKE}
+                  aria-hidden="true"
+                  className="mega-arrow"
+                />
+              </span>
+            </a>
+          ) : (
+            <div className="mega-card block border-l border-menu-divider pl-5">
+              <p className="text-label font-semibold uppercase text-label-featured">
+                {featuredWork.label}
+              </p>
+
+              <div className="relative mt-2 aspect-video overflow-hidden rounded-thumb bg-icon-tile">
+                <Image
+                  src="/physitai-simplifyne-product.webp"
+                  alt=""
+                  fill
+                  quality={90}
+                  sizes="22vw"
+                  className="object-cover"
+                />
+              </div>
+
+              <h3 className="mt-2 text-featured-title font-semibold text-ink">
+                {featuredWork.title}
+              </h3>
+              <p className="mt-0.5 text-menu-body text-on-light-faint">
+                {featuredWork.descriptor}
+              </p>
             </div>
-
-            <h3 className="mt-2 text-featured-title font-semibold text-ink">
-              {featuredWork.title}
-            </h3>
-            <p className="mt-0.5 text-menu-body text-on-light-faint">
-              {featuredWork.descriptor}
-            </p>
-
-            <span className="mt-2 inline-flex items-center gap-1 text-menu-body font-semibold text-ink">
-              {featuredWork.linkLabel}
-              <ArrowRight
-                size={ARROW_SIZE}
-                strokeWidth={ICON_STROKE}
-                aria-hidden="true"
-                className="mega-arrow"
-              />
-            </span>
-          </a>
+          )}
         </div>
       </div>
     </div>

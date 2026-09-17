@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FEATURES } from "@/config/features";
 import type { Service, ServiceSurface } from "@/data/services";
 
 const surfaceClass: Record<ServiceSurface, string> = {
@@ -72,10 +73,12 @@ export function ServiceCard({
         {/* Not a nested <button>: the whole card is the control, this is its
             affordance. On touch it sits right after the heading and is
             always visible; on desktop it reveals alongside the description. */}
-        <span className="service-reveal service-reveal--rise mt-[1.25rem] inline-flex items-center gap-1 text-action font-semibold">
-          Expand
-          <span aria-hidden="true">&rarr;</span>
-        </span>
+        {FEATURES.showExpand && (
+          <span className="service-reveal service-reveal--rise mt-[1.25rem] inline-flex items-center gap-1 text-action font-semibold">
+            Expand
+            <span aria-hidden="true">&rarr;</span>
+          </span>
+        )}
       </div>
     </a>
   );

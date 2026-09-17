@@ -1,12 +1,13 @@
+import { FEATURES } from "@/config/features";
 import { ServicesMegaMenu } from "./ServicesMegaMenu";
 
 /** TODO: point at real routes once those pages exist (out of scope for now). */
 const NAV_LINKS = [
-  { label: "Work", href: "#" },
-  { label: "About", href: "/about" },
-  { label: "Products", href: "#" },
-  { label: "Blog", href: "#" },
-] as const;
+  { label: "Work", href: "#", show: FEATURES.showWorkNav },
+  { label: "About", href: "/about", show: true },
+  { label: "Products", href: "#", show: FEATURES.showProductsNav },
+  { label: "Blog", href: "#", show: FEATURES.showBlogNav },
+].filter((link) => link.show);
 
 export function PrimaryNav({ glassy = false }: { glassy?: boolean }) {
   const navItemClass = glassy

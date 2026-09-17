@@ -3,17 +3,28 @@
 import { ArrowLeft, ArrowRight, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
+import { FEATURES } from "@/config/features";
 import { products } from "@/data/products";
 import { serviceMenuItems } from "@/data/serviceMenu";
 
 /** TODO: point at real routes once those pages exist (stubs for now). */
 const TOP_ITEMS = [
-  { id: "work", label: "Work", href: "#" },
-  { id: "services", label: "Services", submenu: "services" as const },
-  { id: "products", label: "Products", submenu: "products" as const },
-  { id: "about", label: "About", href: "/about" },
-  { id: "blog", label: "Blog", href: "#" },
-];
+  { id: "work", label: "Work", href: "#", show: FEATURES.showWorkNav },
+  {
+    id: "services",
+    label: "Services",
+    submenu: "services" as const,
+    show: true,
+  },
+  {
+    id: "products",
+    label: "Products",
+    submenu: "products" as const,
+    show: FEATURES.showProductsNav,
+  },
+  { id: "about", label: "About", href: "/about", show: true },
+  { id: "blog", label: "Blog", href: "#", show: FEATURES.showBlogNav },
+].filter((item) => item.show);
 
 const SUBMENUS = {
   services: {
