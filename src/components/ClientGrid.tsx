@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { Client } from "@/data/clients";
 
@@ -87,9 +88,20 @@ export function ClientGrid({ clients }: { clients: readonly Client[] }) {
               href="#"
               className="group relative flex aspect-[3/2] w-full flex-col items-center justify-center border-r border-b border-grid-border bg-surface-white px-2 transition-colors duration-standard ease-standard hover:bg-brand focus-visible:z-10 focus-visible:bg-brand focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-on-dark"
             >
-              <span className="text-center text-body-md font-semibold text-ink transition-colors duration-standard ease-standard group-hover:text-on-dark group-focus-visible:text-on-dark">
-                {client.name}
-              </span>
+              {client.logo ? (
+                <Image
+                  src={client.logo.src}
+                  alt={client.name}
+                  width={800}
+                  height={600}
+                  className="client-logo"
+                  style={{ maxHeight: client.logo.maxHeight, maxWidth: 140 }}
+                />
+              ) : (
+                <span className="text-center text-body-md font-semibold text-ink transition-colors duration-standard ease-standard group-hover:text-on-dark group-focus-visible:text-on-dark">
+                  {client.name}
+                </span>
+              )}
 
               {/* Zero height at rest, not display:none, so growing it on
                   hover is what makes room for the name to shift up:
