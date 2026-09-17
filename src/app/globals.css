@@ -576,6 +576,24 @@
     transform: none;
   }
 
+  /* Logo grid cells: every mark ships in its own colours, so a flat grey
+     filter is what makes them read as one tonally consistent row at rest.
+     Width/height stay auto (overriding the img's own 800x600 attributes) so
+     the max-height/max-width caps set per logo in clients.ts, not the
+     source file's aspect ratio, decide the rendered size. */
+  .client-logo {
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(0.65);
+    transition: filter var(--duration-standard) var(--ease-standard);
+  }
+
+  .group:hover .client-logo,
+  .group:focus-visible .client-logo {
+    filter: brightness(0) invert(1);
+  }
+
   /* -------------------------------------------------------------------------
      Case studies bento grid. The shape itself (one tall card, a wide card,
      two equal cards) is what utilities can't express, so it's built with
