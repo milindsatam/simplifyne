@@ -131,7 +131,8 @@
 
   /* Type ------------------------------------------------------------------ */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-display:
+    var(--font-jakarta), var(--font-inter), ui-sans-serif, sans-serif;
 
   --text-hero: clamp(2.5rem, 5vw, 3.75rem);
   --text-hero--line-height: 1.05;
@@ -576,16 +577,16 @@
     transform: none;
   }
 
-  /* Logo grid cells: every mark ships in its own colours, so a flat grey
-     filter is what makes them read as one tonally consistent row at rest.
-     Width/height stay auto (overriding the img's own 800x600 attributes) so
-     the max-height/max-width caps set per logo in clients.ts, not the
-     source file's aspect ratio, decide the rendered size. */
+  /* Logo grid cells: original colours at rest, so each mark stays
+     recognisable. Width/height stay auto (overriding the img's own width/
+     height attributes, which are each logo's own cropped viewBox size from
+     clients.ts) so the max-height/max-width caps set per logo, not a fixed
+     box, decide the rendered size. On hover the logo flattens to white to
+     read on the blue fill, matching the fill's own transition. */
   .client-logo {
     width: auto;
     height: auto;
     object-fit: contain;
-    filter: brightness(0) invert(0.65);
     transition: filter var(--duration-standard) var(--ease-standard);
   }
 

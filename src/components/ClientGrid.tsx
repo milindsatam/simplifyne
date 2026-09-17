@@ -92,10 +92,13 @@ export function ClientGrid({ clients }: { clients: readonly Client[] }) {
                 <Image
                   src={client.logo.src}
                   alt={client.name}
-                  width={800}
-                  height={600}
+                  width={client.logo.width}
+                  height={client.logo.height}
                   className="client-logo"
-                  style={{ maxHeight: client.logo.maxHeight, maxWidth: 140 }}
+                  style={{
+                    maxHeight: client.logo.maxHeight,
+                    maxWidth: client.logo.maxWidth,
+                  }}
                 />
               ) : (
                 <span className="text-center text-body-md font-semibold text-ink transition-colors duration-standard ease-standard group-hover:text-on-dark group-focus-visible:text-on-dark">
