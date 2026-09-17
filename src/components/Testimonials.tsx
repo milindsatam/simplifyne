@@ -3,6 +3,7 @@
 import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { FEATURES } from "@/config/features";
 import { testimonials } from "@/data/testimonials";
 
 const ARROW_SIZE = 18;
@@ -152,18 +153,22 @@ export function Testimonials() {
                         {testimonial.quote}
                       </p>
 
-                      <p className="mt-[1.25rem] max-w-[32.5rem] text-body-md text-on-dark-strong">
+                      <p
+                        className={`max-w-[32.5rem] text-body-md text-on-dark-strong ${FEATURES.showReadStory ? "mt-[1.25rem]" : "mt-[1.75rem]"}`}
+                      >
                         {testimonial.sub}
                       </p>
 
                       {/* TODO: point at the full case study once this quote has one. */}
-                      <a
-                        href="#"
-                        tabIndex={isClone ? -1 : undefined}
-                        className="mt-[1.75rem] inline-flex w-fit items-center rounded-menu-item bg-surface-white px-[1.25rem] py-[0.75rem] text-body-sm font-semibold text-ink transition-colors duration-standard ease-standard hover:bg-pill-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-dark"
-                      >
-                        Read the complete story
-                      </a>
+                      {FEATURES.showReadStory && (
+                        <a
+                          href="#"
+                          tabIndex={isClone ? -1 : undefined}
+                          className="mt-[1.75rem] inline-flex w-fit items-center rounded-menu-item bg-surface-white px-[1.25rem] py-[0.75rem] text-body-sm font-semibold text-ink transition-colors duration-standard ease-standard hover:bg-pill-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-dark"
+                        >
+                          Read the complete story
+                        </a>
+                      )}
                     </div>
 
                     <div className="relative order-first flex min-h-[16rem] items-end overflow-hidden rounded-bento bg-testimonial-photo lg:order-none lg:min-h-[var(--testimonial-card-height)]">

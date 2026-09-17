@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { FEATURES } from "@/config/features";
 import type {
   CaseStudy,
   CaseStudyHeadingSize,
@@ -112,14 +113,16 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
       {/* Not a nested <button>: the whole card is the control, this is its
           affordance. Persistent, unlike the hero cards' reveal-on-hover
           Expand, so it carries no service-reveal treatment. */}
-      <span className="mt-3 inline-flex items-center gap-1 text-action font-semibold">
-        Expand
-        <ArrowRight
-          size={ARROW_SIZE}
-          aria-hidden="true"
-          className="bento-arrow"
-        />
-      </span>
+      {FEATURES.showExpand && (
+        <span className="mt-3 inline-flex items-center gap-1 text-action font-semibold">
+          Expand
+          <ArrowRight
+            size={ARROW_SIZE}
+            aria-hidden="true"
+            className="bento-arrow"
+          />
+        </span>
+      )}
 
       {caseStudy.image ? (
         // Fills whatever space is left in the card (flex-1), left-aligned
@@ -131,7 +134,7 @@ export function CaseStudyCard({ caseStudy }: { caseStudy: CaseStudy }) {
         // logo and nav, rather than a meaningless middle/right slice.
         <div
           aria-hidden="true"
-          className={`relative mt-4 flex-1 ${imageBleedMargin} overflow-hidden rounded-tl-[0.625rem]`}
+          className={`relative ${FEATURES.showExpand ? "mt-4" : "mt-6"} flex-1 ${imageBleedMargin} overflow-hidden rounded-tl-[0.625rem]`}
         >
           <Image
             src={caseStudy.image}
