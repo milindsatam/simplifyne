@@ -1,10 +1,15 @@
 export interface ClientLogo {
   /** Filename in /public. */
   readonly src: string;
-  /** Logos vary in aspect ratio (wide wordmarks vs. square/vertical marks),
-      so each one gets its own rest-state cap to read at a consistent
-      visual weight instead of sharing one height for every shape. */
+  /** The SVG's own (cropped) viewBox dimensions, so next/image computes the
+      right aspect ratio for sizing instead of assuming a generic box. */
+  readonly width: number;
+  readonly height: number;
+  /** Logos vary a lot in aspect ratio (wide wordmarks vs. square/vertical
+      marks) and ink density, so each one gets its own rest-state caps to
+      read at a consistent visual weight instead of sharing one size. */
   readonly maxHeight: number;
+  readonly maxWidth: number;
 }
 
 export interface Client {
@@ -24,19 +29,37 @@ export const clients: readonly Client[] = [
     id: "leaderonomics",
     name: "Leaderonomics",
     work: "Course subscription platform and full website build",
-    logo: { src: "/leaderonmics.svg", maxHeight: 40 },
+    logo: {
+      src: "/leaderonmics.svg",
+      width: 800,
+      height: 301,
+      maxHeight: 46,
+      maxWidth: 180,
+    },
   },
   {
     id: "ecareers",
     name: "E-Careers",
     work: "eLearning course production and delivery",
-    logo: { src: "/e-careers.svg", maxHeight: 40 },
+    logo: {
+      src: "/e-careers.svg",
+      width: 800,
+      height: 301,
+      maxHeight: 46,
+      maxWidth: 180,
+    },
   },
   {
     id: "esteril",
     name: "Esteril",
     work: "SEO and web development retainer",
-    logo: { src: "/esteril.svg", maxHeight: 40 },
+    logo: {
+      src: "/esteril.svg",
+      width: 800,
+      height: 301,
+      maxHeight: 46,
+      maxWidth: 180,
+    },
   },
   {
     id: "shaftcraft",
@@ -47,36 +70,72 @@ export const clients: readonly Client[] = [
     id: "aarogyam",
     name: "Aarogyam",
     work: "SEO and long-form healthcare content",
-    logo: { src: "/aarogyam_hospital.svg", maxHeight: 30 },
+    logo: {
+      src: "/aarogyam_hospital.svg",
+      width: 800,
+      height: 449,
+      maxHeight: 56,
+      maxWidth: 180,
+    },
   },
   {
     id: "cyber-panda",
     name: "Cyber Panda",
     work: "Brand identity and marketing website",
-    logo: { src: "/cyber_panda.svg", maxHeight: 24 },
+    logo: {
+      src: "/cyber_panda.svg",
+      width: 427,
+      height: 600,
+      maxHeight: 60,
+      maxWidth: 180,
+    },
   },
   {
     id: "abungu-farm",
     name: "Abungu Farm",
     work: "Ecommerce store and product photography",
-    logo: { src: "/abungu_rabbit.svg", maxHeight: 24 },
+    logo: {
+      src: "/abungu_rabbit.svg",
+      width: 620,
+      height: 600,
+      maxHeight: 58,
+      maxWidth: 180,
+    },
   },
   {
     id: "alekh-holidays",
     name: "Alekh Holidays",
     work: "Travel booking website and SEO",
-    logo: { src: "/alekh_holidays.svg", maxHeight: 40 },
+    logo: {
+      src: "/alekh_holidays.svg",
+      width: 800,
+      height: 315,
+      maxHeight: 52,
+      maxWidth: 180,
+    },
   },
   {
     id: "bd-lights",
     name: "BD Lights",
     work: "Content strategy, SEO, and paid ads",
-    logo: { src: "/bdlghts.svg", maxHeight: 28 },
+    logo: {
+      src: "/bdlghts.svg",
+      width: 800,
+      height: 600,
+      maxHeight: 50,
+      maxWidth: 180,
+    },
   },
   {
     id: "revonext-waters",
     name: "RevoNext Waters",
     work: "Website design and local search growth",
-    logo: { src: "/revonext_waters.svg", maxHeight: 40 },
+    logo: {
+      src: "/revonext_waters.svg",
+      width: 800,
+      height: 315,
+      maxHeight: 52,
+      maxWidth: 180,
+    },
   },
 ];
