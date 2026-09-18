@@ -6,6 +6,7 @@ import { Hero } from "@/components/Hero";
 import { Products } from "@/components/Products";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Testimonials } from "@/components/Testimonials";
+import { FEATURES } from "@/config/features";
 
 export default function Home() {
   return (
@@ -16,7 +17,7 @@ export default function Home() {
         <ClientLogos />
         <CaseStudies />
         <Testimonials />
-        <Products />
+        {FEATURES.showProductsSection && <Products />}
         <ClosingStatement />
       </main>
       <Footer />
