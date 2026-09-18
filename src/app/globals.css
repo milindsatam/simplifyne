@@ -299,6 +299,8 @@
   /* Client grid. */
   --grid-reveal-rise: 1.5rem; /* 24px, the scroll reveal's travel */
   --grid-reveal-stagger: 50ms;
+  --grid-caption-shift: 0.5rem; /* 8px, caption's rise on hover */
+  --grid-caption-height: 2.25rem; /* fits the longest caption in two lines */
 
   /* Case study bento cards. */
   --bento-lift: 0.25rem; /* 4px, the hover rise */
@@ -555,10 +557,11 @@
   }
 
   /* -------------------------------------------------------------------------
-     Client grid. The box stays white in every state; only the logo itself
-     reacts to hover. The once-only scroll cascade is the one thing
-     utilities can't express (its per-cell delay is driven from React, not
-     a CSS transition-delay, so it never fights the logo's own transition).
+     Client grid. The box stays white in every state; only the logo and the
+     caption reveal react to hover. The once-only scroll cascade is the one
+     thing utilities can't express (its per-cell delay is driven from
+     React, not a CSS transition-delay, so it never fights the hover
+     transition on the same cell).
   ------------------------------------------------------------------------- */
 
   .client-cell {
