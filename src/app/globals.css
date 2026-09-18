@@ -577,22 +577,27 @@
     transform: none;
   }
 
-  /* Logo grid cells: original colours at rest, so each mark stays
-     recognisable. Width/height stay auto (overriding the img's own width/
-     height attributes, which are each logo's own cropped viewBox size from
-     clients.ts) so the max-height/max-width caps set per logo, not a fixed
-     box, decide the rendered size. On hover the logo flattens to white to
-     read on the blue fill, matching the fill's own transition. */
+  /* Logo grid cells: grayscale and dimmed at rest, so the row reads calm
+     and uniform; full original colour reveals on hover, matching the
+     fill's own transition. Width/height stay auto (overriding the img's
+     own width/height attributes, which are each logo's own cropped
+     viewBox size from clients.ts) so the max-height/max-width caps set
+     per logo, not a fixed box, decide the rendered size. */
   .client-logo {
     width: auto;
     height: auto;
     object-fit: contain;
-    transition: filter var(--duration-standard) var(--ease-standard);
+    filter: grayscale(1);
+    opacity: 0.6;
+    transition:
+      filter var(--duration-standard) var(--ease-standard),
+      opacity var(--duration-standard) var(--ease-standard);
   }
 
   .group:hover .client-logo,
   .group:focus-visible .client-logo {
-    filter: brightness(0) invert(1);
+    filter: grayscale(0);
+    opacity: 1;
   }
 
   /* -------------------------------------------------------------------------
