@@ -578,11 +578,12 @@
   }
 
   /* Logo grid cells: grayscale and dimmed at rest, so the row reads calm
-     and uniform; full original colour reveals on hover, matching the
-     fill's own transition. Width/height stay auto (overriding the img's
-     own width/height attributes, which are each logo's own cropped
-     viewBox size from clients.ts) so the max-height/max-width caps set
-     per logo, not a fixed box, decide the rendered size. */
+     and uniform; on hover the logo turns white to read on the blue fill,
+     matching the fill's own transition. Width/height stay auto
+     (overriding the img's own width/height attributes, which are each
+     logo's own cropped viewBox size from clients.ts) so the
+     max-height/max-width caps set per logo, not a fixed box, decide the
+     rendered size. */
   .client-logo {
     width: auto;
     height: auto;
@@ -596,7 +597,7 @@
 
   .group:hover .client-logo,
   .group:focus-visible .client-logo {
-    filter: grayscale(0);
+    filter: brightness(0) invert(1);
     opacity: 1;
   }
 
