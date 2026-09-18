@@ -299,8 +299,6 @@
   /* Client grid. */
   --grid-reveal-rise: 1.5rem; /* 24px, the scroll reveal's travel */
   --grid-reveal-stagger: 50ms;
-  --grid-caption-shift: 0.5rem; /* 8px, caption's rise on hover */
-  --grid-caption-height: 2.25rem; /* fits the longest caption in two lines */
 
   /* Case study bento cards. */
   --bento-lift: 0.25rem; /* 4px, the hover rise */
@@ -557,11 +555,10 @@
   }
 
   /* -------------------------------------------------------------------------
-     Client grid. The hover colour, text colour, and caption reveal are all
-     plain hover:/group-hover: utilities in the markup; the once-only scroll
-     cascade is the one thing utilities can't express (its per-cell delay is
-     driven from React, not a CSS transition-delay, so it never fights the
-     hover transition on the same cell).
+     Client grid. The box stays white in every state; only the logo itself
+     reacts to hover. The once-only scroll cascade is the one thing
+     utilities can't express (its per-cell delay is driven from React, not
+     a CSS transition-delay, so it never fights the logo's own transition).
   ------------------------------------------------------------------------- */
 
   .client-cell {
@@ -578,10 +575,9 @@
   }
 
   /* Logo grid cells: grayscale and dimmed at rest, so the row reads calm
-     and uniform; on hover the logo turns white to read on the blue fill,
-     matching the fill's own transition. Width/height stay auto
-     (overriding the img's own width/height attributes, which are each
-     logo's own cropped viewBox size from clients.ts) so the
+     and uniform; full original colour reveals on hover/focus. Width/height
+     stay auto (overriding the img's own width/height attributes, which are
+     each logo's own cropped viewBox size from clients.ts) so the
      max-height/max-width caps set per logo, not a fixed box, decide the
      rendered size. */
   .client-logo {
@@ -597,7 +593,7 @@
 
   .group:hover .client-logo,
   .group:focus-visible .client-logo {
-    filter: brightness(0) invert(1);
+    filter: grayscale(0);
     opacity: 1;
   }
 

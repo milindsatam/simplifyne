@@ -86,7 +86,7 @@ export function ClientGrid({ clients }: { clients: readonly Client[] }) {
           >
             <a
               href="#"
-              className="group relative flex aspect-[3/2] w-full flex-col items-center justify-center border-r border-b border-grid-border bg-surface-white px-2 transition-colors duration-standard ease-standard hover:bg-brand focus-visible:z-10 focus-visible:bg-brand focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-on-dark"
+              className="group relative flex aspect-[3/2] w-full flex-col items-center justify-center border-r border-b border-grid-border bg-surface-white px-2 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink"
             >
               {client.logo ? (
                 <Image
@@ -101,18 +101,10 @@ export function ClientGrid({ clients }: { clients: readonly Client[] }) {
                   }}
                 />
               ) : (
-                <span className="text-center text-body-md font-semibold text-ink transition-colors duration-standard ease-standard group-hover:text-on-dark group-focus-visible:text-on-dark">
+                <span className="text-center text-body-md font-semibold text-ink">
                   {client.name}
                 </span>
               )}
-
-              {/* Zero height at rest, not display:none, so growing it on
-                  hover is what makes room for the name to shift up:
-                  the pair is centred as one group, and only this box's
-                  own layout changes, never a neighbour's. */}
-              <p className="mt-1 h-0 max-w-[80%] overflow-hidden text-center text-menu-body text-product-copy opacity-0 translate-y-[var(--grid-caption-shift)] motion-safe:transition-all motion-safe:duration-standard motion-safe:ease-standard group-hover:h-[var(--grid-caption-height)] group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:h-[var(--grid-caption-height)] group-focus-visible:opacity-100 group-focus-visible:translate-y-0">
-                {client.work}
-              </p>
             </a>
           </li>
         ))}
