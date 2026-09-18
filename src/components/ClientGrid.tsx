@@ -105,6 +105,14 @@ export function ClientGrid({ clients }: { clients: readonly Client[] }) {
                   {client.name}
                 </span>
               )}
+
+              {/* Zero height at rest, not display:none, so growing it on
+                  hover is what makes room for the name to shift up:
+                  the pair is centred as one group, and only this box's
+                  own layout changes, never a neighbour's. */}
+              <p className="mt-1 h-0 max-w-[80%] overflow-hidden text-center text-menu-body text-ink-soft opacity-0 translate-y-[var(--grid-caption-shift)] motion-safe:transition-all motion-safe:duration-standard motion-safe:ease-standard group-hover:h-[var(--grid-caption-height)] group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:h-[var(--grid-caption-height)] group-focus-visible:opacity-100 group-focus-visible:translate-y-0">
+                {client.work}
+              </p>
             </a>
           </li>
         ))}
