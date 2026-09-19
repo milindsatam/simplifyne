@@ -19,8 +19,7 @@ export interface Client {
   readonly name: string;
   /** The "what we did" caption the box raises on hover or focus. */
   readonly work: string;
-  /** Rendered instead of the text name when present. SCI has no logo file
-      and keeps the text label. */
+  /** Rendered instead of the text name when present. */
   readonly logo?: ClientLogo;
 }
 
@@ -65,6 +64,13 @@ export const clients: readonly Client[] = [
     id: "shaftcraft",
     name: "SCI",
     work: "Website and ongoing digital services",
+    logo: {
+      src: "/sci.svg",
+      width: 436,
+      height: 339,
+      maxHeight: 68,
+      maxWidth: 180,
+    },
   },
   {
     id: "aarogyam",
