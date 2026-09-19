@@ -11,8 +11,6 @@ import {
 export interface WhatWeBuildRow {
   readonly icon: LucideIcon;
   readonly label: string;
-  /** TODO: point at real anchors/routes once they exist (stubs for now). */
-  readonly href: string;
 }
 
 export interface WhatWeBuildCard {
@@ -38,8 +36,8 @@ export const whatWeBuildCards: readonly WhatWeBuildCard[] = [
     description:
       "AI that does real work inside your business, drafting, answering, and acting on your own data, not just clever demos.",
     rows: [
-      { icon: Sparkles, label: "AI agents & assistants", href: "#" },
-      { icon: MessageSquare, label: "Chatbots & support AI", href: "#" },
+      { icon: Sparkles, label: "AI agents & assistants" },
+      { icon: MessageSquare, label: "Chatbots & support AI" },
     ],
   },
   {
@@ -48,8 +46,8 @@ export const whatWeBuildCards: readonly WhatWeBuildCard[] = [
     description:
       "We connect your tools so information and tasks move on their own, no more copy-paste between apps or work stuck in someone's inbox.",
     rows: [
-      { icon: Workflow, label: "Workflow automation", href: "#" },
-      { icon: Blocks, label: "System integrations", href: "#" },
+      { icon: Workflow, label: "Workflow automation" },
+      { icon: Blocks, label: "System integrations" },
     ],
   },
   {
@@ -58,8 +56,8 @@ export const whatWeBuildCards: readonly WhatWeBuildCard[] = [
     description:
       "First we find where your team loses time, then we build the small, sharp tool that removes it.",
     rows: [
-      { icon: Search, label: "Process audits", href: "#" },
-      { icon: Wrench, label: "Internal tools", href: "#" },
+      { icon: Search, label: "Process audits" },
+      { icon: Wrench, label: "Internal tools" },
     ],
   },
 ];
