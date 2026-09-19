@@ -1,5 +1,22 @@
-import Image from "next/image";
-import { tools } from "@/data/aiAutomationTools";
+import { marqueeLogos } from "@/data/aiAutomationLogos";
+
+function LogoSet({ hidden }: { hidden: boolean }) {
+  return (
+    <div
+      aria-hidden={hidden || undefined}
+      className="logo-marquee-set flex shrink-0 items-center gap-8"
+    >
+      {marqueeLogos.map((logo, index) => (
+        <img
+          key={`${logo.src}-${index}`}
+          src={logo.src}
+          alt={hidden ? "" : logo.alt}
+          className="h-[1.75rem] w-auto max-w-[7.5rem] shrink-0 object-contain"
+        />
+      ))}
+    </div>
+  );
+}
 
 export function AiAutomationTools() {
   return (
@@ -20,36 +37,21 @@ export function AiAutomationTools() {
           </p>
         </div>
 
-        {/* Same bordered-grid technique as ClientGrid (border-t/border-l on
-            the grid, border-r/border-b per cell) since it's the one that
-            handles a wrapping column count cleanly, but a lighter, quieter
-            treatment of its own: contained and centered rather than full
-            width, generous padding, no fill colour on hover. */}
-        <ul className="mx-auto mt-6 grid max-w-[60rem] grid-cols-2 overflow-hidden rounded-panel border-t border-l border-menu-divider sm:grid-cols-3 lg:grid-cols-5">
-          {tools.map((tool) => (
-            <li key={tool.id} className="border-r border-b border-menu-divider">
-              <div className="group flex items-center justify-center p-3.5">
-                {tool.logo ? (
-                  <Image
-                    src={tool.logo.src}
-                    alt={tool.name}
-                    width={tool.logo.width}
-                    height={tool.logo.height}
-                    className="h-auto w-auto object-contain grayscale opacity-70 transition-all duration-standard ease-standard group-hover:grayscale-0 group-hover:opacity-100 motion-safe:group-hover:-translate-y-0.5"
-                    style={{
-                      maxHeight: tool.logo.maxHeight,
-                      maxWidth: tool.logo.maxWidth,
-                    }}
-                  />
-                ) : (
-                  <span className="text-body-sm font-semibold text-ink transition-transform duration-standard ease-standard motion-safe:group-hover:-translate-y-0.5">
-                    {tool.name}
-                  </span>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+        {/* Logo files are not in /public yet (zapier.svg, N8n.svg,
+            open_ai.svg, pipedream.svg, microsoft.svg, google_cloud.svg,
+            stripe.svg, notion.svg, airtable.svg, asana.svg, zendesk.svg,
+            oracle.svg, trello.svg, typeform.svg, jotform.svg, cursor.svg,
+            miro.svg, softr.svg); add them there and this renders as-is.
+            The set is rendered twice so the marquee can loop seamlessly:
+            translateX(-50%) always lands the second, identical copy where
+            the first one started. The second copy is aria-hidden, since
+            it's a visual continuation, not new content. */}
+        <div className="logo-marquee-viewport mt-7">
+          <div className="logo-marquee-track flex items-center gap-8">
+            <LogoSet hidden={false} />
+            <LogoSet hidden={true} />
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -95,24 +95,4 @@ export const capabilities: readonly Capability[] = [
       company: "Kessel",
     },
   },
-  {
-    id: "iot-solutions",
-    title: "IoT Solutions",
-    description:
-      "Connect devices to real business value with reliable, well-integrated IoT.",
-    bullets: [
-      "Device integration",
-      "Dashboards and monitoring",
-      "Data pipelines",
-      "Hardware plus software",
-      "Ongoing support",
-    ],
-    // DEMO testimonial, replace
-    testimonial: {
-      quote: "Devices, data, and dashboards, all finally talking to each other.",
-      name: "Meera Iyer",
-      role: "CTO",
-      company: "Attera",
-    },
-  },
 ] as const;
