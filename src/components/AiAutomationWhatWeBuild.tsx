@@ -1,4 +1,3 @@
-import { ArrowRight } from "lucide-react";
 import {
   whatWeBuildCards,
   whatWeBuildEyebrow,
@@ -6,7 +5,6 @@ import {
 } from "@/data/aiAutomationWhatWeBuild";
 
 const ICON_SIZE = 20;
-const ARROW_SIZE = 16;
 
 export function AiAutomationWhatWeBuild() {
   return (
@@ -19,7 +17,11 @@ export function AiAutomationWhatWeBuild() {
           {whatWeBuildIntro.body}
         </p>
 
-        <ul className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        {/* --spacing is 0.5rem in this project (not Tailwind's usual
+            0.25rem), so mt-7/gap-3 land at 56px/24px, matching the site's
+            standard header-to-content gap and a tight, cards-fill-the-row
+            gutter rather than the doubled values mt-14/gap-6 would give. */}
+        <ul className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {whatWeBuildCards.map((card) => (
             <li
               key={card.id}
@@ -39,25 +41,16 @@ export function AiAutomationWhatWeBuild() {
 
               <div className="mt-5 flex flex-1 flex-col divide-y divide-menu-divider border-t border-menu-divider">
                 {card.rows.map((row) => (
-                  <a
-                    key={row.label}
-                    href={row.href}
-                    className="group flex items-center gap-3 py-3 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink"
-                  >
+                  <div key={row.label} className="flex items-center gap-3 py-3">
                     <row.icon
                       size={ICON_SIZE}
                       aria-hidden="true"
                       className="shrink-0 text-ink"
                     />
-                    <span className="flex-1 text-menu-title font-semibold text-ink">
+                    <span className="text-menu-title font-semibold text-ink">
                       {row.label}
                     </span>
-                    <ArrowRight
-                      size={ARROW_SIZE}
-                      aria-hidden="true"
-                      className="shrink-0 text-ink/40 transition-all duration-standard ease-standard group-hover:text-ink motion-safe:group-hover:translate-x-[var(--arrow-shift)]"
-                    />
-                  </a>
+                  </div>
                 ))}
               </div>
             </li>
