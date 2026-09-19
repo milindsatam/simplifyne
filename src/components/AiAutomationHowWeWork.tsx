@@ -1,83 +1,58 @@
 "use client";
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { howWeWorkIntro, howWeWorkSteps } from "@/data/aiAutomationHowWeWork";
 
 const ARROW_SIZE = 18;
 const ARROW_BUTTON_CLASS =
-  "flex size-[2.75rem] shrink-0 items-center justify-center rounded-thumb bg-surface-white text-ink transition-colors duration-standard ease-standard hover:bg-pill-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink";
+  "flex size-[2.75rem] shrink-0 items-center justify-center rounded-thumb bg-surface-white text-ink transition-colors duration-standard ease-standard hover:bg-pill-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-40 disabled:pointer-events-none";
 
-/* Matches --duration-standard. A clone of the last step sits before the
-   first and a clone of the first sits after the last, so "next" can always
-   step left and "prev" can always step right, even across the wrap; once
-   the step lands on a clone, this is how long to wait before silently
-   resetting to the real step underneath it, with the transition switched
-   off so the reset is invisible. Same technique as Testimonials.tsx. */
-const TRANSITION_MS = 300;
+/* Same width at every breakpoint the active slide and its peeks share, so
+   a peek is just this same card partly clipped by the viewport rather than
+   a smaller, separate treatment. Mobile stays close to full width with
+   only a sliver peeking, tablet opens that up a bit, desktop settles at
+   the 66-70% "centered peek" proportion. */
+const SLIDE_WIDTH_CLASS = "w-[88%] sm:w-[80%] lg:w-[68%]";
 
-const slides = [
-  howWeWorkSteps[howWeWorkSteps.length - 1],
-  ...howWeWorkSteps,
-  howWeWorkSteps[0],
-];
-const FIRST_REAL_INDEX = 1;
-const LAST_REAL_INDEX = howWeWorkSteps.length;
+/* The space between slides has to stay well under the narrowest peek the
+   width above leaves visible (mobile's is the tightest), or the gap alone
+   would swallow it and the peek would never show at all. */
+const SLIDE_GAP_CLASS = "gap-1 sm:gap-2 lg:gap-4";
+
+const LAST_INDEX = howWeWorkSteps.length - 1;
 
 export function AiAutomationHowWeWork() {
-  const [trackIndex, setTrackIndex] = useState(FIRST_REAL_INDEX);
-  const [instant, setInstant] = useState(false);
-  const resetTimeout = useRef<ReturnType<typeof setTimeout>>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const slideRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  const atBoundary = trackIndex === 0 || trackIndex === LAST_REAL_INDEX + 1;
+  // Measures the actual rendered layout rather than assuming the width
+  // classes above, so the centering math stays correct at every breakpoint
+  // and gap without duplicating those Tailwind values here.
+  const recompute = useCallback(() => {
+    const viewport = viewportRef.current;
+    const slide = slideRefs.current[activeIndex];
+    if (!viewport || !slide) return;
 
-  const goPrev = () => {
-    setInstant(false);
-    setTrackIndex((current) => current - 1);
-  };
+    setOffset(
+      slide.offsetLeft - (viewport.clientWidth - slide.offsetWidth) / 2,
+    );
+  }, [activeIndex]);
 
-  const goNext = () => {
-    setInstant(false);
-    setTrackIndex((current) => current + 1);
-  };
+  useLayoutEffect(() => {
+    recompute();
+    window.addEventListener("resize", recompute);
+    return () => window.removeEventListener("resize", recompute);
+  }, [recompute]);
 
-  // Landing on a clone always steps one further in the same direction that
-  // got it there, so the visible motion never reverses; only afterwards
-  // does it snap back to the real step the clone stands in for, with the
-  // transition off so the snap itself is invisible.
-  useEffect(() => {
-    if (trackIndex > 0 && trackIndex <= LAST_REAL_INDEX) return;
+  const atFirst = activeIndex === 0;
+  const atLast = activeIndex === LAST_INDEX;
 
-    resetTimeout.current = setTimeout(() => {
-      setInstant(true);
-      setTrackIndex(trackIndex === 0 ? LAST_REAL_INDEX : FIRST_REAL_INDEX);
-    }, TRANSITION_MS);
-
-    return () => {
-      if (resetTimeout.current) clearTimeout(resetTimeout.current);
-    };
-  }, [trackIndex]);
-
-  // Once the instant snap has painted, transitions need to come back on
-  // before the next click, or that click's own move would be instant too.
-  useEffect(() => {
-    if (!instant) return;
-
-    let raf2 = 0;
-    const raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => setInstant(false));
-    });
-
-    return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-    };
-  }, [instant]);
-
-  const currentStep =
-    (((trackIndex - FIRST_REAL_INDEX) % howWeWorkSteps.length) +
-      howWeWorkSteps.length) %
-    howWeWorkSteps.length;
+  const goPrev = () => setActiveIndex((current) => Math.max(0, current - 1));
+  const goNext = () =>
+    setActiveIndex((current) => Math.min(LAST_INDEX, current + 1));
 
   return (
     <section id="how-we-work" className="section-padding bg-surface-muted">
@@ -96,7 +71,7 @@ export function AiAutomationHowWeWork() {
             <button
               type="button"
               onClick={goPrev}
-              disabled={atBoundary}
+              disabled={atFirst}
               aria-label="Previous step"
               className={ARROW_BUTTON_CLASS}
             >
@@ -105,7 +80,7 @@ export function AiAutomationHowWeWork() {
             <button
               type="button"
               onClick={goNext}
-              disabled={atBoundary}
+              disabled={atLast}
               aria-label="Next step"
               className={ARROW_BUTTON_CLASS}
             >
@@ -114,29 +89,32 @@ export function AiAutomationHowWeWork() {
           </div>
         </div>
 
-        {/* Same filmstrip technique as the testimonial carousel: every step
-            stays mounted side by side in the track, and only the track's
-            transform ever changes. */}
-        <div className="how-we-work-viewport mt-7 rounded-[1.25rem]">
+        {/* The viewport spans the full container and clips anything past
+            its edges; the track is wider than it (each slide sits at
+            SLIDE_WIDTH_CLASS, well under 100%), so stepping the active
+            index only ever needs to slide the track's transform, and the
+            previous/next cards show up as peeks for free wherever one
+            exists. At the two ends there's simply no neighbouring slide to
+            peek, so that side of the viewport stays empty rather than
+            being padded or faked. */}
+        <div ref={viewportRef} className="how-we-work-viewport mt-7">
           <div
-            className="how-we-work-track"
-            style={{
-              transform: `translateX(-${trackIndex * 100}%)`,
-              transitionDuration: instant ? "0ms" : undefined,
-            }}
+            className={`how-we-work-track ${SLIDE_GAP_CLASS}`}
+            style={{ transform: `translateX(${-offset}px)` }}
           >
-            {slides.map((step, position) => {
-              // Real index 0 and the last both appear twice (once as
-              // themselves, once as the clone standing in for them at the
-              // opposite end), so the position, not the number, has to be
-              // the key and the thing that marks a step as a clone.
-              const isClone = position !== howWeWorkSteps.indexOf(step) + 1;
+            {howWeWorkSteps.map((step, index) => {
+              const isActive = index === activeIndex;
 
               return (
                 <div
-                  key={position}
-                  aria-hidden={isClone}
-                  className="how-we-work-slide"
+                  key={step.number}
+                  ref={(el) => {
+                    slideRefs.current[index] = el;
+                  }}
+                  aria-hidden={!isActive}
+                  className={`how-we-work-slide ${SLIDE_WIDTH_CLASS} motion-safe:transition-opacity motion-safe:duration-standard motion-safe:ease-standard ${
+                    isActive ? "opacity-100" : "pointer-events-none opacity-35"
+                  }`}
                 >
                   <div className="grid grid-cols-1 overflow-hidden rounded-[1.25rem] bg-surface-white shadow-panel lg:grid-cols-[45fr_55fr]">
                     <div className="flex flex-col justify-center p-5">
@@ -170,7 +148,7 @@ export function AiAutomationHowWeWork() {
               key={step.number}
               aria-hidden="true"
               className={`size-1 rounded-full transition-colors duration-standard ease-standard ${
-                index === currentStep ? "bg-ink" : "bg-ink/20"
+                index === activeIndex ? "bg-ink" : "bg-ink/20"
               }`}
             />
           ))}

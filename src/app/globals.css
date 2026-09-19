@@ -915,10 +915,13 @@
   }
 
   /* -------------------------------------------------------------------------
-     "How we work" step carousel. Same filmstrip technique as the
-     testimonial carousel above (one track, only its transform moves), kept
-     as its own named classes rather than reusing .testimonial-* since the
-     two carousels are unrelated content that happen to share a mechanism.
+     "How we work" step carousel. A centered-peek filmstrip: each slide is
+     narrower than the viewport (its width comes from a Tailwind class in
+     the markup, not fixed here), so the previous/next slide's edges show
+     through at reduced opacity wherever one exists, and only the track's
+     transform moves to bring the next one to center. Kept as its own named
+     classes rather than reusing .testimonial-* since the two carousels are
+     unrelated content that happen to share a mechanism.
   ------------------------------------------------------------------------- */
 
   .how-we-work-viewport {
@@ -932,7 +935,6 @@
   }
 
   .how-we-work-slide {
-    width: 100%;
     flex-shrink: 0;
   }
 
