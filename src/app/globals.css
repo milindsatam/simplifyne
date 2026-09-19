@@ -914,30 +914,6 @@
     flex-shrink: 0;
   }
 
-  /* -------------------------------------------------------------------------
-     "How we work" step carousel. A centered-peek filmstrip: each slide is
-     narrower than the viewport (its width comes from a Tailwind class in
-     the markup, not fixed here), so the previous/next slide's edges show
-     through at reduced opacity wherever one exists, and only the track's
-     transform moves to bring the next one to center. Kept as its own named
-     classes rather than reusing .testimonial-* since the two carousels are
-     unrelated content that happen to share a mechanism.
-  ------------------------------------------------------------------------- */
-
-  .how-we-work-viewport {
-    overflow: hidden;
-  }
-
-  .how-we-work-track {
-    display: flex;
-    align-items: stretch;
-    transition: transform var(--duration-standard) var(--ease-standard);
-  }
-
-  .how-we-work-slide {
-    flex-shrink: 0;
-  }
-
   /* Reduced motion: no resize, no slide, no rise. The reveal still happens,
      it just happens instantly. */
   @media (prefers-reduced-motion: reduce) {
@@ -951,10 +927,6 @@
     }
 
     .testimonial-track {
-      transition: none;
-    }
-
-    .how-we-work-track {
       transition: none;
     }
 
