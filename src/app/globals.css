@@ -914,6 +914,28 @@
     flex-shrink: 0;
   }
 
+  /* -------------------------------------------------------------------------
+     "How we work" step carousel. Same filmstrip technique as the
+     testimonial carousel above (one track, only its transform moves), kept
+     as its own named classes rather than reusing .testimonial-* since the
+     two carousels are unrelated content that happen to share a mechanism.
+  ------------------------------------------------------------------------- */
+
+  .how-we-work-viewport {
+    overflow: hidden;
+  }
+
+  .how-we-work-track {
+    display: flex;
+    align-items: stretch;
+    transition: transform var(--duration-standard) var(--ease-standard);
+  }
+
+  .how-we-work-slide {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
   /* Reduced motion: no resize, no slide, no rise. The reveal still happens,
      it just happens instantly. */
   @media (prefers-reduced-motion: reduce) {
@@ -927,6 +949,10 @@
     }
 
     .testimonial-track {
+      transition: none;
+    }
+
+    .how-we-work-track {
       transition: none;
     }
 
