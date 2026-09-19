@@ -31,7 +31,7 @@ export const services: readonly Service[] = [
       "Web apps and the APIs, infrastructure and integrations that hold them together.",
     image: "/web-app-development-solutions-simplifyne.webp",
     surface: "gray",
-    href: "#",
+    href: "/services/development",
   },
   {
     id: "design-ux",
