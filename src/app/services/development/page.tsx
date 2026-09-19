@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DevelopmentHero } from "@/components/DevelopmentHero";
+import { DevelopmentWhatWeBuild } from "@/components/DevelopmentWhatWeBuild";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -18,6 +19,7 @@ export default function DevelopmentPage() {
       <SiteHeader variant="light" />
       <main>
         <DevelopmentHero />
+        <DevelopmentWhatWeBuild />
       </main>
       <Footer />
     </>
