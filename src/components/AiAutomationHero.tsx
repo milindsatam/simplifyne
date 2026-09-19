@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const ARROW_SIZE = 18;
 
@@ -11,13 +11,16 @@ export function AiAutomationHero() {
     // once the hero scrolls away, which only makes sense on a page that
     // turns light further down. This page stays black throughout, so the
     // island should stay in its dark, white-logo state the whole way.
-    <section className="bg-ink bg-[image:var(--gradient-ai)] pt-[var(--content-clearance-mobile)] pb-16 sm:pt-[var(--content-clearance-tablet)] lg:pt-[8rem]">
+    // The dark gradient background lives on the page-level wrapper (see
+    // page.tsx) so it runs continuously behind the header too, rather than
+    // starting fresh here and leaving a seam where the two meet.
+    <section className="pt-[var(--content-clearance-mobile)] pb-16 sm:pt-[var(--content-clearance-tablet)] lg:pt-[8rem]">
       <div className="mx-auto w-full max-w-site px-2 sm:px-3">
         <p className="text-label font-semibold uppercase text-label-on-dark">
           AI &amp; Automation
         </p>
 
-        <h1 className="mt-4 max-w-[26ch] font-display text-hero font-bold text-on-dark">
+        <h1 className="mt-4 max-w-[19ch] font-display text-hero font-bold text-on-dark">
           Put AI to work where it actually helps
         </h1>
 
@@ -27,29 +30,17 @@ export function AiAutomationHero() {
           matters.
         </p>
 
-        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-          <a
-            href="/contact"
-            className="group inline-flex w-full items-center justify-center gap-2 rounded-pill bg-surface-white px-5 py-[0.875rem] text-body-sm font-semibold text-ink transition-colors duration-standard ease-standard hover:bg-pill-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-dark sm:w-fit"
-          >
-            Let&rsquo;s talk
-            <ArrowRight
-              size={ARROW_SIZE}
-              aria-hidden="true"
-              className="motion-safe:transition-transform motion-safe:duration-standard motion-safe:ease-standard motion-safe:group-hover:translate-x-[var(--arrow-shift)]"
-            />
-          </a>
-
-          {/* Scrolls to the "How we work" section once it exists further
-              down this page; a stub anchor until that section is built. */}
-          <a
-            href="#how-we-work"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-pill border border-cta-glass-border bg-cta-glass-bg px-5 py-[0.875rem] text-body-sm font-semibold text-on-dark backdrop-blur-md transition-colors duration-standard ease-standard hover:bg-cta-glass-bg-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-dark sm:w-fit"
-          >
-            See how we work
-            <ArrowDown size={ARROW_SIZE} aria-hidden="true" />
-          </a>
-        </div>
+        <a
+          href="/contact"
+          className="group mt-8 inline-flex w-full items-center justify-center gap-2 rounded-pill bg-surface-white px-5 py-[0.875rem] text-body-sm font-semibold text-ink transition-colors duration-standard ease-standard hover:bg-pill-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-dark sm:w-fit"
+        >
+          Let&rsquo;s talk
+          <ArrowRight
+            size={ARROW_SIZE}
+            aria-hidden="true"
+            className="motion-safe:transition-transform motion-safe:duration-standard motion-safe:ease-standard motion-safe:group-hover:translate-x-[var(--arrow-shift)]"
+          />
+        </a>
       </div>
     </section>
   );
