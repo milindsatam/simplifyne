@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AiAutomationHero } from "@/components/AiAutomationHero";
+import { AiAutomationTools } from "@/components/AiAutomationTools";
 import { AiAutomationWhatWeBuild } from "@/components/AiAutomationWhatWeBuild";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -33,6 +34,7 @@ export default function AiAutomationPage() {
       </div>
       <main>
         <AiAutomationWhatWeBuild />
+        <AiAutomationTools />
       </main>
       <Footer />
     </>
