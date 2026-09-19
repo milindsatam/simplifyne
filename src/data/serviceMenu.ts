@@ -30,7 +30,7 @@ export const serviceMenuItems: readonly ServiceMenuItem[] = [
     icon: Sparkles,
     title: "AI & Automation",
     description: "Put AI and automation into everyday work",
-    href: "#",
+    href: "/services/ai-automation",
   },
   {
     id: "development",

@@ -21,7 +21,7 @@ export const services: readonly Service[] = [
       "Agents, integrations and automations that take the repetitive work off your team.",
     image: "/ai-automation-business-solutions-simplifyne.webp",
     surface: "ai",
-    href: "#",
+    href: "/services/ai-automation",
   },
   {
     id: "development",
