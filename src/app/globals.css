@@ -345,6 +345,36 @@
   transition-duration: var(--duration-standard);
 }
 
+/* Logo marquee's reduced-motion swap (stop the slide, drop the duplicated
+   set, let the one remaining set wrap and centre). Deliberately unlayered
+   for the same reason as the breakpoint overrides above: .logo-marquee-set
+   and its children also carry Tailwind utility classes (flex, gap-8,
+   shrink-0) straight in the markup, and those win over anything in
+   @layer components regardless of selector specificity, so this has to
+   sit outside that layer to actually override them. */
+@media (prefers-reduced-motion: reduce) {
+  .logo-marquee-viewport {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .logo-marquee-track {
+    width: 100%;
+    animation: none;
+    transform: none;
+  }
+
+  .logo-marquee-track > [aria-hidden="true"] {
+    display: none;
+  }
+
+  .logo-marquee-set {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
 /* About page capabilities: the testimonial swaps content instantly under
    the hood (a plain state change), so this keyframe is what gives it a
    fade rather than a jump cut. Applied via a `key`-remounted element so the
@@ -356,6 +386,19 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+/* AI & Automation page's tools marquee: the track holds the logo set
+   twice, back to back, so sliding exactly half its own width (-50%) always
+   lands the second copy where the first one started, with nothing to
+   reset or jump. */
+@keyframes logo-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
@@ -598,6 +641,36 @@
   .group:focus-visible .client-logo {
     filter: grayscale(0);
     opacity: 1;
+  }
+
+  /* -------------------------------------------------------------------------
+     AI & Automation page's "Tools we build with" marquee. The viewport
+     clips the track and masks its own left/right edges so logos fade in
+     and out rather than cutting off hard; the track itself just slides at
+     a constant linear speed, in one direction, forever.
+  ------------------------------------------------------------------------- */
+
+  .logo-marquee-viewport {
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+  }
+
+  .logo-marquee-track {
+    width: max-content;
+    animation: logo-marquee 38s linear infinite;
   }
 
   /* -------------------------------------------------------------------------
