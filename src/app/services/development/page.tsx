@@ -1,0 +1,25 @@
+import type { Metadata } from "next";
+import { DevelopmentHero } from "@/components/DevelopmentHero";
+import { Footer } from "@/components/Footer";
+import { SiteHeader } from "@/components/SiteHeader";
+
+export const metadata: Metadata = {
+  title: "Development | Simplifyne",
+  description:
+    "We build websites, apps, and the systems behind them around how your business actually works, so the tech pulls its weight instead of getting in the way.",
+};
+
+export default function DevelopmentPage() {
+  return (
+    <>
+      {/* No dark hero on this page, so the header needs its light look from
+          the first frame (see Header.tsx's `variant` prop), same as
+          About/Contact. */}
+      <SiteHeader variant="light" />
+      <main>
+        <DevelopmentHero />
+      </main>
+      <Footer />
+    </>
+  );
+}

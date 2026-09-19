@@ -36,7 +36,7 @@ export const serviceMenuItems: readonly ServiceMenuItem[] = [
     icon: Code2,
     title: "Development",
     description: "Websites, apps, and the wiring between",
-    href: "#",
+    href: "/services/development",
   },
   {
     id: "search-growth",
