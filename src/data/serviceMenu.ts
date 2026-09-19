@@ -1,6 +1,5 @@
 import {
   Code2,
-  Cpu,
   PenTool,
   Sparkles,
   TrendingUp,
@@ -51,13 +50,6 @@ export const serviceMenuItems: readonly ServiceMenuItem[] = [
     icon: PenTool,
     title: "Design & UX",
     description: "Design people actually use",
-    href: "#",
-  },
-  {
-    id: "iot",
-    icon: Cpu,
-    title: "IoT Solutions",
-    description: "Connect devices to real business value",
     href: "#",
   },
 ];
