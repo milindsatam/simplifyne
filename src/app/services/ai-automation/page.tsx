@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AiAutomationHero } from "@/components/AiAutomationHero";
+import { AiAutomationWhatWeBuild } from "@/components/AiAutomationWhatWeBuild";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -21,13 +22,18 @@ export default function AiAutomationPage() {
           brand-blue from the body beneath. Carrying the gradient here,
           across header and hero together, rather than starting it lower
           on the hero section alone, is what keeps the header from reading
-          as a separate flat-black strip sitting on top of the gradient. */}
+          as a separate flat-black strip sitting on top of the gradient.
+          The white sections below live in <main> instead: keeping this
+          gradient scoped to just header+hero is what lets it fade to
+          near-black by the hero's own bottom edge rather than being
+          stretched thin across the whole page's height. */}
       <div className="bg-ink bg-[image:var(--gradient-ai)]">
         <SiteHeader variant="brand" />
-        <main>
-          <AiAutomationHero />
-        </main>
+        <AiAutomationHero />
       </div>
+      <main>
+        <AiAutomationWhatWeBuild />
+      </main>
       <Footer />
     </>
   );
