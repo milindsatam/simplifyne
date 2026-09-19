@@ -68,7 +68,7 @@ export const clients: readonly Client[] = [
       src: "/sci.svg",
       width: 436,
       height: 339,
-      maxHeight: 68,
+      maxHeight: 54,
       maxWidth: 180,
     },
   },
